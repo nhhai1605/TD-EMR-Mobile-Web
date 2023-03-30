@@ -21,7 +21,7 @@ class InternalApiService extends AxiosInitialize {
     }
   }
 
-  postAsync<T>(url: string, payload, isShowErrorMessage = true): Promise<T> {
+  postAsync<T>(url: string, payload?, isShowErrorMessage = true): Promise<T> {
     return super.postAsync(`${this._apiURL}${url}`, payload, isShowErrorMessage);
   }
 

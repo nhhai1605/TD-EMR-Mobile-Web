@@ -1,0 +1,8 @@
+export enum V_RisRequestStatus {
+  NOT_SEND = 87700,
+  SENT = 87701,
+  IN_PROCESS = 87702,
+  DONE = 87703,
+  CANCELED = 87704,
+  WAITFORCANCELLATION = 87705
+}

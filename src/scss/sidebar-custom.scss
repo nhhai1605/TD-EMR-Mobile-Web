@@ -1,0 +1,63 @@
+$sidebar-bg-color: #fff !default;
+$sidebar-color: #0b132b;
+$sidebar-width: 100% !default;
+$sidebar-collapsed-width: 80px !default;
+$highlight-color: #fff !default;
+$submenu-bg-color: #fff !default;
+$submenu-bg-color-collapsed: #2b2b2b !default;
+$icon-bg-color: hsl(0deg 0% 0% / 5%) !default;
+$icon-size: 35px !default;
+$submenu-indent: 24px !default;
+$breakpoint-xs: 480px !default;
+$breakpoint-sm: 576px !default;
+$breakpoint-md: 768px !default;
+$breakpoint-lg: 900px !default;
+$breakpoint-xl: 1200px !default;
+$breakpoint-xxl: 1600px !default;
+
+@import 'react-pro-sidebar/dist/scss/styles.scss';
+
+.pro-sidebar > .pro-sidebar-inner {
+    background: #031c2f !important;
+}
+ .pro-sidebar .pro-menu .pro-menu-item.active {
+    background: rgb(69 84 96);
+    //box-shadow: 3px 3px 20px 0 rgb(23 97 253 / 40%);
+}
+
+.pro-sidebar .pro-menu .pro-menu-item > .pro-inner-item:hover, .pro-sidebar .pro-menu .pro-menu-item > .pro-inner-item:focus{
+    background: #2b3842;
+    color: #202342;
+    box-shadow: unset;
+}
+
+
+.pro-sidebar .pro-menu-item.active a {
+    color: #fff;
+}
+
+.pro-sidebar .pro-menu  a, .pro-item-content {
+    color: #fff !important;
+}
+
+.pro-sidebar .pro-menu .pro-menu-item.pro-sub-menu > .pro-inner-item > .pro-arrow-wrapper .pro-arrow {
+    border-color: #ffffff;
+}
+
+.pro-sidebar {
+    color: #a8acb5;
+    z-index: 1200;
+}
+
+
+.pro-inner-list-item{
+    padding-left: 0 !important;
+}
+
+.pro-inner-list-item .pro-inner-item {
+    padding-left: 32px !important;
+}
+
+.pro-sidebar .overlay {
+    background-color: rgba(0, 0, 0, 0.5)
+}

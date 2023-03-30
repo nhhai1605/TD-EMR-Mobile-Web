@@ -1,0 +1,45 @@
+import { RowStateValue_ItemPrice } from '../enums/rowStateValueItemPrice';
+import { RefGenericDrugDetail } from '../pharmacy/refGenericDrugDetail';
+import { Staff } from '../staff';
+
+export interface PharmacySellingItemPrices {
+  pharmacySellingItemPriceID?: number;
+  drugID?: number;
+  pharmacySellingPriceListID?: number;
+  recCreatedDate?: string;
+  staffID?: number;
+  approvedStaffID?: number;
+  inviIDBefore?: number;
+  inCostBefore?: number;
+  inviID?: number;
+  inBuyingPrice?: number;
+  inCost?: number;
+  percentProfit?: string;
+  normalPrice?: number;
+  suggestPrice?: number;
+  suggestPriceForHI?: number;
+  priceForHIPatient?: number;
+  hIAllowedPrice?: number;
+  effectiveDate?: string;
+  endDate?: string;
+  isActive?: boolean;
+  isDeleted?: boolean;
+  notes?: string;
+  staffNotes?: string;
+  contractPriceBeforeVAT?: number;
+  contractPriceAfterVAT?: number;
+  refHIAllowedPrice?: number;
+  drug?: RefGenericDrugDetail;
+  drugCode?: string;
+  hIDrugCode?: string;
+  brandName?: string;
+  genericName?: string;
+  insuranceCover?: boolean;
+  objStaffID?: Staff;
+  objApprovedStaffID?: Staff;
+  priceType?: string;
+  normalPrice_Old?: number;
+  priceForHIPatient_Old?: number;
+  hIAllowedPrice_Old?: number;
+  rowState?: RowStateValue_ItemPrice;
+}

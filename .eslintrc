@@ -1,0 +1,74 @@
+{
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": ["plugin:react/recommended", "plugin:@typescript-eslint/recommended", "airbnb-typescript", "prettier"],
+  "parser": "@typescript-eslint/parser",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
+    },
+    "ecmaVersion": 12,
+    "project": "./tsconfig.json",
+    "sourceType": "module"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
+    }
+  },
+  "plugins": ["react", "react-hooks"],
+  "rules": {
+    "semi": [0, "never"],
+    "eqeqeq": "off",
+    "react-hooks/rules-of-hooks": "error", // Checks rules of Hooks
+    "react-hooks/exhaustive-deps": "off", // Checks effect dependencies,
+    "react/react-in-jsx-scope": "off",
+    "react/prop-types": ["off"],
+    "prettier/prettier": "off",
+    "react/jsx-filename-extension": "off",
+    "react/display-name": "off",
+    "react/jsx-key": 0,
+    "comma-dangle": "off",
+    "max-len": ["warn", { "code": 200 }],
+    "no-console": "off",
+    "no-param-reassign": "off",
+    "no-plusplus": "off",
+    "no-return-assign": "off",
+    "object-curly-newline": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/require-default-props": "off",
+    "react/no-unescaped-entities": "off",
+    "react/forbid-prop-types": "off",
+    "indent": "off",
+    "no-use-before-define": "off",
+    "no-reserved-keys": 0,
+    "quote-props": 0,
+    "import/no-unresolved": "off",
+    "import/extensions": "off",
+    "@typescript-eslint/comma-dangle": "off",
+    "import/prefer-default-export": "off",
+    "jsx-a11y/anchor-is-valid": "off",
+    "typescript-eslint/no-unused-vars": "off",
+    "import/no-extraneous-dependencies": "off",
+    "react/jsx-max-props-per-line": [
+      1,
+      {
+        "maximum": 2,
+        "when": "multiline"
+      }
+    ],
+    "@typescript-eslint/indent": [0],
+    "@typescript-eslint/no-use-before-define": ["off"],
+    "no-unused-vars": "off",
+    "@typescript-eslint/no-unused-vars": ["error", { "argsIgnorePattern": "^_" }],
+    "@typescript-eslint/no-shadow": ["off"],
+    "@typescript-eslint/dot-notation": ["off"],
+    "@typescript-eslint/naming-convention": ["off"],
+    "@typescript-eslint/no-explicit-any": ["off"],
+    "@typescript-eslint/no-empty-interface": ["off"],
+    "@typescript-eslint/no-unused-expressions": ["off"],
+    "@typescript-eslint/ban-types": ["off"]
+  }
+}

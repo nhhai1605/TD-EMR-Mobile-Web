@@ -1,0 +1,154 @@
+// @font-face {
+//   font-family: Averta;
+//   src: local(Averta Regular),url(/assets/fonts/Averta-Regular.c70705eb.eot);
+//   src: url(/assets/fonts/Averta-Regular.c70705eb.eot?#iefix) format("embedded-opentype"),url(/assets/fonts/Averta-Regular.d88182eb.woff) format("woff"),url(/assets/fonts/Averta-Regular.7ee43da7.ttf) format("truetype");
+//   font-weight: 400
+// }
+
+// @font-face {
+//   font-family: Averta;
+//   src: url(/assets/fonts/Averta-Semibold.12a7ad40.eot);
+//   src: url(/assets/fonts/Averta-Semibold.12a7ad40.eot?#iefix) format("embedded-opentype"),url(/assets/fonts/Averta-Semibold.58d8ee25.woff) format("woff"),url(/assets/fonts/Averta-Semibold.c1362f0e.ttf) format("truetype");
+//   font-weight: 500
+// }
+
+// @font-face {
+//   font-family: Averta;
+//   src: url(/assets/fonts/Averta-Bold.4ba97d69.eot);
+//   src: url(/assets/fonts/Averta-Bold.4ba97d69.eot?#iefix) format("embedded-opentype"),url(/assets/fonts/Averta-Bold.30074e57.woff) format("woff"),url(/assets/fonts/Averta-Bold.3b03c9d6.ttf) format("truetype");
+//   font-weight: 700
+// }
+
+
+
+::-webkit-scrollbar {
+  width: 5px;
+  height: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: rgb(235 235 235 / 50%);
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: rgb(14 20 48 / 50%);
+  border-radius: 5px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #555;
+}
+
+body {
+  overflow-x: hidden;
+}
+body {
+  font-size: 15px !important;
+}
+
+iframe {
+  display: none;
+}
+
+.swal2-container {
+  z-index: 9999 !important;
+}
+
+.swal2-styled.swal2-confirm {
+  background-color: #0068b2 !important;
+}
+
+.swal2-styled.swal2-cancel {
+  background-color: #dbdbdb !important;
+  color: #000 !important;
+}
+
+.MuiAutocomplete-popper {
+  z-index: 1302 !important;
+}
+
+.ReactModal__Overlay {
+  z-index: 9999 !important;
+}
+
+figure {
+  margin: none;
+}
+
+figure:hover img {
+  opacity: 0;
+}
+.swal-lg {
+  width: 40em !important;
+  & .swal2-html-container {
+    text-align: left !important;
+  }
+}
+
+.swal2-title {
+  margin: 0 10px !important;
+  text-align: left !important;
+  font-size: 1.175em !important;
+}
+
+.sash-vertical::before {
+  touch-action: none;
+  order: 1;
+  width: 5px !important;
+  border-width: 0;
+  background-repeat: repeat-y;
+  flex-direction: column;
+  flex: 0 0 auto;
+  color: rgba(0, 0, 0, 0.54);
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+.sash-horizontal::before {
+  touch-action: none;
+  order: 1;
+  height: 5px;
+  border-width: 0;
+  background-repeat: repeat-y;
+  flex-direction: column;
+  flex: 0 0 auto;
+  color: rgba(0, 0, 0, 0.54);
+  background-color: rgba(0, 0, 0, 0.12) !important;
+}
+
+b,
+strong {
+  font-weight: 700 !important;
+}
+
+.cellWarning {
+  border: 1px solid #ff3d00 !important;
+}
+
+.cellWarningText {
+  color: #ff3d00;
+}
+
+.pro-menu > ul {
+  margin-bottom: 60px !important;
+}
+
+.prescriptionOverlayFake {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  z-index: 5;
+  background: rgb(196 196 196 / 30%);
+  top: 0;
+  left: 0;
+}
+
+.activePrescription {
+  // padding: 10px;
+}
+// .activePrescription:hover {
+//   border-top: 1px solid #a49292;
+//   border-bottom: 1px solid #a49292;
+// }

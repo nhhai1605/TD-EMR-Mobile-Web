@@ -1,0 +1,48 @@
+import { DeptLocation } from '../appointments/deptLocation';
+import { MedRegItemBase } from '../appointments/medRegItemBase';
+import { PCLExamType } from '../appointments/pCLExamType';
+import { ChargeableItemPrice } from '../chargeableItemPrice';
+
+export interface PatientPCLRequestDetail extends MedRegItemBase {
+  serviceSeqNum?: number;
+  serviceSeqNumType?: number;
+  serviceSeqNumString?: string;
+  id?: number;
+  pclReqItemID?: number;
+  pclExamTypeID?: number;
+  patientPCLReqID?: number;
+  numberOfTest?: number;
+  regStaffFullName?: string;
+  objDeptLocIDList?: DeptLocation[];
+  v_ExamRegStatus?: number;
+  pclExamType?: PCLExamType;
+  deptLocation?: DeptLocation;
+  markedAsDeleted?: boolean;
+  chargeableItem?: ChargeableItemPrice;
+  hasResult?: boolean;
+  v_ExamRegStatusName?: string;
+  pclSectionName?: string;
+  appointmentDate?: string;
+  pclReqDetailCancelStaffID?: number;
+  qty?: number;
+  requestedByDoctor?: number;
+  isDoctorChooseHI?: boolean;
+  diagnosisForCheck?: string;
+  appointmentID?: number;
+  hosClientContractID?: number;
+  clientContractSvcPtID?: number;
+  v_PCLMainCategory?: number;
+  packPCLReqDetailID?: number;
+  packPCLReqID?: number;
+  patientPCLReqExtID?: number;
+  fromAppointment?: boolean;
+  locationChanged?: boolean;
+  normalPrice?: number;
+  hiPayRatio?: number;
+  hiBenefit?: number;
+  hiAllowedPrice?: number;
+  totalPriceDifference?: number;
+  totalHIPayment?: number;
+  hiApproved?: boolean; 
+  totalPatientPaid?: number;
+}

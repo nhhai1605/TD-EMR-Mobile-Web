@@ -20,17 +20,24 @@ const ListMenu = styled(List)(({ theme }) => ({
     },
 }));
 
-
+//rotas
+const itemList = [
+    {
+        text: 'Danh sách BN',
+        to: '/danh-sach-benh-nhan',
+    },
+    {
+        text: 'Danh sách cuộc hẹn',
+        to: '/danh-sách-cuoc-hen',
+    },
+    {
+        text: 'Liên Hệ',
+        to: '/lien-he',
+    },
+];
 
 const Header = () => {
-    const {isAuthenticated} = useAuth();
-    //rotas
-    const itemList = [
-        {
-            text: isAuthenticated ? 'Đăng xuất' : 'Đăng nhập',
-            to: isAuthenticated ? '/logout' : '/login',
-        },
-    ];
+    const {isAuthenticated, logout} = useAuth();
     return (
         <AppBar
             component='nav'
@@ -57,7 +64,7 @@ const Header = () => {
                     <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                         <DrawerItem />
                     </Box>
-                    <ListMenu sx={{ width: '40%' }}>
+                    <ListMenu sx={{ width: '50%' }}>
                         {itemList.map((item) => {
                             const { text } = item;
                             return (
@@ -84,6 +91,51 @@ const Header = () => {
                                 </ListItem>
                             );
                         })}
+                        {
+                            !isAuthenticated &&
+                            <ListItemButton
+                                component={Link}
+                                to={'/login'}
+                                sx={{
+                                    color: '#64B5F6',
+                                    fontWeight: 'bold',
+                                    '&:hover': {
+                                        backgroundColor: 'transparent',
+                                        color: '#1e2a5a',
+                                    },
+                                }}
+                            >
+                                <ListItemText
+                                    sx={{
+                                        fontWeight: 'bold',
+                                    }}
+                                    primary={'Đăng nhập'}
+                                />
+                            </ListItemButton>
+                        }
+                        {
+                            isAuthenticated &&
+                            <ListItemButton
+                                onClick={async () => await logout()}
+                                component={Link}
+                                to={'#'}
+                                sx={{
+                                    color: '#64B5F6',
+                                    fontWeight: 'bold',
+                                    '&:hover': {
+                                        backgroundColor: 'transparent',
+                                        color: '#1e2a5a',
+                                    },
+                                }}
+                            >
+                                <ListItemText
+                                    sx={{
+                                        fontWeight: 'bold',
+                                    }}
+                                    primary={'Đăng xuất'}
+                                />
+                            </ListItemButton>
+                        }
                     </ListMenu>
                 </StyledToolbar>
             </Container>

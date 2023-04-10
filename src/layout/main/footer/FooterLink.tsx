@@ -1,7 +1,7 @@
 import { Link } from '@mui/material';
 import React from 'react';
 
-const FooterLink = ({ text,link=null ,disabled = true}) => {
+const FooterLink = ({ text,link=null ,disabled = false, capitalize=true}) => {
   return (
     <Link
       href={disabled ? null : (link ?? '#')}
@@ -11,7 +11,7 @@ const FooterLink = ({ text,link=null ,disabled = true}) => {
         fontWeight: '400',
         textDecoration: 'none',
         color: '#414141',
-        textTransform: 'capitalize',
+        textTransform: capitalize ? 'capitalize' : 'none',
         '&:hover': {
           color: '#1c2859',
         },

@@ -37,10 +37,10 @@ const Footer = () => {
             >
                 <StackColumn>
                     <FooterLink text={<FooterTitle text={'VIỆN TIM TP. HỒ CHÍ MINH'}/>} disabled={false} link={"https://vientimtphcm.vn"}/>
-                    <FooterLink text={'Địa chỉ : Số 04 Đường Dương Quang Trung - P12 - Q10 - TP. Hồ Chí Minh'} />
-                    <FooterLink text={'Điện thoại : (028) 3865 1586'} />
-                    <FooterLink text={'Fax : (028) 3865 1543'} />
-                    <FooterLink text={'Email : institutducoeur@vientimtphcm.vn'} />
+                    <FooterLink disabled text={'Địa chỉ : Số 04 Đường Dương Quang Trung - P12 - Q10 - TP. Hồ Chí Minh'} />
+                    <FooterLink disabled text={'Điện thoại : (028) 3865 1586'} />
+                    <FooterLink disabled text={'Fax : (028) 3865 1543'} />
+                    <FooterLink capitalize={false} disabled text={'Email : institutducoeur@vientimtphcm.vn'} />
                 </StackColumn>
 
                 {/*<StackColumn>*/}

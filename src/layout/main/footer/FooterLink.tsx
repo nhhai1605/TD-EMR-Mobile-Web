@@ -1,10 +1,10 @@
 import { Link } from '@mui/material';
 import React from 'react';
 
-const FooterLink = ({ text }) => {
+const FooterLink = ({ text,link=null ,disabled = true}) => {
   return (
     <Link
-      href='#'
+      href={disabled ? null : (link ?? '#')}
       component='a'
       sx={{
         fontSize: '0.9rem',

@@ -1,5 +1,5 @@
 import Box, { BoxProps } from "@mui/material/Box";
-import logoSvg from 'assets/svg/logo.svg';
+import logoSvg from 'assets/images/vt-logo.png';
 
 type LogoProps = {
   colored?: boolean;
@@ -8,7 +8,7 @@ type LogoProps = {
 const Logo = ({  ...boxProps }: LogoProps) => {
   return (
     <Box {...boxProps}>
-      <img src={logoSvg} alt='' />
+      <img src={logoSvg} width={200} height={200} alt='' />
     </Box>
   );
 };

@@ -7,7 +7,7 @@ interface IAuthContextInterface {
   isLoggingIn: boolean;
   isAuthenticated: boolean;
   initialized: boolean;
-  login: (username, password) => Promise<any>;
+  login: (username: number, password) => Promise<any>;
   logout: () => Promise<any>;
   auth?: IInitialAuthState;
   isNotSucceed: boolean;
@@ -36,9 +36,8 @@ const AuthProvider = ({ children }) => {
     const payload = {
       username,
       password,
-      client_id: 'react_client_id',
-      grant_type: 'multi_facility_webapi',
-      facility_code: 'axon',
+      client_id: 'tdemr_mobile_client_id',
+      grant_type: 'multi_facility',
     };
     setIsLoggingIn(true);
     const authData = await authService.getToken(payload).catch(() => {
@@ -55,6 +54,7 @@ const AuthProvider = ({ children }) => {
   };
 
   const logout = async () => {
+    setIsAuthenticated(false);
     authService.signOut();
   };
 

@@ -1,6 +1,6 @@
 const API_PATH = {
   GET_TOKEN: 'connect/token',
-  GET_FACILITY_DETAIL: 'connect/userinfo'
+  GET_USER_INFO: 'connect/userinfo'
 }
 
 

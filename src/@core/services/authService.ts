@@ -3,10 +3,10 @@ import API_PATH from '../constants/apiPath';
 import moment from 'moment';
 import identityServerService from './base/identityServerService';
 import { getFormUrlEncoded, HTTP_CONTENT_TYPE } from '@core/utils/httpHelper';
-import departmentService from './departmentService';
 import COOKIE_NAME from '@core/constants/cookie';
 import internalApiService from './base/internalApiService';
 import { parseNumber } from '@core/utils/appHelper';
+import mobileService from "./mobileService";
 
 class AuthService {
   async getToken(payload: any) {
@@ -25,9 +25,9 @@ class AuthService {
   }
 
   getProvider = async () => {
-    const response: any = await identityServerService.postAsync(API_PATH.GET_FACILITY_DETAIL);
+    const response: any = await mobileService.getFacilityDetail('260'); // 260 là PKHID của Viện Tim
     if (response) {
-      internalApiService.setApiEndpointUrl(response.apiurl);
+      internalApiService.setApiEndpointUrl(response.serverURL);
       const date = new Date();
       date.setTime(date.getTime() + 24 * 60 * 60 * 1000);
       cookie.save(COOKIE_NAME.USER, response, { expires: date });
@@ -36,7 +36,6 @@ class AuthService {
 
   signOut = () => {
     identityServerService.clearAllSession();
-    departmentService.clearDepartment();
   };
 
   getCurrentUser = () => {
@@ -52,15 +51,7 @@ class AuthService {
     const userInfo: any = cookie.load(COOKIE_NAME.USER);
     return userInfo?.accName || '';
   };
-
-  getCurrentDeptID = () => {
-    return departmentService.getDepartment();
-  };
-
-  getCurrentDeptLocID = () => {
-    return departmentService.getLocation();
-  };
-
+  
   showLoginWhenExpired$ = () => {
     return internalApiService.detectShowLoginWhenExpired$();
   }

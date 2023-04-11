@@ -1,4 +1,4 @@
-﻿import React, {useEffect, useState} from "react";
+﻿import React, {useEffect, useRef, useState} from "react";
 import {Box, Button, Container, Drawer, Grid, IconButton, Paper, Typography} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import FlexBox from "@core/components/FlexBox";
@@ -20,10 +20,58 @@ import {TdDatePicker} from "../@core/components/controls/TdDatePicker";
 import {TdSelect} from "../@core/components/controls/TdSelect";
 import {genders} from "../@core/constants/gender";
 import {LoadingButton} from "@mui/lab";
+import {TdAutocomplete} from "../@core/components/controls/TdAutocomplete";
+import {CitiesProvince, SuburbNames, WardNames} from "../@core/models/refCountry";
+import {FamilyRelationship} from "../@core/models/enums/emrEnum";
+export const FamilyRelationships = [
+    {
+        Id: 0,
+        Text: 'Không có',
+    },
+    {
+        Id: FamilyRelationship.VO,
+        Text: 'Vợ',
+    },
+    {
+        Id: FamilyRelationship.CHONG,
+        Text: 'Chồng',
+    },
+    {
+        Id: FamilyRelationship.CON,
+        Text: 'Con',
+    },
+    {
+        Id: FamilyRelationship.CHA,
+        Text: 'Cha',
+    },
+    {
+        Id: FamilyRelationship.ME,
+        Text: 'Mẹ',
+    },
+    {
+        Id: FamilyRelationship.ANH,
+        Text: 'Anh',
+    },
+    {
+        Id: FamilyRelationship.CHI,
+        Text: 'Chị',
+    },
+    {
+        Id: FamilyRelationship.ONG,
+        Text: 'Ông',
+    },
+    {
+        Id: FamilyRelationship.BA,
+        Text: 'Bà',
+    },
+    {
+        Id: FamilyRelationship.KHAC,
+        Text: 'Khác',
+    },
+];
 
 const CreatePatientDrawer = (props) => {
     const {open, onClose, patient} = props;
-    const [initialDate, setInitialDate] = useState(moment(patient?.dob).toDate() ?? new Date());
     const account = cookie.load(COOKIE_NAME.USER)
     const [suburbNameFilters, setSuburbNameFilters] = useState([]);
     const [wardNamesFilters, setWardNamesFilters] = useState([]);
@@ -32,11 +80,12 @@ const CreatePatientDrawer = (props) => {
     const {citiesProvinces, suburbNames, wardNames} = useSelector(
         (state: RootState) => state.address,
     );
+    const [autocompleteKey, setAutocompleteKey] = useState(new Date().getMilliseconds());
     const snackbar = useSnackbar();
 
     const initialDataForm = {
         fullName: patient?.fullName ?? '',
-        dob: moment(initialDate).format('YYYY-MM-DD'),
+        dob: '',
         gender: patient?.gender ?? '',
         cityProvinceID: patient?.cityProvinceID ?? null,
         address: patient?.patientStreetAddress ?? '',
@@ -61,8 +110,8 @@ const CreatePatientDrawer = (props) => {
             .max(12, 'Quá dài')
             .matches(/^[0-9]+$/, 'SĐT chỉ được có số'),
         gender: yup.string().nullable().required('Bắt buộc'),
-        cityProvinceID: yup.string().nullable().required('Bắt buộc'),
         address: yup.string().nullable().required('Bắt buộc'),
+        cityProvinceID: yup.string().nullable().required('Bắt buộc'),
         suburbNameID: yup
             .string()
             .nullable()
@@ -151,11 +200,12 @@ const CreatePatientDrawer = (props) => {
     const initData = async () => {
         toggleLoading(true);
         const init = initialDataForm;
-        console.log("init", init)
         if (!init.fullName) {
             init.dob = moment().format('YYYY-MM-DD')
         } else {
+            init.dob = moment(patient.dob).format('YYYY-MM-DD')
             await mobileService.getPtFamilyRelationship(patient.patientID).then((res: any) => {
+                console.log("family", res)
                 init.fContactFullName = res?.fContactFullName ?? '';
                 init.fContactAddress = res?.fContactAddress ?? '';
                 init.fContactCellPhone = res?.fContactCellPhone ?? '';
@@ -166,18 +216,20 @@ const CreatePatientDrawer = (props) => {
         }
         cityChange(init.cityProvinceID);
         suburbChange(init.suburbNameID);
-        setInitialDate(new Date(init.dob));
+        console.log("init", init)
+
         reset(init);
+        setAutocompleteKey(new Date().getMilliseconds());
         toggleLoading(false);
     };
 
     useEffect(() => {
         if (citiesProvinces?.length === 0) {
-            // getAddress();
+            getAddress();
         }
         setSuburbNameFilters([]);
         setWardNamesFilters([]);
-    }, []);
+    }, [open]);
 
     useEffect(() => {
         if (
@@ -186,9 +238,27 @@ const CreatePatientDrawer = (props) => {
             wardNames.length === 0
         ) return;
         initData();
-    }, [citiesProvinces, suburbNames, wardNames]);
-
+    }, [citiesProvinces, suburbNames, wardNames,open]);
+    
+    const thisOnClose = () => {
+        if (isDirty) {
+            SwalAlert.fire({
+                title: 'THÔNG BÁO',
+                text: 'Bạn có chắc muốn đóng?',
+                icon: 'warning',
+                showCancelButton: true,
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    onClose();
+                }
+            });
+        } else {
+            onClose();
+        }
+    }
+    
     const onReset = () => {
+        if(!isDirty) return;
         SwalAlert.fire({
             title: 'THÔNG BÁO',
             text: 'Bạn có chắc muốn đặt lại?',
@@ -202,19 +272,51 @@ const CreatePatientDrawer = (props) => {
     };
 
     const onSubmit = async () => {
+        console.log("submit", getValues())
         const validateForm = await trigger();
         if (!validateForm) {
             return;
         }
-        console.log(getValues());
+        let response = null;
+        const values : any = getValues();
+        values.dob = moment(values.dob).format('YYYY-MM-DD');
+        values.webUserAccID = account.webUserAccID;
+        values.cityProvinceID = values.cityProvinceID ?? -1;
+        values.wardNameID = values.wardNameID ?? -1;
+        values.suburbNameID = values.suburbNameID ?? -1;
+        values.v_FamilyRelationship = values.v_FamilyRelationship ?? 0;
+        if(patient)
+        {
+            values.patientID = patient.patientID;
+            values.patientCode = patient.patientCode;
+            response = await mobileService.updatePatient(values).catch(err =>
+            {
+                snackbar.error("Lỗi khi cập nhật thông tin bệnh nhân");
+            });
+        }
+        else
+        {
+            response = await mobileService.addPatient(values).catch(err =>
+            {
+                snackbar.error("Lỗi khi thêm mới bệnh nhân");
+            });
+        }
+        if (response)
+        {
+            console.log(response)
+            await initData();
+            onClose();
+            snackbar.success(patient ? 'Cập nhật thông tin thành công' : 'Thêm mới thành công',)
+        }
+        toggleLoading(false);
     }
 
     return (
-        <Drawer anchor={'right'} sx={{zIndex: '1300'}} open={open} onClose={onClose}>
+        <Drawer anchor={'right'} sx={{zIndex: '1300'}} open={open} onClose={thisOnClose}>
             <Box sx={{width: 500, padding: '20px'}}>
                 <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Typography variant='h3'>Tạo bệnh nhân</Typography>
-                    <IconButton onClick={onClose}>
+                    <IconButton onClick={thisOnClose}>
                         <CloseIcon/>
                     </IconButton>
                 </Box>
@@ -256,8 +358,8 @@ const CreatePatientDrawer = (props) => {
                                     inputRef={ref}
                                     margin={'normal'}
                                     size='small'
-                                    error={errors.dob && Boolean(errors.dob)}
-                                    helperText={errors.dob && <>{errors.dob.message}</>}
+                                    error={!moment(getValues().dob).isValid() || (errors.dob && Boolean(errors.dob))}
+                                    helperText={(!moment(getValues().dob).isValid() || errors.dob) &&  <>{errors.dob?.message ?? "Ngày không hợp lệ"}</>}
                                     shrink
                                     required
                                     onChange={onChange}
@@ -267,12 +369,13 @@ const CreatePatientDrawer = (props) => {
                         <Controller
                             name='gender'
                             control={control}
-                            render={({field: {onChange, ref, ...otherFields}}) => (
+                            render={({field: {value,onChange, ref, ...otherFields}}) => (
                                 <TdSelect
                                     {...otherFields}
                                     inputRef={ref}
                                     size={'small'}
                                     required
+                                    value={value}
                                     shrink
                                     //@ts-ignore
                                     margin={'normal'}
@@ -348,21 +451,28 @@ const CreatePatientDrawer = (props) => {
                         name='cityProvinceID'
                         control={control}
                         render={({field: {value, ref, onChange, ...otherFields}}) => (
-                            <TdSelect
+                            <TdAutocomplete
                                 {...otherFields}
+                                size='small'
+                                key={autocompleteKey}
                                 inputRef={ref}
-                                size={'small'}
+                                onChange={(event, newValue: CitiesProvince) => {
+                                    const cityProvinceID = String(newValue?.cityProvinceID) ?? null;
+                                    cityChange(cityProvinceID);
+                                    setValue('cityProvinceID', cityProvinceID);
+                                    setValue('suburbNameID', null);
+                                    setValue('wardNameID', null);
+                                }}
+                                defaultValue={citiesProvinces.find((item) => item.cityProvinceID === initialDataForm.cityProvinceID)}
+                                textValue={'cityProvinceName'}
+                                keyValue={'cityProvinceID'}
                                 required
-                                shrink
-                                //@ts-ignore
-                                margin={'normal'}
-                                notched
+                                margin='normal'
                                 error={errors.cityProvinceID && Boolean(errors.cityProvinceID)}
                                 helperText={errors.cityProvinceID && <>{errors.cityProvinceID.message}</>}
-                                onChange={onChange}
-                                data={[]}
-                                placeholder={'Chọn tỉnh, thành'}
+                                options={citiesProvinces}
                                 label={'Tỉnh, thành'}
+                                placeholderI18nKey={'Chọn tỉnh, thành'}
                             />
                         )}
                     />
@@ -380,10 +490,19 @@ const CreatePatientDrawer = (props) => {
                                 notched
                                 //@ts-ignore
                                 margin={'normal'}
+                                value={value}
                                 error={errors.suburbNameID && Boolean(errors.suburbNameID)}
                                 helperText={errors.suburbNameID && <>{errors.suburbNameID.message}</>}
-                                onChange={onChange}
-                                data={[]}
+                                onChange={(e) => {
+                                    onChange(e)
+                                    suburbChange(e.target.value);
+                                    setValue('wardNameID', null);
+                                }}
+                                data={suburbNameFilters.map(i => ({
+                                    ...i,
+                                    Id: i.suburbNameID.toString(),
+                                    Text: i.suburbName,
+                                }))}
                                 placeholder={getValues().cityProvinceID ? (suburbNameFilters.length > 0 ? 'Chọn quận, huyện' : 'Không có quận, huyện') : 'Chọn tỉnh, thành trước'}
                                 label={'Quận, huyện'}
                             />
@@ -401,13 +520,18 @@ const CreatePatientDrawer = (props) => {
                                 disabled={wardNamesFilters.length === 0}
                                 shrink
                                 notched
+                                value={value}
                                 //@ts-ignore
                                 margin={'normal'}
                                 error={errors.wardNameID && Boolean(errors.wardNameID)}
                                 helperText={errors.wardNameID && <>{errors.wardNameID.message}</>}
                                 onChange={onChange}
-                                data={[]}
-                                placeholder={getValues().cityProvinceID ? (suburbNameFilters.length > 0 ? 'Chọn phường, xã' : 'Không có phường, xã') : 'Chọn quận, huyện trước'}
+                                data={wardNamesFilters.map(i => ({
+                                    ...i,
+                                    Id: i.wardNameID.toString(),
+                                    Text: i.wardName,
+                                }))}
+                                placeholder={getValues().suburbNameID ? (wardNamesFilters.length > 0 ? 'Chọn phường, xã' : 'Không có phường, xã') : 'Chọn quận, huyện trước'}
                                 label={'Phường, xã'}
                             />
                         )}
@@ -422,14 +546,14 @@ const CreatePatientDrawer = (props) => {
                                 moveToNextEleAfterEnter
                                 value={value}
                                 size={'small'}
-                                required
+                                required={moment().diff(moment(getValues().dob), 'years') <= 6}
                                 margin={'normal'}
                                 sx={{flex: 1}}
                                 inputRef={ref}
                                 error={errors.fContactFullName && Boolean(errors.fContactFullName)}
                                 helperText={errors.fContactFullName && <>{errors.fContactFullName.message}</>}
                                 label={'Họ và Tên người thân'}
-                                placeholder={'Nhập họ và tên của người thân'}
+                                placeholder={'Nhập họ và tên người thân'}
                             />
                         )}
                     />
@@ -441,15 +565,16 @@ const CreatePatientDrawer = (props) => {
                                 {...otherFields}
                                 inputRef={ref}
                                 size={'small'}
-                                required
+                                required={getValues().fContactFullName != ''}
                                 shrink
                                 notched
+                                value={value}
                                 //@ts-ignore
                                 margin={'normal'}
                                 error={errors.v_FamilyRelationship && Boolean(errors.v_FamilyRelationship)}
                                 helperText={errors.v_FamilyRelationship && <>{errors.v_FamilyRelationship.message}</>}
                                 onChange={onChange}
-                                data={[]}
+                                data={FamilyRelationships}
                                 placeholder={'Chọn quan hệ với bệnh nhân'}
                                 label={'Quan hệ'}
                             />
@@ -464,7 +589,6 @@ const CreatePatientDrawer = (props) => {
                                 moveToNextEleAfterEnter
                                 value={value}
                                 size={'small'}
-                                required
                                 margin={'normal'}
                                 sx={{flex: 1}}
                                 inputRef={ref}
@@ -484,7 +608,6 @@ const CreatePatientDrawer = (props) => {
                                 moveToNextEleAfterEnter
                                 value={value}
                                 size={'small'}
-                                required
                                 margin={'normal'}
                                 sx={{flex: 1}}
                                 inputRef={ref}
@@ -504,12 +627,21 @@ const CreatePatientDrawer = (props) => {
                             justifyContent: 'space-between',
                         }}
                     >
-                        <Button onClick={onClose} color={'error'} sx={{
+                        <Button onClick={thisOnClose} color={'error'} sx={{
                             '&:hover': {
                                 backgroundColor: '#a12222',
                             }
                         }} variant='contained'>
                             Đóng
+                        </Button>
+                        <Button onClick={onReset} color={'warning'} sx={{
+                            color:'white',
+                            '&:hover': {
+                                color:'white',
+                                backgroundColor: '#dcc432',
+                            }
+                        }} variant='contained'>
+                            Đặt lại
                         </Button>
                         <LoadingButton onClick={onSubmit} type='button' variant='contained'>
                             Xác nhận

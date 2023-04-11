@@ -92,8 +92,8 @@ export function AppointmentContextProvider({ children }) {
             if (services != null && services.length > 0) 
             {
                 services.forEach((item) => {
-                    item.value = String(item.medServiceID) 
-                    item.label = String(item.medServiceName)
+                    item.Id = String(item.medServiceID) 
+                    item.Text = String(item.medServiceName)
                 })
                 console.log(services)
                 setMedServices(services);

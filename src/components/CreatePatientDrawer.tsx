@@ -85,7 +85,7 @@ const CreatePatientDrawer = (props) => {
 
     const initialDataForm = {
         fullName: patient?.fullName ?? '',
-        dob: '',
+        dob: moment().format('YYYY-MM-DD'),
         gender: patient?.gender ?? '',
         cityProvinceID: patient?.cityProvinceID ?? null,
         address: patient?.patientStreetAddress ?? '',

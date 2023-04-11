@@ -18,7 +18,7 @@ const PatientList = () => {
         toggleLoading(true);
         await getPatientList().then(res =>
         {
-            console.log("res: " + res);
+            console.log("res: " , res);
             setAllPatients(res ?? [])
         }).catch(err =>
         {

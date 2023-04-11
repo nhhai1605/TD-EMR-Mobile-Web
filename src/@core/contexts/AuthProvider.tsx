@@ -73,7 +73,7 @@ const AuthProvider = ({ children }) => {
     }
     setInitialized(true);
   };
-
+  
   useEffect(() => {
     (async () => {
       await initContext();

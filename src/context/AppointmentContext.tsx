@@ -57,15 +57,14 @@ export function AppointmentContextProvider({ children }) {
 
     async function getPatientList() {
         const account = cookie.load(COOKIE_NAME.USER)
-        console.log(account)
         if (!account || !account.webUserAccID)
             return []
         const response : any = await mobileService.getManagePatientList(account.webUserAccID);
         if(response && response.data)
         {
             response.data.forEach((patient) => {
-                patient.value = String(patient.patientID) 
-                patient.label = String(patient.fullName) 
+                patient.Id = String(patient.patientID) 
+                patient.Text = String(patient.fullName) 
             })
             let result = response.data.filter((obj, pos, arr) => {return arr.map(mapObj => mapObj["patientID"]).indexOf(obj["patientID"]) === pos}); 
             result = result.sort((a, b) => moment(b.dateBecamePatient).diff(moment(a.dateBecamePatient)))

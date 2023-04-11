@@ -27,8 +27,12 @@ const itemList = [
         to: '/danh-sach-benh-nhan',
     },
     {
+        text: 'Danh sách phiếu khám',
+        to: '/danh-sach-phieu-kham',
+    },
+    {
         text: 'Danh sách cuộc hẹn',
-        to: '/danh-sách-cuoc-hen',
+        to: '/danh-sach-cuoc-hen',
     },
     {
         text: 'Liên Hệ',

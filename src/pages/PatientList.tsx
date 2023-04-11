@@ -32,7 +32,7 @@ const PatientList = () => {
     
     useEffect(() =>
     {
-        // fetchData();
+        fetchData();
     }, [])
     
     return (

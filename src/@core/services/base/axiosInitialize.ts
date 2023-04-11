@@ -47,7 +47,6 @@ export abstract class AxiosInitialize {
       headers: {
         'Content-Type': contentType,
         Authorization: this._includeToken && authData ? `${authData?.token_type} ${authData?.access_token}` : undefined,
-        PKHID: 250, //dùng để debug trực tiếp lên dataService
       },
       //responseType: responseType,
     });

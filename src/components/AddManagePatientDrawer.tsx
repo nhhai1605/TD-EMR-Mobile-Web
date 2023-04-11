@@ -9,10 +9,17 @@ import FlexBox from "../@core/components/FlexBox";
 import {TdTextBox} from "../@core/components/controls/TdTextBox";
 import {LoadingButton} from "@mui/lab";
 import BoxedLayout from "../@core/components/BoxedLayout";
+import COOKIE_NAME from "../@core/constants/cookie";
+import cookie from "react-cookies";
+import {toggleLoading} from "../@core/components/loading/LoadingScreen";
+import mobileService from "../@core/services/mobileService";
+import {useSnackbar} from "../@core/contexts/SnackbarProvider";
+import {useAppointment} from "../context/AppointmentContext";
 
 const AddManagePatientDrawer = (props) => {
     const {open, onClose} = props;
-
+    const snackbar = useSnackbar();
+    const {searchPatient} = useAppointment();
     const initialDataForm = {
         patientCode: '',
         contactMobileNum: '',
@@ -38,12 +45,81 @@ const AddManagePatientDrawer = (props) => {
         if (!validateForm) {
             return;
         }
-        const pkhid = '260';
-        const facilityCode = '';
-        // Then get facility Code
+        const facilityCode = cookie.load(COOKIE_NAME.USER).facilityCode;
         const payload = {...getValues(), facilityCode}
+        addManagePatient(payload.facilityCode, payload.patientCode, payload.contactMobileNum);
     }
     
+    const addManagePatient = async (facilityCode, patientCode, contactMobileNum = null) =>
+    {
+        const addToManageList = async (patient) =>
+        {
+            const account = cookie.load(COOKIE_NAME.USER);
+
+            await mobileService.addManagePatient({
+                webUserAccID: account.webUserAccID,
+                patientID: patient.patientID
+            }).then((res) =>
+            {
+                snackbar.success("Thêm BN thành công");
+                onClose();
+            }).catch((err) =>
+            {
+                snackbar.error("Thêm BN thất bại. " + err.message.toString());
+            })
+        }
+        
+        toggleLoading(true)
+      
+        await searchPatient({ patientCode: patientCode }).then(async (patient) =>
+        {
+            console.log(patient)
+            if (patient && patient.patientID)
+            {
+                if (contactMobileNum)
+                {
+                    if (patient.patientCellPhoneNumber == contactMobileNum)
+                    {
+                        addToManageList(patient)
+                    }
+                    else
+                    {
+                        await mobileService.getPtFamilyRelationship(patient.patientID).then((res: any) =>
+                        {
+                            if (res && res?.fContactCellPhone == contactMobileNum)
+                            {
+                                addToManageList(patient);
+                            }
+                            else
+                            {
+                                snackbar.error('Số điện thoại không khớp')
+                            }
+                        }).catch(err =>
+                        {
+                            snackbar.error('Lỗi khi lấy thông tin người thân')
+                        })
+                    }
+                }
+                else
+                {
+                    addToManageList(patient)
+                }
+
+            }
+            else
+            {
+                snackbar.error('Không tìm thấy BN')
+            }
+        }).catch((err) =>
+        {
+            console.log(err)
+            snackbar.error('Lỗi khi tìm BN')
+        }).finally(() =>
+        {
+            toggleLoading(false)
+        })
+    }
+
     return (
         <Drawer anchor={'right'} sx={{ zIndex: '1300' }} open={open} onClose={onClose}>
             <Box sx={{ width: 500, padding: '20px' }}>

@@ -144,13 +144,21 @@ class MobileService {
         return internalApiService.postAsync('Appointment/AppointmentWeb/Web_GetPayooXMLAndCheckSum', payload);
     }
 
-    getSeqNumber(payload)
+    createNewTicket(payload)
     {
-        return internalApiService.postAsync('QMS/CallGetSeqNumberByTypeForApp', payload);
+        return internalApiService.postAsync('QMS/App_CreateNewTicket', payload);
     }
-    getSeqNumber_NewPatient(payload)
+    getCurrentTicket(payload)
     {
-        return internalApiService.postAsync('QMS/CallGetSeqNumberByTypeForApp_NewPatient', payload);
+        return internalApiService.postAsync('QMS/App_GetCurrentTicket', payload);
+    }
+    cancelTicket(payload)
+    {
+        return internalApiService.postAsync('QMS/App_CancelTicket', payload);
+    }
+    getListTicket(payload)
+    {
+        return internalApiService.postAsync('QMS/App_GetListTicketByWebAccountUserID', payload);
     }
 }
 export default new MobileService()

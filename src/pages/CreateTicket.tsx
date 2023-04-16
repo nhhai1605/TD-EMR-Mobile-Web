@@ -13,19 +13,20 @@ import mobileService from "../@core/services/mobileService";
 import {CitiesProvince} from "../@core/models/refCountry";
 import {TdAutocomplete} from "../@core/components/controls/TdAutocomplete";
 import QRCode from "react-qr-code";
+import COOKIE_NAME from "../@core/constants/cookie";
+import cookie from "react-cookies";
 const CreateTicket = () => {
     const snackbar = useSnackbar();
-    const { getPatientList, getMedicalServices, medServices } = useAppointment()
+    const { getPatientList } = useAppointment()
     const [patientList, setPatientList] = useState([])
-    const [ticketDate, setTicketDate] = useState(moment().add(1,'days').toDate())   
-    const [ticketService, setTicketService] = useState(null)
+    const [selectedDate, setSelectedDate] = useState(moment().add(1,'days').toDate())   
     const [selectedPatient, setSelectedPatient] = useState(null)
     const [haveErrors, setHaveErrors] = useState(false)    
     const [ticketNumber, setTicketNumber] = useState(null)
+    const account = cookie.load(COOKIE_NAME.USER)
     const fetchData = async () =>
     {
         toggleLoading(true);
-        getMedicalServices();
         await getPatientList().then(res =>
         {
             const patients = (res ?? []).map(p => ({
@@ -47,39 +48,30 @@ const CreateTicket = () => {
     }, [])
     
     const onSubmit = async () => {
-        if(!selectedPatient || !ticketDate || !ticketService)
+        if(!selectedPatient || !selectedDate )
         {
             setHaveErrors(true)
             snackbar.error("Vui lòng nhập đầy đủ thông tin");
             return;
         }
+        toggleLoading(true)
         setHaveErrors(false)
         console.log(selectedPatient)
-        console.log(ticketService)
         const payload = {
-            aType: 30,
-            patientCode: selectedPatient.patientCode,
+            aType: 1,
+            webAccountUserID: account.webUserAccID,
+            webAccManPtID: selectedPatient.webAccManPtID,
+            hiCardNo: "",
             patientName: selectedPatient.fullName,
-            HICardNo: "",
-            v_IssueBy: 5,
-            IsGetTicketIssueAgain: false,
-            staffID: 0,
-            //API is missing date and service 
+            patientCode: selectedPatient.patientCode,
+            ticketGetTime: moment(selectedDate).format('YYYY-MM-DDTHH:mm:ss'),
         }
-        let res;
-        if (selectedPatient.isPatientAppt) //New Patient
-        {
-            res = await mobileService.getSeqNumber_NewPatient(payload).catch(err => {
-                console.log(err)
-                snackbar.error("Lỗi khi lấy phiếu khám")
-            })
-        } else {
-            res = await mobileService.getSeqNumber(payload).catch(err => {
-                console.log(err)
-                snackbar.error("Lỗi khi lấy phiếu khám")
-            })
-        }
-        setTicketNumber('qms' + res.serialTicket)
+        await mobileService.createNewTicket(payload).then((res:any) => {
+            setTicketNumber('qms' + res?.serialTicket)
+        }).catch(err => snackbar.error("Lỗi khi tạo phiếu khám")).finally(()=> {
+            snackbar.success("Tạo phiếu khám thành công")
+            toggleLoading(false)
+        })
     }
     
     return (
@@ -121,30 +113,14 @@ const CreateTicket = () => {
                         // disablePast
                         label={'Ngày Khám'}
                         inputFormat='DD/MM/YYYY'
-                        value={ticketDate}
+                        maxDate={moment().add(1,'months').toDate()}
+                        value={selectedDate}
                         size='small'
                         shrink
                         required
                         onChange={(e : any) => {
-                            setTicketDate(e.toDate())
+                            setSelectedDate(e.toDate())
                         }}
-                    />
-                </FlexBox>
-                <FlexBox sx={{paddingY:2}}>
-                    <TdAutocomplete
-                        size='small'
-                        onChange={(event, newValue: CitiesProvince) => {
-                            setTicketService(newValue)
-                        }}
-                        textValue={'Text'}
-                        keyValue={'Id'}
-                        required
-                        margin='normal'
-                        options={medServices}
-                        placeholderI18nKey={'Chọn dịch vụ khám'}
-                        label={'Dịch Vụ'}
-                        error={haveErrors && !ticketService}
-                        helperText={haveErrors && !ticketService  &&  <>Vui lòng chọn dịch vụ</>}
                     />
                 </FlexBox>
                 <FlexBox sx={{paddingY:2}}>

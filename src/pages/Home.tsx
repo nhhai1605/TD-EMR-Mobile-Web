@@ -29,25 +29,34 @@ const Home = () => {
               lineHeight: 1.6,
             }}
           >
-            Mô tả dài 10000 ký tự mô tả dài 10000 ký tự mô tả dài 10000 ký tự mô tả dài 10000 ký tự mô tả dài 10000 ký tự mô tả
-            dài 10000 ký tự
+            {/*Mô tả dài 10000 ký tự mô tả dài 10000 ký tự mô tả dài 10000 ký tự mô tả dài 10000 ký tự mô tả dài 10000 ký tự mô tả*/}
+            {/*dài 10000 ký tự*/}
           </Typography>
 
           <FlexBox gap={'10px'}>
             <Button
               variant='contained'
               component={Link}
-              to={'/dat-hen-dv'}
+              to={'/lay-phieu-kham'}
               sx={buttonCSS}
             >
-              Đặt Khám DV
+              Lấy Phiếu Khám
             </Button>
             <Button
+              variant='contained'
               component={Link}
-              to={'/dat-hen-bs'}
-              variant='outlined'
+              to={'/dat-kham-dich-vu'}
+              sx={buttonCSS}
             >
-              Đặt Khám BS
+              Đặt Khám Dịch Vụ
+            </Button>
+            <Button
+              variant='contained'
+              component={Link}
+              to={'/dat-kham-bac-si'}
+              sx={buttonCSS}
+            >
+              Đặt Khám Bác Sĩ
             </Button>
           </FlexBox>
         </BoxText>

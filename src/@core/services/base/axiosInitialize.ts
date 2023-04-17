@@ -47,7 +47,6 @@ export abstract class AxiosInitialize {
       headers: {
         'Content-Type': contentType,
         Authorization: this._includeToken && authData ? `${authData?.token_type} ${authData?.access_token}` : undefined,
-        PKHID: 250, //dùng để debug trực tiếp lên dataService
       },
       //responseType: responseType,
     });
@@ -139,7 +138,7 @@ export abstract class AxiosInitialize {
       return undefined;
     }
     const payload = {
-      client_id: 'react_client_id',
+      client_id: 'tdemr_mobile_client_id',
       grant_type: 'refresh_token',
       refresh_token: authData.refresh_token,
     };

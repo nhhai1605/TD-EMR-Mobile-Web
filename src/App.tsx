@@ -9,6 +9,7 @@ import SplashScreen from '@core/components/SplashScreen';
 import * as Sentry from '@sentry/react';
 import { BrowserTracing } from '@sentry/tracing';
 import { Theme } from '@mui/material/styles';
+import {AppointmentContextProvider} from "./context/AppointmentContext";
 // import { useBeforeunload } from "@core/hooks/useBeforeunload";
 // import { useDetectBackButton } from "@core/hooks/useDetectBackButton";
 
@@ -36,14 +37,16 @@ function App() {
       <BrowserRouter>
         <React.Suspense fallback={<SplashScreen />}>
           <AuthProvider>
-            <Sentry.ErrorBoundary>
-              <SettingsProvider>
-                <SnackbarProvider>
-                  <Loading />
-                  <AppRoutes />
-                </SnackbarProvider>
-              </SettingsProvider>
-            </Sentry.ErrorBoundary>
+            <AppointmentContextProvider>
+              <Sentry.ErrorBoundary>
+                <SettingsProvider>
+                  <SnackbarProvider>
+                    <Loading />
+                    <AppRoutes />
+                  </SnackbarProvider>
+                </SettingsProvider>
+              </Sentry.ErrorBoundary>
+            </AppointmentContextProvider>
           </AuthProvider>
         </React.Suspense>
       </BrowserRouter>

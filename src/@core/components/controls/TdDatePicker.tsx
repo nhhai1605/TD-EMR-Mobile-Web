@@ -2,7 +2,8 @@ import { BaseTextFieldProps, SxProps, TextField, TextFieldProps, Theme } from '@
 import { DatePicker, DatePickerProps, LocalizationProvider } from '@mui/x-date-pickers';
 import { useTranslation } from 'react-i18next';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-
+import {useState} from "react";
+import { DesktopDatePicker  } from '@mui/x-date-pickers';
 type TdDatePickerProps<TInputDate, TDate> = DatePickerProps<TInputDate, TDate> & BaseTextFieldProps & {
   labelI18nKey?: string;
   label?: string;
@@ -50,6 +51,8 @@ export const TdDatePicker = <TInputDate, TDate>(props: TdDatePickerProps<TInputD
     ...datePickerProps
   } = props;
   const { t } = useTranslation();
+  const [dateOpen,setDateOpen] = useState(false);
+
   const styles =
     margin === 'dense'
       ? {
@@ -83,13 +86,35 @@ export const TdDatePicker = <TInputDate, TDate>(props: TdDatePickerProps<TInputD
 
   return (
     <LocalizationProvider dateAdapter={AdapterMoment}>
-      <DatePicker
+      <DesktopDatePicker
         {...datePickerProps}
+        open={dateOpen}
+        onClose={() => setDateOpen(false)}
         label={labelI18nKey ? t(labelI18nKey) : label}
         value={value}
         onChange={onChange}
         inputFormat={format}
-        renderInput={renderInput || onRenderInputDefault}
+        // renderInput={renderInput || onRenderInputDefault}
+        renderInput={(props) => (
+            <TextField
+                onClick={() => setDateOpen(true)}
+                onKeyDown={e => {e.preventDefault()}}
+                {...props}
+                fullWidth
+                InputLabelProps={{ shrink: shrink, ...InputLabelProps }}
+                sx={{
+                  '& .MuiInputBase-inputSizeSmall': {
+                    height: '1.7375em !important',
+                  },
+                  ...sx,
+                  ...styles,
+                }}
+                size={size}
+                error={error}
+                required={required}
+                helperText={helperText}
+            />
+        )}
       />
     </LocalizationProvider>
   );

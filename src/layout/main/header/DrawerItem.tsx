@@ -1,17 +1,17 @@
-import React, { useState } from 'react'
-import {  
-  styled, 
-  useTheme,
-  Drawer,
-  Divider,
-  List,
-  IconButton,
-  ListItem,
-  ListItemIcon,
-  ListItemText,
+import React, {useState} from 'react'
+import {
+    styled,
+    useTheme,
+    Drawer,
+    Divider,
+    List,
+    IconButton,
+    ListItem,
+    ListItemIcon,
+    ListItemText, Typography,
 } from '@mui/material'
 // rotas
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 // icons
 import EmailIcon from '@mui/icons-material/Email';
 import HomeIcon from '@mui/icons-material/Home';
@@ -22,110 +22,117 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 const drawerWidth = 240;
 
-const DrawerHeader = styled('div')(({ theme }) => ({
-  display: 'flex',
-  alignItems: 'center',
-  padding: theme.spacing(0, 5),
-  ...theme.mixins.toolbar,
-  justifyContent: 'flex-start',
+const DrawerHeader = styled('div')(({theme}) => ({
+    display: 'flex',
+    alignItems: 'center',
+    padding: theme.spacing(0, 5),
+    ...theme.mixins.toolbar,
+    justifyContent: 'flex-start',
 }));
 
 //rotas
 const itemList = [
-  {
-    text: "Trang chủ",
-    icon: <HomeIcon />,
-    to: "/"
-  },
-  {
-    text: "Giới thiệu",
-    icon: <InfoIcon />,
-    to: "/gioi-thieu"
-  },
-  {
-    text: "Liên hệ",
-    icon: <EmailIcon />,
-    to: 'lien-he',
-  }
+    {
+        text: "Trang chủ",
+        icon: <HomeIcon/>,
+        to: "/"
+    },
+    {
+        text: 'Danh sách BN',
+        to: '/danh-sach-benh-nhan',
+    },
+    {
+        text: 'Danh sách phiếu khám',
+        to: '/danh-sach-phieu-kham',
+    },
+    {
+        text: 'Danh sách cuộc hẹn',
+        to: '/danh-sach-cuoc-hen',
+    },
+    {
+        text: "Liên hệ",
+        icon: <EmailIcon/>,
+        to: 'lien-he',
+    }
 ];
 
 
 const DrawerItem = () => {
 
-  const theme = useTheme();
-  const [open, setOpen] = useState(false);
-  const handleDrawerOpen = () => {
-    setOpen(true);
-  };
+    const theme = useTheme();
+    const [open, setOpen] = useState(false);
+    const handleDrawerOpen = () => {
+        setOpen(true);
+    };
 
-  const handleDrawerClose = () => {
-    setOpen(false);
-  };
+    const handleDrawerClose = () => {
+        setOpen(false);
+    };
 
-  return (
-    <>
-      <IconButton
-      color="inherit"
-      aria-label="open drawer"
-      edge="end"
-      onClick={handleDrawerOpen}
-      sx={{ ...(open && { display: 'none' }) }}
-      >
-        <MenuIcon />
-      </IconButton>
+    return (
+        <>
+            <IconButton
+                aria-label="open drawer"
+                edge="end"
+                onClick={handleDrawerOpen}
+                sx={{...(open && {display: 'none'})}}
+            >
+                <MenuIcon/>
+            </IconButton>
 
-      <Drawer
-      sx={{
-          flexGrow: 1,
-          flexShrink: 0,
-          '& .MuiDrawer-paper': {
-          width: drawerWidth,
-          },
-      }}
-      variant="persistent"
-      anchor="right"
-      open={open}
-      >
-        <DrawerHeader>
-          <IconButton onClick={handleDrawerClose}>
-            {theme.direction === 'rtl' ? <ChevronLeftIcon /> : <ChevronRightIcon />}
-          </IconButton>
-        </DrawerHeader>
-        <Divider />
-        <List>
-          {itemList.map( ( item ) => {
-            const { text } = item;
-            return(
-              <ListItem 
-              key={text} 
-              component={Link} 
-              to={item.to}
-              sx={{
-                color: '#414141',
-                "&:hover": {
-                  backgroundColor: '#e9e5e5',
-                  color: '#1c2859',
-                }
-              }}
-              >
-                <ListItemIcon
+            <Drawer
                 sx={{
-                  "&:hover":{
-                    backgroundColor: 'transparent',
-                    color: '#1c2859',
-                  }
+                    flexGrow: 1,
+                    flexShrink: 0,
+                    '& .MuiDrawer-paper': {
+                        width: drawerWidth,
+                    },
                 }}
-                >
-                  {item.icon}
-                </ListItemIcon>
-                <ListItemText primary={text} />
-              </ListItem>
-            )
-          })}
-        </List>
-      </Drawer>
-    </>
-  )
+                variant="persistent"
+                anchor="right"
+                open={open}
+            >
+                <DrawerHeader>
+                    <IconButton onClick={handleDrawerClose}>
+                        {theme.direction === 'rtl' ? <ChevronLeftIcon/> : <ChevronRightIcon/>}
+                    </IconButton>
+                </DrawerHeader>
+                <Divider/>
+                <List>
+                    {itemList.map((item) => {
+                        const {text} = item;
+                        return (
+                            <ListItem
+                                key={text}
+                                onClick={handleDrawerClose}
+                                component={Link}
+                                to={item.to}
+                                sx={{
+                                    color: '#414141',
+                                    "&:hover": {
+                                        backgroundColor: '#e9e5e5',
+                                        color: '#1c2859',
+                                    }
+                                }}
+                            >
+                                <ListItemIcon
+                                    sx={{
+                                        "&:hover": {
+                                            backgroundColor: 'transparent',
+                                            color: '#1c2859',
+                                        }
+                                    }}
+                                >
+                                    {item.icon}
+                                </ListItemIcon>
+                                <ListItemText primary={text}/>
+                            </ListItem>
+                        )
+                    })}
+                </List>
+            </Drawer>
+        </>
+    )
 }
 
 export default DrawerItem;

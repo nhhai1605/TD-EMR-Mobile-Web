@@ -313,7 +313,7 @@ const CreatePatientDrawer = (props) => {
 
     return (
         <Drawer anchor={'right'} sx={{zIndex: '1300'}} open={open} onClose={thisOnClose}>
-            <Box sx={{width: 500, padding: '20px'}}>
+            <Box sx={{padding: '20px'}}>
                 <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Typography variant='h3'>Tạo bệnh nhân</Typography>
                     <IconButton onClick={thisOnClose}>
@@ -620,11 +620,11 @@ const CreatePatientDrawer = (props) => {
                     />
                     <FlexBox
                         sx={{
-                            position: 'absolute',
-                            bottom: 10,
-                            gap: '10px',
-                            right: 22,
-                            justifyContent: 'space-between',
+                            // position: 'absolute',
+                            // bottom: 10,
+                            gap: '20px',
+                            marginTop:'20px',
+                            justifyContent: 'flex-end',
                         }}
                     >
                         <Button onClick={thisOnClose} color={'error'} sx={{
@@ -648,7 +648,6 @@ const CreatePatientDrawer = (props) => {
                         </LoadingButton>
                     </FlexBox>
                 </Box>
-
             </Box>
         </Drawer>
     )

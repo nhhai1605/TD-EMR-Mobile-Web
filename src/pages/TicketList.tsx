@@ -1,7 +1,7 @@
 ﻿import React, {useCallback, useEffect, useRef, useState} from "react";
 import {useAppointment} from "../context/AppointmentContext";
 import {useSnackbar} from "../@core/contexts/SnackbarProvider";
-import {Box, Container, Link, Modal, Typography} from "@mui/material";
+import {Box, Button, Container, Link, Modal, Typography} from "@mui/material";
 import { toggleLoading } from '@core/components/loading/LoadingScreen';
 import mobileService from "../@core/services/mobileService";
 import COOKIE_NAME from "../@core/constants/cookie";
@@ -9,12 +9,14 @@ import cookie from "react-cookies";
 import moment from "moment";
 import QRCode from "react-qr-code";
 import FlexBox from "../@core/components/FlexBox";
+import * as htmlToImage from 'html-to-image';
 
 const TicketList = () => {
     const [allTickets, setAllTickets] = useState([])
     const [selectedTicket, setSelectedTicket] = useState(null)
     const snackbar = useSnackbar();
     const account = cookie.load(COOKIE_NAME.USER)
+    const flexBoxRef = useRef<any>();
     const fetchData = async () =>
     {
         toggleLoading(true);
@@ -52,6 +54,18 @@ const TicketList = () => {
     {
         fetchData();
     }, [])
+    
+    const exportAsImage = async (element, imageFileName) => {
+        htmlToImage.toPng(element, {style:{}}).then((dataUrl) => {
+            downloadImage(dataUrl, imageFileName);
+        });
+    };
+    const downloadImage = (image, imageFileName) => {
+        const fakeLink = document.createElement("a");
+        fakeLink.download = imageFileName;
+        fakeLink.href = image;
+        fakeLink.click();
+    };
 
     return (
         <Container>
@@ -61,13 +75,16 @@ const TicketList = () => {
                     style={{display:'flex',alignItems:'center',justifyContent:'center'}}
                     open={Boolean(selectedTicket)}
                     onClose={()=>setSelectedTicket(null)}>
-                    <FlexBox sx={{backgroundColor:'white',width:500,height:500,alignItems:'center',justifyContent:'center',borderRadius:5,flexDirection:'column'}}>
-                        <Typography variant={"h5"} >Bệnh Nhân: {selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
-                        <Typography variant={"h5"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD-MM-YYYY")}</Typography>
-                        <QRCode
-                            size={300}
-                            value={"qms" + selectedTicket.serialTicket}/>
-                    </FlexBox>
+                        <FlexBox sx={{alignItems:'center',justifyContent:'center',backgroundColor:'white',flexDirection:'column',padding:1,borderRadius:5}}>
+                            <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:5}}>
+                                <Typography variant={"h5"}>{selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
+                                <Typography sx={{margin:2}} variant={"h5"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD-MM-YYYY")}</Typography>
+                                <QRCode
+                                    size={300}
+                                    value={"qms" + selectedTicket.serialTicket}/>
+                            </FlexBox>
+                            <Button sx={{margin:2}} variant={'contained'} onClick={() => exportAsImage(flexBoxRef.current, selectedTicket.patientName + moment(selectedTicket.issueDateTime).format("DD-MM-YYYY"))}>LƯU</Button>
+                        </FlexBox>
                 </Modal>
             }
             

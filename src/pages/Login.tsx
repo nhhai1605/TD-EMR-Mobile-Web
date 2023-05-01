@@ -28,7 +28,9 @@ export const Login = () => {
             return;
         }
         const data: any = getValues();
-        const response = await login(data.username, data.password);
+        const response = await login(data.username, data.password).catch((err) => {
+            snackbar.error(err.message.toString());
+        });
         if (response) {
             snackbar.success(t('common.loginSuccess'));
             navigate('/trang-chu');

@@ -41,7 +41,7 @@ const Register = () => {
             .matches(/[a-zA-Z0-9]/, 'Mật khẩu chỉ được có số và chữ'),
         confirmPassword: yup.string()
             .oneOf([yup.ref('password'), null], 'Mật khẩu không khớp'),
-        cccd:yup.string().nullable()
+        cccd:yup.string().nullable().transform((o, c) => o === "" ? null : c)
             .min(9, 'Quá ngắn')
             .max(12, 'Quá dài'),
         email: yup.string().nullable().email('Email không hợp lệ'),
@@ -57,11 +57,6 @@ const Register = () => {
         getValues,
         clearErrors,
     } = useForm({ resolver: yupResolver(validationFormSchema) , defaultValues: initialDataForm});
-    
-    useEffect(() =>
-    {
-        
-    }, [])
     
     const onSubmit = async() => {
         const validateForm = await trigger();
@@ -86,7 +81,7 @@ const Register = () => {
             
         }).catch((err) => { 
             console.log(err);
-            snackbar.error("Đăng ký thất bại");
+            snackbar.error(err.message.toString());
         }).finally(() => toggleLoading(false))
     }
     

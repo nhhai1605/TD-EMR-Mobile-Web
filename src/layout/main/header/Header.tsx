@@ -6,11 +6,18 @@ import DrawerItem from './DrawerItem';
 import { Link } from 'react-router-dom';
 import FooterLink from "../footer/FooterLink";
 import {useAuth} from "../../../@core/contexts/AuthProvider";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import QueueOutlinedIcon from "@mui/icons-material/QueueOutlined";
+import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumberOutlined";
+import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
+import LocalHospitalOutlinedIcon from "@mui/icons-material/LocalHospitalOutlined";
+import ContactSupportOutlinedIcon from "@mui/icons-material/ContactSupportOutlined";
 
 // personalizacao
 const StyledToolbar = styled(Toolbar)({
     display: 'flex',
     justifyContent: 'space-between',
+    width:'90%'
 });
 
 const ListMenu = styled(List)(({ theme }) => ({
@@ -23,21 +30,25 @@ const ListMenu = styled(List)(({ theme }) => ({
 //rotas
 const itemList = [
     {
-        text: 'Danh sách BN',
-        to: '/danh-sach-benh-nhan',
+        text: 'Lấy phiếu khám',
+        to: '/lay-phieu-kham',
     },
     {
-        text: 'Danh sách phiếu khám',
+        text: 'DS Phiếu khám',
         to: '/danh-sach-phieu-kham',
     },
     {
-        text: 'Danh sách cuộc hẹn',
+        text: 'Bệnh nhân',
+        to: '/danh-sach-benh-nhan',
+    },
+    {
+        text: 'Cuộc hẹn',
         to: '/danh-sach-cuoc-hen',
     },
     {
-        text: 'Liên Hệ',
-        to: '/lien-he',
-    },
+        text: "Liên hệ",
+        to: 'lien-he',
+    }
 ];
 
 const Header = () => {
@@ -48,101 +59,101 @@ const Header = () => {
             position='sticky'
             sx={{
                 backgroundColor: '#fff',
+                justifyContent:'center',
+                alignItems:'center'
             }}
             elevation={0}
         >
-            <Container>
-                <StyledToolbar>
-                    <FooterLink text={
-                        <Typography
+            <StyledToolbar>
+                <FooterLink text={
+                    <Typography
+                        sx={{
+                            color: '#64B5F6',
+                        }}
+                        variant='h1'
+                        component='h1'
+                    >Viện Tim TP.HCM
+                    </Typography>
+                } 
+                disabled={false} 
+                link={"/"}/>
+                <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
+                    <DrawerItem />
+                </Box>
+                <ListMenu sx={{ width: '50%' }}>
+                    {itemList.map((item) => {
+                        const { text } = item;
+                        return (
+                            <ListItem key={text}>
+                                <ListItemButton
+                                    component={Link}
+                                    to={item.to}
+                                    sx={{
+                                        color: '#64B5F6',
+                                        fontWeight: 'bold',
+                                        '&:hover': {
+                                            backgroundColor: 'transparent',
+                                            color: '#1e2a5a',
+                                        },
+                                    }}
+                                >
+                                    <ListItemText
+                                        sx={{
+                                            fontWeight: 'bold',
+                                        }}
+                                        primary={text}
+                                    />
+                                </ListItemButton>
+                            </ListItem>
+                        );
+                    })}
+                    {
+                        !isAuthenticated &&
+                        <ListItemButton
+                            component={Link}
+                            to={'/login'}
                             sx={{
                                 color: '#64B5F6',
+                                fontWeight: 'bold',
+                                '&:hover': {
+                                    backgroundColor: 'transparent',
+                                    color: '#1e2a5a',
+                                },
                             }}
-                            variant='h1'
-                            component='h1'
-                        >Viện Tim TP.HCM
-                        </Typography>
-                    } 
-                    disabled={false} 
-                    link={"/"}/>
-                    <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
-                        <DrawerItem />
-                    </Box>
-                    <ListMenu sx={{ width: '50%' }}>
-                        {itemList.map((item) => {
-                            const { text } = item;
-                            return (
-                                <ListItem key={text}>
-                                    <ListItemButton
-                                        component={Link}
-                                        to={item.to}
-                                        sx={{
-                                            color: '#64B5F6',
-                                            fontWeight: 'bold',
-                                            '&:hover': {
-                                                backgroundColor: 'transparent',
-                                                color: '#1e2a5a',
-                                            },
-                                        }}
-                                    >
-                                        <ListItemText
-                                            sx={{
-                                                fontWeight: 'bold',
-                                            }}
-                                            primary={text}
-                                        />
-                                    </ListItemButton>
-                                </ListItem>
-                            );
-                        })}
-                        {
-                            !isAuthenticated &&
-                            <ListItemButton
-                                component={Link}
-                                to={'/login'}
+                        >
+                            <ListItemText
                                 sx={{
-                                    color: '#64B5F6',
                                     fontWeight: 'bold',
-                                    '&:hover': {
-                                        backgroundColor: 'transparent',
-                                        color: '#1e2a5a',
-                                    },
                                 }}
-                            >
-                                <ListItemText
-                                    sx={{
-                                        fontWeight: 'bold',
-                                    }}
-                                    primary={'Đăng nhập'}
-                                />
-                            </ListItemButton>
-                        }
-                        {
-                            isAuthenticated &&
-                            <ListItemButton
-                                onClick={async () => await logout()}
-                                component={Link}
-                                to={'#'}
+                                primary={'Đăng nhập'}
+                            />
+                        </ListItemButton>
+                    }
+                    {
+                        isAuthenticated &&
+                        <ListItemButton
+                            onClick={async () => await logout()}
+                            component={Link}
+                            to={'#'}
+                            sx={{
+                                color: '#64B5F6',
+                                fontWeight: 'bold',
+                                '&:hover': {
+                                    backgroundColor: 'transparent',
+                                    color: '#1e2a5a',
+                                },
+                            }}
+                        >
+                            <ListItemText
                                 sx={{
-                                    color: '#64B5F6',
                                     fontWeight: 'bold',
-                                    '&:hover': {
-                                        backgroundColor: 'transparent',
-                                        color: '#1e2a5a',
-                                    },
                                 }}
-                            >
-                                <ListItemText
-                                    sx={{
-                                        fontWeight: 'bold',
-                                    }}
-                                    primary={'Đăng xuất'}
-                                />
-                            </ListItemButton>
-                        }
-                    </ListMenu>
-                </StyledToolbar>
-            </Container>
+                                primary={'Đăng xuất'}
+                            />
+                        </ListItemButton>
+                    }
+                </ListMenu>
+            </StyledToolbar>
         </AppBar>
     );
 };

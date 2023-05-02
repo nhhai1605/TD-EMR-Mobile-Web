@@ -108,7 +108,7 @@ const CreatePatientDrawer = (props) => {
             .nullable()
             .min(9, 'Quá ngắn')
             .max(12, 'Quá dài')
-            .matches(/^[0-9]+$/, 'SĐT chỉ được có số'),
+            .matches(/^[0-9]+$/, 'SĐT chỉ được có số').transform((o, c) => o === "" ? null : c),
         gender: yup.string().nullable().required('Bắt buộc'),
         address: yup.string().nullable().required('Bắt buộc'),
         cityProvinceID: yup.string().nullable().required('Bắt buộc'),
@@ -435,6 +435,7 @@ const CreatePatientDrawer = (props) => {
                             <TdTextBox
                                 {...otherFields}
                                 value={value}
+                                required
                                 moveToNextEleAfterEnter
                                 size={'small'}
                                 sx={{flex: 1}}

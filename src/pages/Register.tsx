@@ -20,6 +20,8 @@ import {yupResolver} from "@hookform/resolvers/yup";
 import {useAuth} from "../@core/contexts/AuthProvider";
 import mobileService from "../@core/services/mobileService";
 import { ROUTE_PATHS } from "@core/constants/routeConfig";
+import cookie from "react-cookies";
+import authService from "../@core/services/authService";
 
 const Register = () => {
     const snackbar = useSnackbar();
@@ -57,6 +59,27 @@ const Register = () => {
         getValues,
         clearErrors,
     } = useForm({ resolver: yupResolver(validationFormSchema) , defaultValues: initialDataForm});
+
+    const addFacilityToAccount = async () =>
+    {
+        const account = authService.getCurrentUser();
+        await mobileService.getFacilityDetail('260').then(async (facility:any) =>
+        {
+            const payload = {
+                WebUserAccountId: account.webUserAccID,
+                FacilityCode: facility.facilityCode,
+            }
+            await mobileService.addFacilityToAccount(payload).catch((err) =>
+            {
+                snackbar.error(err.message.toString())
+            })
+        }).catch((err) =>
+        {
+            snackbar.error(err.message.toString())
+        })
+        
+    }
+    
     
     const onSubmit = async() => {
         const validateForm = await trigger();
@@ -76,9 +99,11 @@ const Register = () => {
         console.log(newAccount);
         await mobileService.register(newAccount).then(async () =>
         {
+            // addFacilityToAccount().catch(err => snackbar.error(err.message)).finally(() =>
+            // {
             snackbar.success("Đăng ký thành công");
             navigate(ROUTE_PATHS.Login);
-            
+            // });
         }).catch((err) => { 
             console.log(err);
             snackbar.error(err.message.toString());

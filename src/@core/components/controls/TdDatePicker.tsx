@@ -51,7 +51,7 @@ export const TdDatePicker = <TInputDate, TDate>(props: TdDatePickerProps<TInputD
     ...datePickerProps
   } = props;
   const { t } = useTranslation();
-  const [dateOpen,setDateOpen] = useState(false);
+  // const [dateOpen,setDateOpen] = useState(false);
 
   const styles =
     margin === 'dense'
@@ -88,33 +88,33 @@ export const TdDatePicker = <TInputDate, TDate>(props: TdDatePickerProps<TInputD
     <LocalizationProvider dateAdapter={AdapterMoment}>
       <DesktopDatePicker
         {...datePickerProps}
-        open={dateOpen}
-        onClose={() => setDateOpen(false)}
+        // open={dateOpen}
+        // onClose={() => setDateOpen(false)}
         label={labelI18nKey ? t(labelI18nKey) : label}
         value={value}
         onChange={onChange}
         inputFormat={format}
-        // renderInput={renderInput || onRenderInputDefault}
-        renderInput={(props) => (
-            <TextField
-                onClick={() => setDateOpen(true)}
-                onKeyDown={e => {e.preventDefault()}}
-                {...props}
-                fullWidth
-                InputLabelProps={{ shrink: shrink, ...InputLabelProps }}
-                sx={{
-                  '& .MuiInputBase-inputSizeSmall': {
-                    height: '1.7375em !important',
-                  },
-                  ...sx,
-                  ...styles,
-                }}
-                size={size}
-                error={error}
-                required={required}
-                helperText={helperText}
-            />
-        )}
+        renderInput={renderInput || onRenderInputDefault}
+        // renderInput={(props) => (
+        //     <TextField
+        //         onClick={() => setDateOpen(true)}
+        //         onKeyDown={e => {e.preventDefault()}}
+        //         {...props}
+        //         fullWidth
+        //         InputLabelProps={{ shrink: shrink, ...InputLabelProps }}
+        //         sx={{
+        //           '& .MuiInputBase-inputSizeSmall': {
+        //             height: '1.7375em !important',
+        //           },
+        //           ...sx,
+        //           ...styles,
+        //         }}
+        //         size={size}
+        //         error={error}
+        //         required={required}
+        //         helperText={helperText}
+        //     />
+        // )}
       />
     </LocalizationProvider>
   );

@@ -47,16 +47,6 @@ class AuthService {
   getCurrentUser = () => {
     return cookie.load(COOKIE_NAME.USER);
   };
-
-  getCurrentUserId = () => {
-    const userInfo: any = cookie.load(COOKIE_NAME.USER);
-    return parseNumber(userInfo?.staffID || 0);
-  };
-
-  getCurrentUserName = () => {
-    const userInfo: any = cookie.load(COOKIE_NAME.USER);
-    return userInfo?.accName || '';
-  };
   
   showLoginWhenExpired$ = () => {
     return internalApiService.detectShowLoginWhenExpired$();

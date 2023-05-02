@@ -44,6 +44,7 @@ const Home = () => {
             </Button>
             <Button
               variant='contained'
+              disabled
               component={Link}
               to={'/dat-kham-dich-vu'}
               sx={buttonCSS}
@@ -52,6 +53,7 @@ const Home = () => {
             </Button>
             <Button
               variant='contained'
+              disabled
               component={Link}
               to={'/dat-kham-bac-si'}
               sx={buttonCSS}

@@ -8,17 +8,23 @@ import {
     IconButton,
     ListItem,
     ListItemIcon,
-    ListItemText, Typography,
+    ListItemText, Typography, ListItemButton,
 } from '@mui/material'
 // rotas
 import {Link} from 'react-router-dom';
 // icons
-import EmailIcon from '@mui/icons-material/Email';
-import HomeIcon from '@mui/icons-material/Home';
+import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlined';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';import LogoutIcon from '@mui/icons-material/Logout';
+import LoginIcon from '@mui/icons-material/Login';
 import InfoIcon from '@mui/icons-material/Info';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
+import {useAuth} from "../../../@core/contexts/AuthProvider";
+import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumberOutlined';
+import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
+import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
+import LocalHospitalOutlinedIcon from '@mui/icons-material/LocalHospitalOutlined';
 
 const drawerWidth = 240;
 
@@ -34,30 +40,39 @@ const DrawerHeader = styled('div')(({theme}) => ({
 const itemList = [
     {
         text: "Trang chủ",
-        icon: <HomeIcon/>,
+        icon: <HomeOutlinedIcon/>,
         to: "/"
     },
     {
-        text: 'Danh sách BN',
-        to: '/danh-sach-benh-nhan',
+        text: 'Lấy phiếu khám',
+        icon: <QueueOutlinedIcon/>,
+        to: '/lay-phieu-kham',
     },
     {
-        text: 'Danh sách phiếu khám',
+        text: 'DS Phiếu khám',
+        icon: <ConfirmationNumberOutlinedIcon/>,
         to: '/danh-sach-phieu-kham',
     },
     {
-        text: 'Danh sách cuộc hẹn',
+        text: 'Bệnh nhân',
+        icon: <PeopleAltOutlinedIcon/>,
+        to: '/danh-sach-benh-nhan',
+    },
+    {
+        text: 'Cuộc hẹn',
+        icon: <LocalHospitalOutlinedIcon/>,
         to: '/danh-sach-cuoc-hen',
     },
     {
         text: "Liên hệ",
-        icon: <EmailIcon/>,
+        icon: <ContactSupportOutlinedIcon/>,
         to: 'lien-he',
     }
 ];
 
 
 const DrawerItem = () => {
+    const {isAuthenticated, logout} = useAuth();
 
     const theme = useTheme();
     const [open, setOpen] = useState(false);
@@ -129,6 +144,64 @@ const DrawerItem = () => {
                             </ListItem>
                         )
                     })}
+                    {
+                        !isAuthenticated &&
+                        <ListItemButton
+                            component={Link}
+                            to={'/login'}
+                            sx={{
+                                color: '#414141',
+                                "&:hover": {
+                                    backgroundColor: '#e9e5e5',
+                                    color: '#1c2859',
+                                }
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    "&:hover": {
+                                        backgroundColor: 'transparent',
+                                        color: '#1c2859',
+                                    }
+                                }}
+                            >
+                                <LoginIcon/>
+                            </ListItemIcon>
+                            <ListItemText
+                                primary={'Đăng nhập'}
+                            />
+                        </ListItemButton>
+                    }
+                    {
+                        isAuthenticated &&
+                        <ListItemButton
+                            onClick={async () => await logout()}
+                            component={Link}
+                            to={'#'}
+                            sx={{
+                                color: '#414141',
+                                "&:hover": {
+                                    backgroundColor: '#e9e5e5',
+                                    color: '#1c2859',
+                                }
+                            }}
+                        >
+                            <ListItemIcon
+                                sx={{
+                                    "&:hover": {
+                                        backgroundColor: 'transparent',
+                                        color: '#1c2859',
+                                    }
+                                }}
+                            >
+                                <LogoutIcon/>
+                            </ListItemIcon>
+                            <ListItemText
+                                
+                                primary={'Đăng xuất'}
+                            />
+                        </ListItemButton>
+                    }
                 </List>
             </Drawer>
         </>

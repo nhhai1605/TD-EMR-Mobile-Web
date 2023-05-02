@@ -10,7 +10,17 @@ import moment from "moment";
 import QRCode from "react-qr-code";
 import FlexBox from "../@core/components/FlexBox";
 import * as htmlToImage from 'html-to-image';
-
+export const exportAsImage = async (element, imageFileName) => {
+    htmlToImage.toPng(element, {style:{}}).then((dataUrl) => {
+        downloadImage(dataUrl, imageFileName);
+    });
+};
+export const downloadImage = (image, imageFileName) => {
+    const fakeLink = document.createElement("a");
+    fakeLink.download = imageFileName;
+    fakeLink.href = image;
+    fakeLink.click();
+};
 const TicketList = () => {
     const [allTickets, setAllTickets] = useState([])
     const [selectedTicket, setSelectedTicket] = useState(null)
@@ -55,17 +65,7 @@ const TicketList = () => {
         fetchData();
     }, [])
     
-    const exportAsImage = async (element, imageFileName) => {
-        htmlToImage.toPng(element, {style:{}}).then((dataUrl) => {
-            downloadImage(dataUrl, imageFileName);
-        });
-    };
-    const downloadImage = (image, imageFileName) => {
-        const fakeLink = document.createElement("a");
-        fakeLink.download = imageFileName;
-        fakeLink.href = image;
-        fakeLink.click();
-    };
+
 
     return (
         <Container>
@@ -77,13 +77,17 @@ const TicketList = () => {
                     onClose={()=>setSelectedTicket(null)}>
                         <FlexBox sx={{alignItems:'center',justifyContent:'center',backgroundColor:'white',flexDirection:'column',padding:1,borderRadius:5}}>
                             <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:5}}>
-                                <Typography variant={"h5"}>{selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
-                                <Typography sx={{margin:2}} variant={"h5"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD-MM-YYYY")}</Typography>
+                                <Typography sx={{marginBottom:2}}variant={"h5"}>Số Thứ Tự: {selectedTicket.ticketNumberText}</Typography>
+                                <Typography sx={{marginBottom:2}} variant={"h5"}>{selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
+                                <Typography sx={{marginBottom:2}} variant={"h5"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD-MM-YYYY")}</Typography>
                                 <QRCode
                                     size={300}
                                     value={"qms" + selectedTicket.serialTicket}/>
                             </FlexBox>
-                            <Button sx={{margin:2}} variant={'contained'} onClick={() => exportAsImage(flexBoxRef.current, selectedTicket.patientName + moment(selectedTicket.issueDateTime).format("DD-MM-YYYY"))}>LƯU</Button>
+                            <FlexBox>
+                                <Button sx={{margin:2, '&:hover': {backgroundColor: '#a12222'}}} color={'error'} variant={'contained'} onClick={() => setSelectedTicket(null)}>ĐÓNG</Button>
+                                <Button sx={{margin:2}} variant={'contained'} onClick={() => exportAsImage(flexBoxRef.current, selectedTicket.patientName + moment(selectedTicket.issueDateTime).format("DD-MM-YYYY"))}>LƯU</Button>
+                            </FlexBox>
                         </FlexBox>
                 </Modal>
             }

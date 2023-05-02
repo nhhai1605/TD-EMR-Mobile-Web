@@ -36,8 +36,7 @@ const CreateTicket = () => {
             console.log(patients[0])
             setAllPatients(patients);
         }).catch(err=>{
-            console.log(err);
-            snackbar.error("Lỗi khi tải danh sách bệnh nhân")
+            snackbar.error(err.message.toString());
         }).finally(()=>{setSelectedDate(moment().add(1,'days').toDate())});
         toggleLoading(false);
     }
@@ -68,7 +67,7 @@ const CreateTicket = () => {
         }
         await mobileService.createNewTicket(payload).then((res:any) => {
             setTicketNumber('qms' + res?.serialTicket)
-        }).catch(err => snackbar.error("Lỗi khi tạo phiếu khám")).finally(()=> {
+        }).catch(err => snackbar.error(err.message.toString())).finally(()=> {
             snackbar.success("Tạo phiếu khám thành công")
             toggleLoading(false)
         })
@@ -82,12 +81,12 @@ const CreateTicket = () => {
             const availablePatients = allPatients.filter(p => !filterByDate.find(r => r.patientCode === p.patientCode && r.patientName == p.fullName));
             setPatientList(availablePatients)
         }).catch(err => {
-            snackbar.error("Lỗi khi tải danh sách phiếu khám")
+            snackbar.error(err.message.toString());            
         }).finally(()=>setPatientLoading(false))
     }
     
     useEffect(()=>{
-        setSelectedPatient(null)
+        setSelectedPatient(null) 
         getAvailablePatients();
     },[selectedDate])
     

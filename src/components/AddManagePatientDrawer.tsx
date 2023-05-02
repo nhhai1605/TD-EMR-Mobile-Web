@@ -65,7 +65,7 @@ const AddManagePatientDrawer = (props) => {
                 onClose();
             }).catch((err) =>
             {
-                snackbar.error("Thêm BN thất bại. " + err.message.toString());
+                snackbar.error(err.message.toString());
             })
         }
         
@@ -96,7 +96,7 @@ const AddManagePatientDrawer = (props) => {
                             }
                         }).catch(err =>
                         {
-                            snackbar.error('Lỗi khi lấy thông tin người thân')
+                            snackbar.error(err.message.toString())
                         })
                     }
                 }

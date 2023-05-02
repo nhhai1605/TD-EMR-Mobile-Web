@@ -291,14 +291,14 @@ const CreatePatientDrawer = (props) => {
             values.patientCode = patient.patientCode;
             response = await mobileService.updatePatient(values).catch(err =>
             {
-                snackbar.error("Lỗi khi cập nhật thông tin bệnh nhân");
+                snackbar.error(err.message.toString());
             });
         }
         else
         {
             response = await mobileService.addPatient(values).catch(err =>
             {
-                snackbar.error("Lỗi khi thêm mới bệnh nhân");
+                snackbar.error(err.message.toString());
             });
         }
         if (response)

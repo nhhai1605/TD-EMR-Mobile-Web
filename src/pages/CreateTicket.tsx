@@ -71,9 +71,7 @@ const CreateTicket = () => {
             ticketGetTime: moment(selectedDate).format('YYYY-MM-DDTHH:mm:ss'),
         }
         await mobileService.createNewTicket(payload).then((res:any) => {
-            setSelectedPatient(null)
             getAvailablePatients();
-            // setTicketNumber('qms' + res?.serialTicket)
             setSelectedTicket(res)
             snackbar.success("Tạo phiếu khám thành công")
         }).catch(err => snackbar.error(err.message.toString())).finally(()=> {
@@ -84,6 +82,7 @@ const CreateTicket = () => {
 
     const getAvailablePatients= async () => {
         setPatientLoading(true)
+        setSelectedPatient(null)
         await mobileService.getListTicket(account.webUserAccID).then((res : any) => {
             // const filterByDate = res.filter(r => moment(r.issueDateTime).format('YYYY-MM-DD') === moment(selectedDate).format('YYYY-MM-DD'));
             const availablePatients = allPatients.filter(p => !res.find(r => r.patientCode === p.patientCode && r.patientName == p.fullName));
@@ -94,7 +93,6 @@ const CreateTicket = () => {
     }
     
     useEffect(()=>{
-        setSelectedPatient(null) 
         getAvailablePatients();
     },[selectedDate])
     
@@ -165,10 +163,9 @@ const CreateTicket = () => {
                         size={'small'}
                         required
                         shrink
-                        value={selectedPatient?.Id}
+                        value={selectedPatient?.Id ?? null}
                         notched
                         onChange={e=>{
-                            console.log(patientList.find(p => p.Id === e.target.value))
                             setSelectedPatient(patientList.find(p => p.Id === e.target.value))
                         }}
                         disabled={patientLoading || !selectedDate || patientList.length == 0}

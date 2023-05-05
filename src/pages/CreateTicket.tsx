@@ -13,6 +13,8 @@ import QRCode from "react-qr-code";
 import COOKIE_NAME from "../@core/constants/cookie";
 import cookie from "react-cookies";
 import {exportAsImage} from "./TicketList";
+import {CustomBox} from "./Home";
+import {Flex} from "glamor/jsxstyle";
 const CreateTicket = () => {
     const snackbar = useSnackbar();
     const { getPatientList } = useAppointment()
@@ -97,93 +99,94 @@ const CreateTicket = () => {
     },[selectedDate])
     
     return (
-        <React.Fragment>
-            <Container
-                maxWidth='md'
-                sx={{
-                    minHeight: '80vh',
-                    height: '80vh',
-                    paddingTop: '10px',
-                    overflow: 'auto',
-                    backgroundColor:'white'
-                }}
-            >
-                {
-                    selectedTicket &&
-                    <Modal
-                        style={{display:'flex',alignItems:'center',justifyContent:'center'}}
-                        open={Boolean(selectedTicket)}
-                        onClose={()=>setSelectedTicket(null)}>
-                        <FlexBox sx={{alignItems:'center',justifyContent:'center',backgroundColor:'white',flexDirection:'column',padding:1,borderRadius:5}}>
-                            <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:5}}>
-                                <Typography sx={{marginBottom:2}}variant={"h5"}>Số Thứ Tự: {selectedTicket.ticketNumberText}</Typography>
-                                <Typography sx={{marginBottom:2}} variant={"h5"}>{selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
-                                <Typography sx={{marginBottom:2}} variant={"h5"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD-MM-YYYY")}</Typography>
-                                <QRCode
-                                    size={300}
-                                    value={"qms" + selectedTicket.serialTicket}/>
+        <CustomBox>
+        <Container
+            sx={{
+                position: 'relative',
+                flexDirection: 'column',
+                minHeight: '90vh',
+                height: '90vh',
+                paddingTop: '10px',
+                backgroundColor:'white',
+            }}
+        >
+            {
+                selectedTicket &&
+                <Modal
+                    style={{display:'flex',alignItems:'center',justifyContent:'center'}}
+                    open={Boolean(selectedTicket)}
+                    onClose={()=>setSelectedTicket(null)}>
+                    <FlexBox sx={{alignItems:'center',justifyContent:'center',backgroundColor:'white',flexDirection:'column',padding:1,borderRadius:5}}>
+                        <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:5}}>
+                            <FlexBox sx={{justifyContent:'center', flexDirection:'column',alignItems:'flex-start', paddingBottom:2}}>
+                                <Typography sx={{marginBottom:2, color:'#db220d'}} variant={"h4"}>STT: {selectedTicket.ticketNumberText}</Typography>
+                                <Typography sx={{marginBottom:2}} variant={"h6"}>Bệnh Nhân: {selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
+                                <Typography sx={{marginBottom:2}} variant={"h6"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD-MM-YYYY")}</Typography>
                             </FlexBox>
-                            <FlexBox>
-                                <Button sx={{margin:2, '&:hover': {backgroundColor: '#a12222'}}} color={'error'} variant={'contained'} onClick={() => setSelectedTicket(null)}>ĐÓNG</Button>
-                                <Button sx={{margin:2}} variant={'contained'} onClick={() => exportAsImage(flexBoxRef.current, selectedTicket.patientName + moment(selectedTicket.issueDateTime).format("DD-MM-YYYY"))}>LƯU</Button>
-                            </FlexBox>
+                            <QRCode
+                                size={250}
+                                value={"qms" + selectedTicket.serialTicket}/>
                         </FlexBox>
-                    </Modal>
-                }
-                
-                <FlexBox sx={{paddingY:2}}>
-                    <Typography variant='h5'>Lấy Phiếu Khám Bệnh</Typography>
-                </FlexBox>
-                <FlexBox sx={{paddingY:2}}>
-                    <TdDatePicker
-                        disableHighlightToday
-                        minDate={moment().add(1,'days').toDate()}
-                        label={'Ngày Khám'}
-                        inputFormat='DD/MM/YYYY'
-                        maxDate={moment().add(1,'months').toDate()}
-                        value={selectedDate}
-                        size='small'
-                        shrink
-                        required
-                        error={haveDateError && !selectedDate}
-                        helperText={haveDateError && !selectedDate && <>Vui lòng chọn ngày</>}
-                        onChange={(e : any) => {
-                            if(e && moment(e.toDate()).isValid())
-                            {
-                                setSelectedDate(e.toDate())
-                            }
-                            else {
-                                setSelectedDate(null)
-                            }
-                        }}
-                    />
-                </FlexBox>
-                <FlexBox sx={{paddingY:2}}>
-                    <TdSelect
-                        size={'small'}
-                        required
-                        shrink
-                        value={selectedPatient?.Id ?? null}
-                        notched
-                        onChange={e=>{
-                            setSelectedPatient(patientList.find(p => p.Id === e.target.value))
-                        }}
-                        disabled={patientLoading || !selectedDate || patientList.length == 0}
-                        data={patientList}
-                        error={havePatientError && !selectedPatient}
-                        helperText={havePatientError && !selectedPatient && <>Vui lòng chọn bệnh nhân</>}
-                        placeholder={!selectedDate ? "Chọn ngày trước" : (patientLoading ? "Đang tải..." : (patientList.length == 0 ? "Không có BN nào có thể lấy phiếu" : 'Chọn bệnh nhân'))}
-                        label={'Bệnh Nhân'}
-                    />
-                </FlexBox>
-                <FlexBox sx={{paddingY:2}}>
-                    <LoadingButton onClick={onSubmit} type='button' variant='contained'>
-                        Xác nhận
-                    </LoadingButton>
-                </FlexBox>
-            </Container>
+                        <FlexBox>
+                            <Button sx={{margin:2, '&:hover': {backgroundColor: '#a12222'}}} color={'error'} variant={'contained'} onClick={() => setSelectedTicket(null)}>ĐÓNG</Button>
+                            <Button sx={{margin:2}} variant={'contained'} onClick={() => exportAsImage(flexBoxRef.current, selectedTicket.patientName + moment(selectedTicket.issueDateTime).format("DD-MM-YYYY"))}>LƯU</Button>
+                        </FlexBox>
+                    </FlexBox>
+                </Modal>
+            }
             
-        </React.Fragment>
+            <FlexBox sx={{paddingY:2}}>
+                <Typography variant='h5'>Lấy Phiếu Khám Bệnh</Typography>
+            </FlexBox>
+            <FlexBox sx={{paddingY:2}}>
+                <TdDatePicker
+                    disableHighlightToday
+                    minDate={moment().add(1,'days').toDate()}
+                    label={'Ngày Khám'}
+                    inputFormat='DD/MM/YYYY'
+                    maxDate={moment().add(1,'months').toDate()}
+                    value={selectedDate}
+                    size='small'
+                    shrink
+                    required
+                    error={haveDateError && !selectedDate}
+                    helperText={haveDateError && !selectedDate && <>Vui lòng chọn ngày</>}
+                    onChange={(e : any) => {
+                        if(e && moment(e.toDate()).isValid())
+                        {
+                            setSelectedDate(e.toDate())
+                        }
+                        else {
+                            setSelectedDate(null)
+                        }
+                    }}
+                />
+            </FlexBox>
+            <FlexBox sx={{paddingY:2}}>
+                <TdSelect
+                    size={'small'}
+                    required
+                    shrink
+                    value={selectedPatient?.Id ?? null}
+                    notched
+                    onChange={e=>{
+                        setSelectedPatient(patientList.find(p => p.Id === e.target.value))
+                    }}
+                    disabled={patientLoading || !selectedDate || patientList.length == 0}
+                    data={patientList}
+                    error={havePatientError && !selectedPatient}
+                    helperText={havePatientError && !selectedPatient && <>Vui lòng chọn bệnh nhân</>}
+                    placeholder={!selectedDate ? "Chọn ngày trước" : (patientLoading ? "Đang tải..." : (patientList.length == 0 ? "Không có BN nào có thể lấy phiếu" : 'Chọn bệnh nhân'))}
+                    label={'Bệnh Nhân'}
+                />
+            </FlexBox>
+            <FlexBox sx={{paddingY:2, justifyContent:'center'}}>
+                <LoadingButton onClick={onSubmit} type='button' variant='contained' fullWidth={true}>
+                    Xác nhận
+                </LoadingButton>
+            </FlexBox>
+        </Container>
+        </CustomBox>
     )
 
 }

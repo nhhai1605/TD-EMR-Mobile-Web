@@ -1,27 +1,23 @@
 import { Outlet } from 'react-router-dom';
 
-import { Box,  } from '@mui/material';
+import {Box} from '@mui/material';
 import Header from './header/Header';
 import Footer from './footer/Footer';
 
 function MasterLayout() {
-  return (
-    <>
-      <Box
-        sx={{
-          display: 'flex',
-          flexDirection: { xs: 'column', md: 'row' },
-        }}
-      >
-        <Box component='main' sx={{ position: 'relative', flexGrow: 1 }}>
-          <Header />
-          {/* <Container> */}
-            <Outlet />
-          {/* </Container> */}
-          <Footer />
-        </Box>
-      </Box>
-    </>
+	return (
+		<Box
+			sx={{
+				// display: 'flex',
+		        flexDirection: { xs: 'column', md: 'row' }
+			}}
+			>
+			{/*<Box component='main' sx={{ position: 'relative', flexGrow: 1 }}>*/}
+				<Header />
+				<Outlet />
+				<Footer />
+			{/*</Box>*/}
+		</Box>
   );
 }
 

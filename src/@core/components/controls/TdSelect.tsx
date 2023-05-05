@@ -123,7 +123,7 @@ export const TdSelect = (props: TdSelectProps & typeof defaultProps) => {
         labelId={`${labelI18nKey}`}
         label={labelI18nKey ? t(`${labelI18nKey}`) : label}
         displayEmpty
-        renderValue={selectProps.value ? undefined : () => <StyleTypography variant='body2'>{placeholder}</StyleTypography>}
+        renderValue={selectProps.value ? undefined : () => <StyleTypography sx={{textAlign:'start'}} variant='body2'>{placeholder}</StyleTypography>}
       >
         {/* fake for removing the warning from mui. */}
         <MenuItem sx={{ display: 'none' }} key={`${labelI18nKey}+Empty`} value={undefined}></MenuItem>
@@ -134,7 +134,7 @@ export const TdSelect = (props: TdSelectProps & typeof defaultProps) => {
           dataSources.map((item, index) => {
             return (
               <MenuItem key={`${labelI18nKey}+${index}`} value={item[keyValue]}>
-                <Typography variant='body2'>{item[textValue]}</Typography>
+                <Typography sx={{textAlign:'start'}} variant='body2'>{item[textValue]}</Typography>
               </MenuItem>
             );
           })}

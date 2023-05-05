@@ -10,6 +10,7 @@ import moment from "moment";
 import QRCode from "react-qr-code";
 import FlexBox from "../@core/components/FlexBox";
 import * as htmlToImage from 'html-to-image';
+import {CustomBox} from "./Home";
 export const exportAsImage = async (element, imageFileName) => {
     htmlToImage.toPng(element, {style:{}}).then((dataUrl) => {
         downloadImage(dataUrl, imageFileName);
@@ -68,48 +69,58 @@ const TicketList = () => {
 
 
     return (
-        <Container>
-            {
-                selectedTicket &&
-                <Modal
-                    style={{display:'flex',alignItems:'center',justifyContent:'center'}}
-                    open={Boolean(selectedTicket)}
-                    onClose={()=>setSelectedTicket(null)}>
-                        <FlexBox sx={{alignItems:'center',justifyContent:'center',backgroundColor:'white',flexDirection:'column',padding:1,borderRadius:5}}>
-                            <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:5}}>
-                                <Typography sx={{marginBottom:2}}variant={"h5"}>Số Thứ Tự: {selectedTicket.ticketNumberText}</Typography>
-                                <Typography sx={{marginBottom:2}} variant={"h5"}>{selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
-                                <Typography sx={{marginBottom:2}} variant={"h5"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD-MM-YYYY")}</Typography>
-                                <QRCode
-                                    size={300}
-                                    value={"qms" + selectedTicket.serialTicket}/>
-                            </FlexBox>
-                            <FlexBox>
-                                <Button sx={{margin:2, '&:hover': {backgroundColor: '#a12222'}}} color={'error'} variant={'contained'} onClick={() => setSelectedTicket(null)}>ĐÓNG</Button>
-                                <Button sx={{margin:2}} variant={'contained'} onClick={() => exportAsImage(flexBoxRef.current, selectedTicket.patientName + moment(selectedTicket.issueDateTime).format("DD-MM-YYYY"))}>LƯU</Button>
-                            </FlexBox>
-                        </FlexBox>
-                </Modal>
-            }
-            
-            <Box sx={{
-                display: "flex",
-                flexDirection: "column",
-                height: 500,
+        <CustomBox>
+            <Container
+            sx={{
+                position: 'relative',
+                flexDirection: 'column',
+                minHeight: '90vh',
+                height: '90vh',
+                paddingTop: '10px',
+                backgroundColor:'white',
             }}>
                 {
-                    allTickets.map((ticket, index) =>{
-                        return (
-                            <Link sx={{paddingY:2}} component={'button'} onClick={()=> {
-                                setSelectedTicket(ticket);
-                            }}>
-                                {moment(ticket.issueDateTime).format("DD-MM-YYYY")} - {ticket.patientName}
-                            </Link>
-                        )
-                    })
+                    selectedTicket &&
+                    <Modal
+                        style={{display:'flex',alignItems:'center',justifyContent:'center'}}
+                        open={Boolean(selectedTicket)}
+                        onClose={()=>setSelectedTicket(null)}>
+                            <FlexBox sx={{alignItems:'center',justifyContent:'center',backgroundColor:'white',flexDirection:'column',padding:1,borderRadius:5}}>
+                                <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:5}}>
+                                    <Typography sx={{marginBottom:2}}variant={"h5"}>Số Thứ Tự: {selectedTicket.ticketNumberText}</Typography>
+                                    <Typography sx={{marginBottom:2}} variant={"h5"}>{selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
+                                    <Typography sx={{marginBottom:2}} variant={"h5"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD-MM-YYYY")}</Typography>
+                                    <QRCode
+                                        size={300}
+                                        value={"qms" + selectedTicket.serialTicket}/>
+                                </FlexBox>
+                                <FlexBox>
+                                    <Button sx={{margin:2, '&:hover': {backgroundColor: '#a12222'}}} color={'error'} variant={'contained'} onClick={() => setSelectedTicket(null)}>ĐÓNG</Button>
+                                    <Button sx={{margin:2}} variant={'contained'} onClick={() => exportAsImage(flexBoxRef.current, selectedTicket.patientName + moment(selectedTicket.issueDateTime).format("DD-MM-YYYY"))}>LƯU</Button>
+                                </FlexBox>
+                            </FlexBox>
+                    </Modal>
                 }
-            </Box>
-        </Container>
+                
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "column",
+                    height: 500,
+                }}>
+                    {
+                        allTickets.map((ticket, index) =>{
+                            return (
+                                <Link sx={{paddingY:2}} component={'button'} onClick={()=> {
+                                    setSelectedTicket(ticket);
+                                }}>
+                                    {moment(ticket.issueDateTime).format("DD-MM-YYYY")} - {ticket.patientName}
+                                </Link>
+                            )
+                        })
+                    }
+                </Box>
+            </Container>
+        </CustomBox>
     )
 
 }

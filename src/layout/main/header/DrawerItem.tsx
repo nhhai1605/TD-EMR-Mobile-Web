@@ -124,6 +124,7 @@ const DrawerItem = () => {
                                 to={item.to}
                                 sx={{
                                     color: '#414141',
+                                    borderRadius:0,
                                     "&:hover": {
                                         backgroundColor: '#e9e5e5',
                                         color: '#1c2859',

@@ -36,12 +36,12 @@ function AppRoutes() {
   };
 
    const routes = [...authLayoutRoutings, ...masterLayoutRoutings];
-   console.log('routes', routes)
+   // console.log('routes', routes)
   return (
     <Routes>
       <Route index element={<Navigate to={'trang-chu'} />} />
-      <Route index element={<Navigate to={'gioi-thieu'} />} />
-      <Route index element={<Navigate to={'lien-he'} />} />
+      {/*<Route index element={<Navigate to={'gioi-thieu'} />} />*/}
+      {/*<Route index element={<Navigate to={'lien-he'} />} />*/}
       {/* <Route path='*' element={<Navigate to={ROUTE_PATHS.NotFound} />} /> */}
       {routes.map(({ element: Element, children, path }, index) => {
         if (children && children?.length > 0) {

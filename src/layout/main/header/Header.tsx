@@ -58,9 +58,10 @@ const Header = () => {
             component='nav'
             position='sticky'
             sx={{
-                backgroundColor: '#fff',
+                backgroundColor: '#f3f4f9',
                 justifyContent:'center',
-                alignItems:'center'
+                alignItems:'center',
+                height:'10vh',
             }}
             elevation={0}
         >

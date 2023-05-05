@@ -14,9 +14,9 @@ import {
 import {Link} from 'react-router-dom';
 // icons
 import ContactSupportOutlinedIcon from '@mui/icons-material/ContactSupportOutlined';
-import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';import LogoutIcon from '@mui/icons-material/Logout';
+import HomeOutlinedIcon from '@mui/icons-material/HomeOutlined';
+import LogoutIcon from '@mui/icons-material/Logout';
 import LoginIcon from '@mui/icons-material/Login';
-import InfoIcon from '@mui/icons-material/Info';
 import MenuIcon from '@mui/icons-material/Menu';
 import ChevronLeftIcon from '@mui/icons-material/ChevronLeft';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';

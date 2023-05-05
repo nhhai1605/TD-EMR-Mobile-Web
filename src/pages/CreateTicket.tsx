@@ -106,7 +106,6 @@ const CreateTicket = () => {
                 flexDirection: 'column',
                 minHeight: '90vh',
                 height: '90vh',
-                paddingTop: '10px',
                 backgroundColor:'white',
             }}
         >
@@ -117,11 +116,11 @@ const CreateTicket = () => {
                     open={Boolean(selectedTicket)}
                     onClose={()=>setSelectedTicket(null)}>
                     <FlexBox sx={{alignItems:'center',justifyContent:'center',backgroundColor:'white',flexDirection:'column',padding:1,borderRadius:5}}>
-                        <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:5}}>
+                        <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:3}}>
                             <FlexBox sx={{justifyContent:'center', flexDirection:'column',alignItems:'flex-start', paddingBottom:2}}>
                                 <Typography sx={{marginBottom:2, color:'#db220d'}} variant={"h4"}>STT: {selectedTicket.ticketNumberText}</Typography>
                                 <Typography sx={{marginBottom:2}} variant={"h6"}>Bệnh Nhân: {selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
-                                <Typography sx={{marginBottom:2}} variant={"h6"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD-MM-YYYY")}</Typography>
+                                <Typography sx={{marginBottom:2}} variant={"h6"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD/MM/YYYY")}</Typography>
                             </FlexBox>
                             <QRCode
                                 size={250}

@@ -1,7 +1,7 @@
 ﻿import React, {useCallback, useEffect, useRef, useState} from "react";
 import {useAppointment} from "../context/AppointmentContext";
 import {useSnackbar} from "../@core/contexts/SnackbarProvider";
-import {Box, Button, Container, Link, Modal, Typography} from "@mui/material";
+import {Badge, Box, Button, Container, Link, List, Modal, Typography} from "@mui/material";
 import { toggleLoading } from '@core/components/loading/LoadingScreen';
 import mobileService from "../@core/services/mobileService";
 import COOKIE_NAME from "../@core/constants/cookie";
@@ -11,6 +11,11 @@ import QRCode from "react-qr-code";
 import FlexBox from "../@core/components/FlexBox";
 import * as htmlToImage from 'html-to-image';
 import {CustomBox} from "./Home";
+import Paper from "@mui/material/Paper";
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import {Female, Male} from "@mui/icons-material";
+import MedicalInformationOutlinedIcon from '@mui/icons-material/MedicalInformationOutlined';
+import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 export const exportAsImage = async (element, imageFileName) => {
     htmlToImage.toPng(element, {style:{}}).then((dataUrl) => {
         downloadImage(dataUrl, imageFileName);
@@ -71,54 +76,68 @@ const TicketList = () => {
     return (
         <CustomBox>
             <Container
-            sx={{
-                position: 'relative',
-                flexDirection: 'column',
-                minHeight: '90vh',
-                height: '90vh',
-                paddingTop: '10px',
-                backgroundColor:'white',
-            }}>
+                disableGutters
+                sx={{
+                    position: 'relative',
+                    flexDirection: 'column',
+                    minHeight: '90vh',
+                    height: '90vh',
+                    backgroundColor:'white',
+                }}
+            >
                 {
                     selectedTicket &&
                     <Modal
                         style={{display:'flex',alignItems:'center',justifyContent:'center'}}
                         open={Boolean(selectedTicket)}
                         onClose={()=>setSelectedTicket(null)}>
-                            <FlexBox sx={{alignItems:'center',justifyContent:'center',backgroundColor:'white',flexDirection:'column',padding:1,borderRadius:5}}>
-                                <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:5}}>
-                                    <Typography sx={{marginBottom:2}}variant={"h5"}>Số Thứ Tự: {selectedTicket.ticketNumberText}</Typography>
-                                    <Typography sx={{marginBottom:2}} variant={"h5"}>{selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
-                                    <Typography sx={{marginBottom:2}} variant={"h5"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD-MM-YYYY")}</Typography>
-                                    <QRCode
-                                        size={300}
-                                        value={"qms" + selectedTicket.serialTicket}/>
+                        <FlexBox sx={{alignItems:'center',justifyContent:'center',backgroundColor:'white',flexDirection:'column',padding:1,borderRadius:5}}>
+                            <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:3}}>
+                                <FlexBox sx={{justifyContent:'center', flexDirection:'column',alignItems:'flex-start', paddingBottom:2}}>
+                                    <Typography sx={{marginBottom:2, color:'#db220d'}} variant={"h4"}>STT: {selectedTicket.ticketNumberText}</Typography>
+                                    <Typography sx={{marginBottom:2}} variant={"h6"}>Bệnh Nhân: {selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
+                                    <Typography sx={{marginBottom:2}} variant={"h6"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD/MM/YYYY")}</Typography>
                                 </FlexBox>
-                                <FlexBox>
-                                    <Button sx={{margin:2, '&:hover': {backgroundColor: '#a12222'}}} color={'error'} variant={'contained'} onClick={() => setSelectedTicket(null)}>ĐÓNG</Button>
-                                    <Button sx={{margin:2}} variant={'contained'} onClick={() => exportAsImage(flexBoxRef.current, selectedTicket.patientName + moment(selectedTicket.issueDateTime).format("DD-MM-YYYY"))}>LƯU</Button>
-                                </FlexBox>
+                                <QRCode
+                                    size={250}
+                                    value={"qms" + selectedTicket.serialTicket}/>
                             </FlexBox>
+                            <FlexBox>
+                                <Button sx={{margin:2, '&:hover': {backgroundColor: '#a12222'}}} color={'error'} variant={'contained'} onClick={() => setSelectedTicket(null)}>ĐÓNG</Button>
+                                <Button sx={{margin:2}} variant={'contained'} onClick={() => exportAsImage(flexBoxRef.current, selectedTicket.patientName + moment(selectedTicket.issueDateTime).format("DD-MM-YYYY"))}>LƯU</Button>
+                            </FlexBox>
+                        </FlexBox>
                     </Modal>
                 }
-                
-                <Box sx={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 500,
-                }}>
+                <Paper style={{height:'90vh', maxHeight: '90vh', overflow: 'auto', backgroundColor:'white'}} >
+                    <FlexBox sx={{padding:2}}>
+                        <Typography variant='h5'>Danh sách Phiếu Khám Bệnh</Typography>
+                    </FlexBox>
+                    <List sx={{paddingBottom:4}}>
                     {
                         allTickets.map((ticket, index) =>{
                             return (
-                                <Link sx={{paddingY:2}} component={'button'} onClick={()=> {
-                                    setSelectedTicket(ticket);
-                                }}>
-                                    {moment(ticket.issueDateTime).format("DD-MM-YYYY")} - {ticket.patientName}
-                                </Link>
+                                <Paper onClick={()=>setSelectedTicket(ticket)} variant="outlined" sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2, backgroundColor:"#f3f4f9",}}>
+                                    <FlexBox sx={{flexDirection:'column', alignItems:'flex-start'}}>
+                                        <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
+                                            <DateRangeOutlinedIcon sx={{color: '#e3681b', fontSize: '1.5rem', marginRight:1}}/>
+                                            <Typography variant={"h6"} sx={{lineHeight:'40px'}}>Ngày Khám: {moment(ticket?.issueDateTime).format("DD/MM/YYYY")}</Typography>
+                                        </FlexBox>
+                                        <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
+                                            <PersonOutlinedIcon sx={{color: '#45b561', fontSize: '1.5rem', marginRight:1}}/>
+                                            <Typography variant={"h6"} sx={{lineHeight:'40px'}}>Bệnh Nhân: {ticket?.patientName}</Typography>
+                                        </FlexBox>
+                                        <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
+                                            <MedicalInformationOutlinedIcon sx={{color: '#22b0e3', fontSize: '1.5rem', marginRight:1}}/>
+                                            <Typography variant={"h6"} sx={{lineHeight:'40px'}}>Mã BN: {ticket?.patientCode}</Typography>
+                                        </FlexBox>
+                                    </FlexBox>
+                                </Paper>
                             )
                         })
                     }
-                </Box>
+                    </List>
+                </Paper>
             </Container>
         </CustomBox>
     )

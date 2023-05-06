@@ -104,7 +104,6 @@ const CreateTicket = () => {
             sx={{
                 position: 'relative',
                 flexDirection: 'column',
-                minHeight: '90vh',
                 height: '90vh',
                 backgroundColor:'white',
             }}

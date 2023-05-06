@@ -121,7 +121,7 @@ const AddManagePatientDrawer = (props) => {
     }
 
     return (
-        <Drawer anchor={'right'} sx={{ zIndex: '1300' }} open={open} onClose={onClose}>
+        <Drawer anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} open={open} onClose={onClose}>
             <Box sx={{ padding: '20px' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant='h5'>Thêm bệnh nhân vào danh sách quản lí</Typography>

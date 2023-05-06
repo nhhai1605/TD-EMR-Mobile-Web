@@ -39,32 +39,32 @@ const DrawerHeader = styled('div')(({theme}) => ({
 //rotas
 const itemList = [
     {
-        text: "Trang chủ",
+        text: "Trang Chủ",
         icon: <HomeOutlinedIcon/>,
         to: "/"
     },
     {
-        text: 'Lấy phiếu khám',
+        text: 'Lấy Phiếu Khám',
         icon: <QueueOutlinedIcon/>,
         to: '/lay-phieu-kham',
     },
     {
-        text: 'DS Phiếu khám',
+        text: 'DS Phiếu Khám',
         icon: <ConfirmationNumberOutlinedIcon/>,
         to: '/danh-sach-phieu-kham',
     },
     {
-        text: 'Bệnh nhân',
+        text: 'Bệnh Nhân',
         icon: <PeopleAltOutlinedIcon/>,
         to: '/danh-sach-benh-nhan',
     },
     {
-        text: 'Cuộc hẹn',
+        text: 'Cuộc Hẹn',
         icon: <LocalHospitalOutlinedIcon/>,
         to: '/danh-sach-cuoc-hen',
     },
     {
-        text: "Liên hệ",
+        text: "Liên Hệ",
         icon: <ContactSupportOutlinedIcon/>,
         to: 'lien-he',
     }
@@ -147,11 +147,13 @@ const DrawerItem = () => {
                     })}
                     {
                         !isAuthenticated &&
-                        <ListItemButton
+                        <ListItem
+                            onClick={handleDrawerClose}
                             component={Link}
-                            to={'/login'}
+                            to={"/login"}
                             sx={{
                                 color: '#414141',
+                                borderRadius:0,
                                 "&:hover": {
                                     backgroundColor: '#e9e5e5',
                                     color: '#1c2859',
@@ -168,19 +170,20 @@ const DrawerItem = () => {
                             >
                                 <LoginIcon/>
                             </ListItemIcon>
-                            <ListItemText
-                                primary={'Đăng nhập'}
-                            />
-                        </ListItemButton>
+                            <ListItemText primary={'Đăng Nhập'}/>
+                        </ListItem>
                     }
                     {
                         isAuthenticated &&
-                        <ListItemButton
-                            onClick={async () => await logout()}
+                        <ListItem
+                            onClick={async ()=>{
+                                await logout();
+                            }}
                             component={Link}
-                            to={'#'}
+                            to={"#"}
                             sx={{
                                 color: '#414141',
+                                borderRadius:0,
                                 "&:hover": {
                                     backgroundColor: '#e9e5e5',
                                     color: '#1c2859',
@@ -195,13 +198,10 @@ const DrawerItem = () => {
                                     }
                                 }}
                             >
-                                <LogoutIcon/>
+                                <LoginIcon/>
                             </ListItemIcon>
-                            <ListItemText
-                                
-                                primary={'Đăng xuất'}
-                            />
-                        </ListItemButton>
+                            <ListItemText primary={'Đăng Xuất'}/>
+                        </ListItem>
                     }
                 </List>
             </Drawer>

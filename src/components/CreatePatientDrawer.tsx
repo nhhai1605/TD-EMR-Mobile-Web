@@ -312,7 +312,7 @@ const CreatePatientDrawer = (props) => {
     }
 
     return (
-        <Drawer anchor={'right'} sx={{zIndex: '1300'}} open={open} onClose={thisOnClose}>
+        <Drawer anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} open={open} onClose={thisOnClose}>
             <Box sx={{padding: '20px'}}>
                 <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Typography variant='h3'>Tạo bệnh nhân</Typography>

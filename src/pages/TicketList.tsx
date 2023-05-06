@@ -80,7 +80,6 @@ const TicketList = () => {
                 sx={{
                     position: 'relative',
                     flexDirection: 'column',
-                    minHeight: '90vh',
                     height: '90vh',
                     backgroundColor:'white',
                 }}
@@ -119,17 +118,17 @@ const TicketList = () => {
                             return (
                                 <Paper onClick={()=>setSelectedTicket(ticket)} variant="outlined" sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2, backgroundColor:"#f3f4f9",}}>
                                     <FlexBox sx={{flexDirection:'column', alignItems:'flex-start'}}>
-                                        <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
-                                            <DateRangeOutlinedIcon sx={{color: '#e3681b', fontSize: '1.5rem', marginRight:1}}/>
-                                            <Typography variant={"h6"} sx={{lineHeight:'40px'}}>Ngày Khám: {moment(ticket?.issueDateTime).format("DD/MM/YYYY")}</Typography>
+                                        <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
+                                            <DateRangeOutlinedIcon sx={{color: '#e3681b', marginRight:1}}/>
+                                            <Typography variant={"h6"} sx={{textAlign:'start'}}>Ngày Khám: {moment(ticket?.issueDateTime).format("DD/MM/YYYY")}</Typography>
                                         </FlexBox>
-                                        <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
-                                            <PersonOutlinedIcon sx={{color: '#45b561', fontSize: '1.5rem', marginRight:1}}/>
-                                            <Typography variant={"h6"} sx={{lineHeight:'40px'}}>Bệnh Nhân: {ticket?.patientName}</Typography>
+                                        <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
+                                            <PersonOutlinedIcon sx={{color: '#45b561',  marginRight:1}}/>
+                                            <Typography variant={"h6"} sx={{textAlign:'start'}}>Bệnh Nhân: {ticket?.patientName}</Typography>
                                         </FlexBox>
-                                        <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
-                                            <MedicalInformationOutlinedIcon sx={{color: '#22b0e3', fontSize: '1.5rem', marginRight:1}}/>
-                                            <Typography variant={"h6"} sx={{lineHeight:'40px'}}>Mã BN: {ticket?.patientCode}</Typography>
+                                        <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
+                                            <MedicalInformationOutlinedIcon sx={{color: '#22b0e3',  marginRight:1}}/>
+                                            <Typography variant={"h6"} sx={{textAlign:'start'}}>Mã BN: {ticket?.patientCode}</Typography>
                                         </FlexBox>
                                     </FlexBox>
                                 </Paper>

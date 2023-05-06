@@ -55,7 +55,6 @@ const AppointmentList = () => {
                 sx={{
                     position: 'relative',
                     flexDirection: 'column',
-                    minHeight: '90vh',
                     height: '90vh',
                     backgroundColor:'white',
                 }}
@@ -70,25 +69,25 @@ const AppointmentList = () => {
                                 return (
                                     <Paper onClick={()=>setSelectedAppointment(appt)} variant="outlined" sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2, backgroundColor:"#f3f4f9",}}>
                                         <FlexBox sx={{flexDirection:'column', alignItems:'flex-start'}}>
-                                            <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
-                                                <PersonOutlinedIcon sx={{color: '#45b561', fontSize: '1.5rem', marginRight:1}}/>
-                                                <Typography variant={"h6"} sx={{lineHeight:'40px'}}>Bệnh Nhân: {appt?.patientName}</Typography>
+                                            <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
+                                                <PersonOutlinedIcon sx={{color: '#45b561', marginRight:1}}/>
+                                                <Typography variant={"h6"} sx={{textAlign:'start'}}>Bệnh Nhân: {appt?.patientName}</Typography>
                                             </FlexBox>
-                                            <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
-                                                <DateRangeOutlinedIcon sx={{color: '#e3681b', fontSize: '1.5rem', marginRight:1}}/>
-                                                <Typography variant={"h6"} sx={{lineHeight:'40px'}}>Ngày Hẹn: {moment(appt?.apptDate).format("DD/MM/YYYY")}</Typography>
+                                            <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
+                                                <DateRangeOutlinedIcon sx={{color: '#e3681b', marginRight:1}}/>
+                                                <Typography variant={"h6"} sx={{textAlign:'start'}}>Ngày Hẹn: {moment(appt?.apptDate).format("DD/MM/YYYY")}</Typography>
                                             </FlexBox>
-                                            <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
-                                                <AccessTimeOutlinedIcon sx={{color: '#7632ed', fontSize: '1.5rem', marginRight:1}}/>
-                                                <Typography variant={"h6"} sx={{lineHeight:'40px'}}>Vào lúc: {moment(appt?.apptDate).format("HH:mm")}</Typography>
+                                            <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
+                                                <AccessTimeOutlinedIcon sx={{color: '#7632ed', marginRight:1}}/>
+                                                <Typography variant={"h6"} sx={{textAlign:'start'}}>Vào lúc: {moment(appt?.apptDate).format("HH:mm")}</Typography>
                                             </FlexBox>
-                                            <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
-                                                <MedicalServicesOutlinedIcon sx={{color: '#225ce3', fontSize: '1.5rem', marginRight:1}}/>
-                                                <Typography variant={"h6"} sx={{lineHeight:'40px'}}>Dịch Vụ: {appt?.medServiceNames}</Typography>
+                                            <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
+                                                <MedicalServicesOutlinedIcon sx={{color: '#225ce3', marginRight:1}}/>
+                                                <Typography variant={"h6"} sx={{textAlign:'start'}}>Dịch Vụ: {appt?.medServiceNames}</Typography>
                                             </FlexBox>
-                                            <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
-                                                <MasksOutlinedIcon sx={{color: '#e322c9', fontSize: '1.5rem', marginRight:1}}/>
-                                                <Typography variant={"h6"} sx={{lineHeight:'40px'}}>Bác Sĩ: {appt?.doctorStaff?.fullName}</Typography>
+                                            <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
+                                                <MasksOutlinedIcon sx={{color: '#e322c9', marginRight:1}}/>
+                                                <Typography variant={"h6"} sx={{textAlign:'start'}}>Bác Sĩ: {appt?.doctorStaff?.fullName}</Typography>
                                             </FlexBox>
                                         </FlexBox>
                                     </Paper>

@@ -56,7 +56,6 @@ const PatientList = () => {
 				sx={{
 					position: 'relative',
 					flexDirection: 'column',
-					minHeight: '90vh',
 					height: '90vh',
 					backgroundColor:'white',
 				}}
@@ -90,10 +89,10 @@ const PatientList = () => {
 										setCreatePatientDrawer(true);
 									}} variant="outlined" sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2, backgroundColor:"#f3f4f9",}}>
 										<FlexBox sx={{flexDirection:'column', alignItems:'flex-start'}}>
-											<FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'space-between', width:'100%'}}>
-												<FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
-													<PersonOutlinedIcon sx={{color: '#45b561', fontSize: '1.5rem', marginRight:1}}/>
-													<Typography variant={"h6"} sx={{lineHeight:'40px'}}>Bệnh Nhân: {patient?.fullName}</Typography>
+											<FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent: 'space-between', width: '100%',py:1}}>
+												<FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%'}}>
+													<PersonOutlinedIcon sx={{color: '#45b561', marginRight:1}}/>
+													<Typography variant={"h6"} sx={{textAlign:'start'}}>Bệnh Nhân: {patient?.fullName}</Typography>
 												</FlexBox>
 												{/*<Typography variant={"h6"} sx={{lineHeight:'30px'}}>Bệnh Nhân: {patient?.fullName}</Typography>*/}
 												<Badge color='error' badgeContent={0}>
@@ -104,13 +103,13 @@ const PatientList = () => {
 													)}
 												</Badge>
 											</FlexBox>
-											<FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
-												<MedicalInformationOutlinedIcon sx={{color: '#22b0e3', fontSize: '1.5rem', marginRight:1}}/>
-												<Typography variant={"h6"} sx={{lineHeight:'40px'}}>Mã BN: {patient?.patientCode}</Typography>
+											<FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
+												<MedicalInformationOutlinedIcon sx={{color: '#22b0e3', marginRight:1}}/>
+												<Typography variant={"h6"} sx={{textAlign:'start'}}>Mã BN: {patient?.patientCode}</Typography>
 											</FlexBox>
-											<FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'flex-start', width:'100%'}}>
-												<DateRangeOutlinedIcon sx={{color: '#e3681b', fontSize: '1.5rem', marginRight:1}}/>
-												<Typography variant={"h6"} sx={{lineHeight:'40px'}}>Ngày Sinh: {moment(patient?.dob).format("DD/MM/YYYY")}</Typography>
+											<FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
+												<DateRangeOutlinedIcon sx={{color: '#e3681b', marginRight:1}}/>
+												<Typography variant={"h6"} sx={{textAlign:'start'}}>Ngày Sinh: {moment(patient?.dob).format("DD/MM/YYYY")}</Typography>
 											</FlexBox>
 										</FlexBox>
 									</Paper>

@@ -30,23 +30,23 @@ const ListMenu = styled(List)(({ theme }) => ({
 //rotas
 const itemList = [
     {
-        text: 'Lấy phiếu khám',
+        text: 'Lấy Phiếu Khám',
         to: '/lay-phieu-kham',
     },
     {
-        text: 'DS Phiếu khám',
+        text: 'DS Phiếu Lhám',
         to: '/danh-sach-phieu-kham',
     },
     {
-        text: 'Bệnh nhân',
+        text: 'Bệnh Nhân',
         to: '/danh-sach-benh-nhan',
     },
     {
-        text: 'Cuộc hẹn',
+        text: 'Cuộc Hẹn',
         to: '/danh-sach-cuoc-hen',
     },
     {
-        text: "Liên hệ",
+        text: "Liên Hệ",
         to: 'lien-he',
     }
 ];
@@ -81,16 +81,17 @@ const Header = () => {
                 <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                     <DrawerItem />
                 </Box>
-                <ListMenu sx={{ width: '50%' }}>
+                <ListMenu sx={{ width: '60%' }}>
                     {itemList.map((item) => {
                         const { text } = item;
                         return (
-                            <ListItem key={text}>
+                            <ListItem key={text} sx={{px:1}}>
                                 <ListItemButton
                                     component={Link}
                                     to={item.to}
                                     sx={{
-                                        color: '#64B5F6',
+                                        px:0,
+                                        color: '#2b6bc4',
                                         fontWeight: 'bold',
                                         '&:hover': {
                                             backgroundColor: 'transparent',
@@ -100,6 +101,7 @@ const Header = () => {
                                 >
                                     <ListItemText
                                         sx={{
+                                            textAlign:'center',
                                             fontWeight: 'bold',
                                         }}
                                         primary={text}
@@ -110,48 +112,56 @@ const Header = () => {
                     })}
                     {
                         !isAuthenticated &&
-                        <ListItemButton
-                            component={Link}
-                            to={'/login'}
-                            sx={{
-                                color: '#64B5F6',
-                                fontWeight: 'bold',
-                                '&:hover': {
-                                    backgroundColor: 'transparent',
-                                    color: '#1e2a5a',
-                                },
-                            }}
-                        >
-                            <ListItemText
+                        <ListItem sx={{px:1}}>
+                            <ListItemButton
+                                component={Link}
+                                to={'/login'}
                                 sx={{
+                                    px:0,
+                                    color: '#2b6bc4',
                                     fontWeight: 'bold',
+                                    '&:hover': {
+                                        backgroundColor: 'transparent',
+                                        color: '#1e2a5a',
+                                    },
                                 }}
-                                primary={'Đăng nhập'}
-                            />
-                        </ListItemButton>
+                            >
+                                <ListItemText
+                                    sx={{
+                                        textAlign:'center',
+                                        fontWeight: 'bold',
+                                    }}
+                                    primary={'Đăng Nhập'}
+                                />
+                            </ListItemButton>
+                        </ListItem>
                     }
                     {
                         isAuthenticated &&
-                        <ListItemButton
-                            onClick={async () => await logout()}
-                            component={Link}
-                            to={'#'}
-                            sx={{
-                                color: '#64B5F6',
-                                fontWeight: 'bold',
-                                '&:hover': {
-                                    backgroundColor: 'transparent',
-                                    color: '#1e2a5a',
-                                },
-                            }}
-                        >
-                            <ListItemText
+                        <ListItem sx={{px:1}}>
+                            <ListItemButton
+                                onClick={async () => await logout()}
+                                component={Link}
+                                to={'#'}
                                 sx={{
+                                    px:0,
+                                    color: '#2b6bc4',
                                     fontWeight: 'bold',
+                                    '&:hover': {
+                                        backgroundColor: 'transparent',
+                                        color: '#1e2a5a',
+                                    },
                                 }}
-                                primary={'Đăng xuất'}
-                            />
-                        </ListItemButton>
+                            >
+                                <ListItemText
+                                    sx={{
+                                        textAlign:'center',
+                                        fontWeight: 'bold',
+                                    }}
+                                    primary={'Đăng Xuất'}
+                                />
+                            </ListItemButton>
+                        </ListItem>
                     }
                 </ListMenu>
             </StyledToolbar>

@@ -95,8 +95,8 @@ const BoxText = styled(Box)(({ theme }) => ({
     position:'relative',
     top:'-50%',
     [theme.breakpoints.up('sm')]: {
-        top:'10%',
-        left:'10%',
+        top:'20%',
+        left:'-10%',
     },
 }));
 

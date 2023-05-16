@@ -89,6 +89,7 @@ const CreateTicket = () => {
             // const filterByDate = res.filter(r => moment(r.issueDateTime).format('YYYY-MM-DD') === moment(selectedDate).format('YYYY-MM-DD'));
             const availablePatients = allPatients.filter(p => !res.find(r => r.patientCode === p.patientCode && r.patientName == p.fullName));
             setPatientList(availablePatients)
+            availablePatients?.length > 0 && setSelectedPatient(availablePatients[0]);
         }).catch(err => {
             snackbar.error(err.message.toString());            
         }).finally(()=>setPatientLoading(false))

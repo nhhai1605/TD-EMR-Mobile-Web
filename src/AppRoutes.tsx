@@ -1,9 +1,10 @@
-import React, { useEffect } from 'react';
-import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import React, {lazy, useEffect} from 'react';
+import {Navigate, Route, Routes, useLocation} from 'react-router-dom';
 import { AuthRoute } from '@core/components/AuthRoute';
 import masterLayoutRoutings from 'layout/main/MasterLayoutRoutings';
 import authLayoutRoutings from 'layout/auth/AuthLayoutRoutings';
 import { LocalStorageHelper } from '@core/utils/localStorageHelper';
+import { ROUTE_PATHS } from '@core/constants/routeConfig';
 
 export interface LayoutProps {
   pageTitle: React.ReactNode;
@@ -11,6 +12,7 @@ export interface LayoutProps {
   avatar: string;
   setAvatar: (value: string) => void;
 }
+const NotFound = lazy(() => import('pages/NotFound').then(({ NotFound }) => ({ default: NotFound })));
 
 function AppRoutes() {
   const location = useLocation();
@@ -40,9 +42,9 @@ function AppRoutes() {
   return (
     <Routes>
       <Route index element={<Navigate to={'trang-chu'} />} />
-      {/*<Route index element={<Navigate to={'gioi-thieu'} />} />*/}
-      {/*<Route index element={<Navigate to={'lien-he'} />} />*/}
-      {/* <Route path='*' element={<Navigate to={ROUTE_PATHS.NotFound} />} /> */}
+      <Route path='*' element={<Navigate to={ROUTE_PATHS.NotFound} />} />
+      <Route path={ROUTE_PATHS.NotFound} element={<NotFound />} />
+
       {routes.map(({ element: Element, children, path }, index) => {
         if (children && children?.length > 0) {
           return (

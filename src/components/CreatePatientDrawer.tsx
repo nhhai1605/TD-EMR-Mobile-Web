@@ -310,6 +310,31 @@ const CreatePatientDrawer = (props) => {
         }
         toggleLoading(false);
     }
+    
+    const handleDeletePatient = async () => {
+        SwalAlert.fire({
+            text: 'Bạn có chắc muốn xóa bệnh nhân này khỏi DSQL?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Xóa',
+            cancelButtonText: 'Hủy',
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                const payload = {
+                    webUserAccID: account.webUserAccID,
+                    patientID: patient.patientID
+                }
+                await mobileService.removeManagePatient(payload).then((res) =>
+                {
+                    snackbar.success('Xóa thành công');
+                }).catch(err=>{
+                    snackbar.error(err.message.toString());
+                }).finally(()=>{
+                    onClose();
+                })
+            }
+        });
+    }
 
     return (
         <Drawer anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} open={open} onClose={thisOnClose}>
@@ -323,6 +348,7 @@ const CreatePatientDrawer = (props) => {
                 <Box component={"form"} sx={{
                     display: "flex",
                     flexDirection: "column",
+                    marginBottom: 5,
                 }}>
                     <Controller
                         name='fullName'
@@ -464,6 +490,7 @@ const CreatePatientDrawer = (props) => {
                                     setValue('suburbNameID', null);
                                     setValue('wardNameID', null);
                                 }}
+                                
                                 defaultValue={citiesProvinces.find((item) => item.cityProvinceID === initialDataForm.cityProvinceID)}
                                 textValue={'cityProvinceName'}
                                 keyValue={'cityProvinceID'}
@@ -621,13 +648,22 @@ const CreatePatientDrawer = (props) => {
                     />
                     <FlexBox
                         sx={{
-                            // position: 'absolute',
-                            // bottom: 10,
+                            position: 'fixed',
+                            bottom: 10,
+                            right:10,
                             gap: '20px',
-                            marginTop:'20px',
-                            justifyContent: 'flex-end',
                         }}
                     >
+                        {
+                            patient &&
+                            <Button onClick={handleDeletePatient} color={'error'} sx={{
+                                '&:hover': {
+                                    backgroundColor: '#a12222',
+                                }
+                            }} variant='contained'>
+                                Xóa BN
+                            </Button>
+                        }
                         <Button onClick={thisOnClose} color={'error'} sx={{
                             '&:hover': {
                                 backgroundColor: '#a12222',

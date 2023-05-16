@@ -152,7 +152,7 @@ class MobileService {
     {
         return internalApiService.postAsync('QMS/App_GetCurrentTicket', payload);
     }
-    cancelTicket(payload)
+    cancelTicket(payload: number)
     {
         return internalApiService.postAsync('QMS/App_CancelTicket', payload);
     }

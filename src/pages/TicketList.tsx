@@ -1,7 +1,7 @@
 ﻿import React, {useCallback, useEffect, useRef, useState} from "react";
 import {useAppointment} from "../context/AppointmentContext";
 import {useSnackbar} from "../@core/contexts/SnackbarProvider";
-import {Badge, Box, Button, Container, Link, List, Modal, Typography} from "@mui/material";
+import {Badge, Box, Button, Container, IconButton, Link, List, Modal, Typography} from "@mui/material";
 import { toggleLoading } from '@core/components/loading/LoadingScreen';
 import mobileService from "../@core/services/mobileService";
 import COOKIE_NAME from "../@core/constants/cookie";
@@ -16,6 +16,8 @@ import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 import {Female, Male} from "@mui/icons-material";
 import MedicalInformationOutlinedIcon from '@mui/icons-material/MedicalInformationOutlined';
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
+import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
+import {SwalAlert} from "../@core/components/SwalAlert";
 export const exportAsImage = async (element, imageFileName) => {
     htmlToImage.toPng(element, {style:{}}).then((dataUrl) => {
         downloadImage(dataUrl, imageFileName);
@@ -72,7 +74,27 @@ const TicketList = () => {
     }, [])
     
 
-
+    const handleDelete = async (ticket) =>
+    {
+        SwalAlert.fire({
+            text: 'Bạn có chắc muốn hủy phiếu khám này?',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonText: 'Đồng ý',
+            cancelButtonText: 'Không',
+        }).then(async (result) => {
+            if (result.isConfirmed) {
+                await mobileService.cancelTicket(Number(ticket.ticketID)).then(res=>{
+                    snackbar.success("Hủy phiếu khám thành công");
+                    fetchData();
+                }).catch(err => {
+                    snackbar.error(err.message);
+                })
+            }
+        });
+       
+    }
+    
     return (
         <CustomBox>
             <Container
@@ -117,6 +139,12 @@ const TicketList = () => {
                         allTickets.map((ticket, index) =>{
                             return (
                                 <Paper onClick={()=>setSelectedTicket(ticket)} variant="outlined" sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2, backgroundColor:"#f3f4f9",}}>
+                                    <IconButton onClick={(e)=>{
+                                        e.stopPropagation();
+                                        handleDelete(ticket);
+                                    }} sx={{position:'absolute', right:20, top:0}} size={'large'}>
+                                        <DeleteOutlineIcon />
+                                    </IconButton>
                                     <FlexBox sx={{flexDirection:'column', alignItems:'flex-start'}}>
                                         <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
                                             <DateRangeOutlinedIcon sx={{color: '#e3681b', marginRight:1}}/>

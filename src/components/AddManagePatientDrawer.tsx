@@ -130,8 +130,9 @@ const AddManagePatientDrawer = (props) => {
                     </IconButton>
                 </Box>
                 <Box component={"form"} sx={{
-                        display: "flex",
-                        flexDirection: "column",}}>
+                    display: "flex",
+                    marginBottom:5,
+                    flexDirection: "column",}}>
                     <Controller
                         name='contactMobileNum'
                         control={control}
@@ -175,11 +176,10 @@ const AddManagePatientDrawer = (props) => {
                     />
                     <FlexBox
                         sx={{
-                            position: 'absolute',
+                            position: 'fixed',
                             bottom: 10,
-                            gap: '10px',
-                            right: 22,
-                            justifyContent: 'space-between',
+                            right:10,
+                            gap: '20px',
                         }}
                     >
                         <Button onClick={onClose} color={'error'} sx={{

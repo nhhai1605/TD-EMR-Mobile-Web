@@ -36,7 +36,21 @@ function AppRoutes() {
       }
     } catch {}
   };
-
+  
+  const eventListener = () => {
+    window.history.pushState(null, null, window.location.pathname);
+  }
+  
+  useEffect(() => {
+    console.log("here");
+    window.history.pushState(null, null, window.location.pathname);
+    window.addEventListener('popstate', eventListener);
+    return () => {
+      window.removeEventListener('popstate', eventListener);
+    };
+  }, [window.location.pathname]);
+  
+  
    const routes = [...authLayoutRoutings, ...masterLayoutRoutings];
    // console.log('routes', routes)
   return (

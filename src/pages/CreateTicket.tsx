@@ -86,9 +86,10 @@ const CreateTicket = () => {
         setPatientLoading(true)
         setSelectedPatient(null)
         await mobileService.getListTicket(account.webUserAccID).then((res : any) => {
-            // const filterByDate = res.filter(r => moment(r.issueDateTime).format('YYYY-MM-DD') === moment(selectedDate).format('YYYY-MM-DD'));
+            console.log('res',res)
             const availablePatients = allPatients.filter(p => !res.find(r => r.patientCode === p.patientCode && r.patientName == p.fullName));
             setPatientList(availablePatients)
+            console.log("availablePatients",availablePatients)
             availablePatients?.length > 0 && setSelectedPatient(availablePatients[0]);
         }).catch(err => {
             snackbar.error(err.message.toString());            

@@ -322,11 +322,19 @@ const CreatePatientDrawer = (props) => {
             if (result.isConfirmed) {
                 const payload = {
                     webUserAccID: account.webUserAccID,
-                    patientID: patient.patientID
+                    patientID: patient.patientID,
+                    isPatientAppt: (patient.patientCode && patient.patientCode !== '') ? false : true,
                 }
                 await mobileService.removeManagePatient(payload).then((res) =>
                 {
-                    snackbar.success('Xóa thành công');
+                    if(res)
+                    {
+                        snackbar.success('Xóa thành công');
+                    }
+                    else
+                    {
+                        snackbar.error('Xóa thất bại');
+                    }
                 }).catch(err=>{
                     snackbar.error(err.message.toString());
                 }).finally(()=>{

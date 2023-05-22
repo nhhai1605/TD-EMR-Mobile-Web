@@ -42,24 +42,24 @@ const Home = () => {
                     >
                         Lấy Phiếu Khám
                     </Button>
-                    <Button
-                        variant='contained'
-                        disabled
-                        component={Link}
-                        to={'/dat-kham-dich-vu'}
-                        sx={buttonStyle}
-                    >
-                        Đặt Khám Dịch Vụ
-                    </Button>
-                    <Button
-                        variant='contained'
-                        disabled
-                        component={Link}
-                        to={'/dat-kham-bac-si'}
-                        sx={buttonStyle}
-                    >
-                        Đặt Khám Bác Sĩ
-                    </Button>
+                    {/*<Button*/}
+                    {/*    variant='contained'*/}
+                    {/*    disabled*/}
+                    {/*    component={Link}*/}
+                    {/*    to={'/dat-kham-dich-vu'}*/}
+                    {/*    sx={buttonStyle}*/}
+                    {/*>*/}
+                    {/*    Đặt Khám Dịch Vụ*/}
+                    {/*</Button>*/}
+                    {/*<Button*/}
+                    {/*    variant='contained'*/}
+                    {/*    disabled*/}
+                    {/*    component={Link}*/}
+                    {/*    to={'/dat-kham-bac-si'}*/}
+                    {/*    sx={buttonStyle}*/}
+                    {/*>*/}
+                    {/*    Đặt Khám Bác Sĩ*/}
+                    {/*</Button>*/}
                 </MobileFlexBox>
             </BoxText>
             </Container>

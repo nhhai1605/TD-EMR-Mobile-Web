@@ -239,9 +239,12 @@ const Register = () => {
                             )}
                         />
                         
-                        <LoadingButton type='button' onClick={onSubmit} fullWidth variant='contained' sx={{ mt: 3 }}>
+                        <LoadingButton type='button' onClick={onSubmit} fullWidth variant='contained' sx={{ my: 3 }}>
                             {"Đăng Ký"}
                         </LoadingButton>
+                        <Link href={ROUTE_PATHS.Login} variant='body2' >
+                            {"Đã có tài khoản? Đăng nhập"}
+                        </Link>
                     </Box>
                 </BoxedLayout>
             </Grid>

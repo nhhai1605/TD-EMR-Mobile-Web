@@ -45,6 +45,7 @@ class AuthService {
   };
 
   getCurrentUser = () => {
+    console.log(cookie.load(COOKIE_NAME.USER))
     return cookie.load(COOKIE_NAME.USER);
   };
   

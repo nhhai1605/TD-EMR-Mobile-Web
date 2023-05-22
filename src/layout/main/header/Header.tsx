@@ -1,5 +1,20 @@
-import React from 'react';
-import { AppBar, Toolbar, Box, List, ListItem, Typography, styled, ListItemButton, ListItemText, Container } from '@mui/material';
+import React, {useState} from 'react';
+import {
+    AppBar,
+    Toolbar,
+    Box,
+    List,
+    ListItem,
+    Typography,
+    styled,
+    ListItemButton,
+    ListItemText,
+    Container,
+    Avatar,
+    Menu,
+    MenuItem,
+    Link as MuiLink,
+} from '@mui/material';
 // menu
 import DrawerItem from './DrawerItem';
 // rotas
@@ -12,6 +27,9 @@ import ConfirmationNumberOutlinedIcon from "@mui/icons-material/ConfirmationNumb
 import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
 import LocalHospitalOutlinedIcon from "@mui/icons-material/LocalHospitalOutlined";
 import ContactSupportOutlinedIcon from "@mui/icons-material/ContactSupportOutlined";
+import authService from "../../../@core/services/authService";
+import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
+import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
 
 // personalizacao
 const StyledToolbar = styled(Toolbar)({
@@ -51,8 +69,63 @@ const itemList = [
     }
 ];
 
+
 const Header = () => {
     const {isAuthenticated, logout} = useAuth();
+    const [anchorDropdownMenu, setAnchorDropdownMenu] = useState<null | HTMLElement>(null);
+    const openDropdown = Boolean(anchorDropdownMenu);
+
+    const openDropdownMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+        setAnchorDropdownMenu(event.currentTarget);
+    };
+    const handleClose = () => {
+        // setAnchorNotification(null);
+        setAnchorDropdownMenu(null);
+    };
+    const renderDropdownMenu = () => {
+        return (
+            <Box sx={{maxHeight: 50}}>
+                <MuiLink
+                    sx={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        cursor: 'pointer',
+                        width: '150px',
+                    }}
+                    underline='none'
+                    color='inherit'
+                    onClick={(e: any) => openDropdownMenu(e)}
+                >
+                    <Typography display="inline" sx={{color: '#2b6bc4', fontWeight: 'bold', width:'100%'}}>{authService.getCurrentUser().accName}</Typography>
+                    <KeyboardArrowDownOutlinedIcon sx={{color: '#2b6bc4'}} />
+                </MuiLink>
+                <Menu
+                    id='basic-menu'
+                    anchorEl={anchorDropdownMenu}
+                    open={openDropdown}
+                    onClose={handleClose}
+                    anchorOrigin={{
+                        vertical: 'bottom',
+                        horizontal: 'center',
+                    }}
+                    transformOrigin={{
+                        vertical: 'top',
+                        horizontal: 'center',
+                    }}
+                    PaperProps={{
+                        style: {
+                            width: '150px',
+                        },
+                    }}
+                >
+                    <MenuItem sx={{ height: 50 }} onClick={async () => await logout()}>
+                        <LogoutOutlinedIcon className='mr-3' /> {"Đăng Xuất"}
+                    </MenuItem>
+                </Menu>
+            </Box>
+        );
+    };
+    
     return (
         <AppBar
             component='nav'
@@ -139,30 +212,36 @@ const Header = () => {
                     {
                         isAuthenticated &&
                         <ListItem sx={{px:1}}>
-                            <ListItemButton
-                                onClick={async () => await logout()}
-                                component={Link}
-                                to={'#'}
-                                sx={{
-                                    px:0,
-                                    color: '#2b6bc4',
-                                    fontWeight: 'bold',
-                                    '&:hover': {
-                                        backgroundColor: 'transparent',
-                                        color: '#1e2a5a',
-                                    },
-                                }}
-                            >
-                                <ListItemText
-                                    sx={{
-                                        textAlign:'center',
-                                        fontWeight: 'bold',
-                                    }}
-                                    primary={'Đăng Xuất'}
-                                />
-                            </ListItemButton>
+                            {renderDropdownMenu()}
                         </ListItem>
                     }
+                    {/*{*/}
+                    {/*    isAuthenticated &&*/}
+                    {/*    <ListItem sx={{px:1}}>*/}
+                    {/*        <ListItemButton*/}
+                    {/*            onClick={async () => await logout()}*/}
+                    {/*            component={Link}*/}
+                    {/*            to={'#'}*/}
+                    {/*            sx={{*/}
+                    {/*                px:0,*/}
+                    {/*                color: '#2b6bc4',*/}
+                    {/*                fontWeight: 'bold',*/}
+                    {/*                '&:hover': {*/}
+                    {/*                    backgroundColor: 'transparent',*/}
+                    {/*                    color: '#1e2a5a',*/}
+                    {/*                },*/}
+                    {/*            }}*/}
+                    {/*        >*/}
+                    {/*            <ListItemText*/}
+                    {/*                sx={{*/}
+                    {/*                    textAlign:'center',*/}
+                    {/*                    fontWeight: 'bold',*/}
+                    {/*                }}*/}
+                    {/*                primary={'Đăng Xuất'}*/}
+                    {/*            />*/}
+                    {/*        </ListItemButton>*/}
+                    {/*    </ListItem>*/}
+                    {/*}*/}
                 </ListMenu>
             </StyledToolbar>
         </AppBar>

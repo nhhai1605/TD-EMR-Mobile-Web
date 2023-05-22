@@ -109,6 +109,7 @@ const TicketList = () => {
                 {
                     selectedTicket &&
                     <Modal
+                        component={null}
                         style={{display:'flex',alignItems:'center',justifyContent:'center'}}
                         open={Boolean(selectedTicket)}
                         onClose={()=>setSelectedTicket(null)}>

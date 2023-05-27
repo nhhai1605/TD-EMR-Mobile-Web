@@ -30,6 +30,7 @@ import ContactSupportOutlinedIcon from "@mui/icons-material/ContactSupportOutlin
 import authService from "../../../@core/services/authService";
 import KeyboardArrowDownOutlinedIcon from '@mui/icons-material/KeyboardArrowDownOutlined';
 import LogoutOutlinedIcon from '@mui/icons-material/LogoutOutlined';
+import {PersonOutlined} from "@mui/icons-material";
 
 // personalizacao
 const StyledToolbar = styled(Toolbar)({
@@ -52,21 +53,21 @@ const itemList = [
         to: '/lay-phieu-kham',
     },
     {
-        text: 'DS Phiếu Lhám',
+        text: 'DS Phiếu Khám',
         to: '/danh-sach-phieu-kham',
     },
     {
         text: 'Bệnh Nhân',
         to: '/danh-sach-benh-nhan',
     },
-    {
-        text: 'Cuộc Hẹn',
-        to: '/danh-sach-cuoc-hen',
-    },
-    {
-        text: "Liên Hệ",
-        to: 'lien-he',
-    }
+    // {
+    //     text: 'Cuộc Hẹn',
+    //     to: '/danh-sach-cuoc-hen',
+    // },
+    // {
+    //     text: "Liên Hệ",
+    //     to: 'lien-he',
+    // }
 ];
 
 
@@ -118,6 +119,9 @@ const Header = () => {
                         },
                     }}
                 >
+                    <MenuItem sx={{ height: 50 }} component={Link} to="/tai-khoan">
+                        <PersonOutlined className='mr-3' /> {"Tài Khoản"}
+                    </MenuItem>
                     <MenuItem sx={{ height: 50 }} onClick={async () => await logout()}>
                         <LogoutOutlinedIcon className='mr-3' /> {"Đăng Xuất"}
                     </MenuItem>
@@ -215,33 +219,6 @@ const Header = () => {
                             {renderDropdownMenu()}
                         </ListItem>
                     }
-                    {/*{*/}
-                    {/*    isAuthenticated &&*/}
-                    {/*    <ListItem sx={{px:1}}>*/}
-                    {/*        <ListItemButton*/}
-                    {/*            onClick={async () => await logout()}*/}
-                    {/*            component={Link}*/}
-                    {/*            to={'#'}*/}
-                    {/*            sx={{*/}
-                    {/*                px:0,*/}
-                    {/*                color: '#2b6bc4',*/}
-                    {/*                fontWeight: 'bold',*/}
-                    {/*                '&:hover': {*/}
-                    {/*                    backgroundColor: 'transparent',*/}
-                    {/*                    color: '#1e2a5a',*/}
-                    {/*                },*/}
-                    {/*            }}*/}
-                    {/*        >*/}
-                    {/*            <ListItemText*/}
-                    {/*                sx={{*/}
-                    {/*                    textAlign:'center',*/}
-                    {/*                    fontWeight: 'bold',*/}
-                    {/*                }}*/}
-                    {/*                primary={'Đăng Xuất'}*/}
-                    {/*            />*/}
-                    {/*        </ListItemButton>*/}
-                    {/*    </ListItem>*/}
-                    {/*}*/}
                 </ListMenu>
             </StyledToolbar>
         </AppBar>

@@ -1,4 +1,4 @@
-﻿import React from "react";
+﻿import React, {useState} from "react";
 import {Box, Button, Container, Drawer, Grid, IconButton, Paper, Typography} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import moment from "moment/moment";
@@ -15,11 +15,13 @@ import {toggleLoading} from "../@core/components/loading/LoadingScreen";
 import mobileService from "../@core/services/mobileService";
 import {useSnackbar} from "../@core/contexts/SnackbarProvider";
 import {useAppointment} from "../context/AppointmentContext";
+import OTPComponent from "./OTPComponent";
 
 const AddManagePatientDrawer = (props) => {
     const {open, onClose} = props;
     const snackbar = useSnackbar();
     const {searchPatient} = useAppointment();
+    const [openOtp,setOpenOtp] = useState(false);
     const initialDataForm = {
         patientCode: '',
         contactMobileNum: '',
@@ -41,10 +43,10 @@ const AddManagePatientDrawer = (props) => {
     } = useForm({ resolver: yupResolver(validationFormSchema), defaultValues: initialDataForm });
     
     const onSubmit = async () => {
-        const validateForm = await trigger();
-        if (!validateForm) {
-            return;
-        }
+        // const validateForm = await trigger();
+        // if (!validateForm) {
+        //     return;
+        // }
         const facilityCode = cookie.load(COOKIE_NAME.USER).facilityCode;
         const payload = {...getValues(), facilityCode}
         addManagePatient(payload.facilityCode, payload.patientCode, payload.contactMobileNum);
@@ -122,6 +124,7 @@ const AddManagePatientDrawer = (props) => {
 
     return (
         <Drawer anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} open={open} onClose={onClose}>
+            <OTPComponent open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
             <Box sx={{ padding: '20px' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant='h5'>Thêm bệnh nhân vào danh sách quản lí</Typography>
@@ -189,7 +192,13 @@ const AddManagePatientDrawer = (props) => {
                         }} variant='contained'>
                             Đóng
                         </Button>
-                        <LoadingButton onClick={onSubmit} type='button' variant='contained'>
+                        <LoadingButton onClick={async ()=> {
+                            const validateForm = await trigger();
+                            if (!validateForm) {
+                                return;
+                            }
+                            setOpenOtp(true);
+                        }} type='button' variant='contained'>
                             Xác nhận
                         </LoadingButton>
                     </FlexBox>
@@ -198,4 +207,4 @@ const AddManagePatientDrawer = (props) => {
         </Drawer>
     )
 }
-export  default AddManagePatientDrawer;
+export default AddManagePatientDrawer;

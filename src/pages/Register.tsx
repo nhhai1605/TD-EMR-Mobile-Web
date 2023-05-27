@@ -22,9 +22,12 @@ import mobileService from "../@core/services/mobileService";
 import { ROUTE_PATHS } from "@core/constants/routeConfig";
 import cookie from "react-cookies";
 import authService from "../@core/services/authService";
+import OTPComponent from "../components/OTPComponent";
 
 const Register = () => {
     const snackbar = useSnackbar();
+    const [openOtp, setOpenOtp] = useState(false);
+
     const initialDataForm = {
         fullName: '',
         phoneNumber: '',
@@ -82,10 +85,10 @@ const Register = () => {
     
     
     const onSubmit = async() => {
-        const validateForm = await trigger();
-        if (!validateForm) {
-            return;
-        }
+        // const validateForm = await trigger();
+        // if (!validateForm) {
+        //     return;
+        // }
         toggleLoading(true);
         const data = getValues();
         const newAccount = {
@@ -109,9 +112,9 @@ const Register = () => {
             snackbar.error(err.message.toString());
         }).finally(() => toggleLoading(false))
     }
-    
     return (
         <Grid container component='main' sx={{ height: '100vh' }}>
+            <OTPComponent open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
             <Grid
                 item
                 xs={false}
@@ -239,7 +242,13 @@ const Register = () => {
                             )}
                         />
                         
-                        <LoadingButton type='button' onClick={onSubmit} fullWidth variant='contained' sx={{ my: 3 }}>
+                        <LoadingButton type='button' onClick={async ()=> {
+                            const validateForm = await trigger();
+                            if (!validateForm) {
+                                return;
+                            }
+                            setOpenOtp(true)
+                        }} fullWidth variant='contained' sx={{ my: 3 }}>
                             {"Đăng Ký"}
                         </LoadingButton>
                         <Link href={ROUTE_PATHS.Login} variant='body2' >

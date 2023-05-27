@@ -16,6 +16,7 @@ import {exportAsImage} from "./TicketList";
 import {CustomBox} from "./Home";
 import OtpInput from 'react-otp-input';
 import CloseIcon from "@mui/icons-material/Close";
+import OTPComponent from "../components/OTPComponent";
 const CreateTicket = () => {
     const snackbar = useSnackbar();
     const { getPatientList } = useAppointment()
@@ -29,7 +30,7 @@ const CreateTicket = () => {
     const [patientLoading, setPatientLoading]= useState(false);
     const [selectedTicket, setSelectedTicket] = useState(null)
     const flexBoxRef = useRef<any>();
-    const [otp, setOtp] = useState('');
+    // const [otp, setOtp] = useState('');
     const [openOtp, setOpenOtp] = useState(false);
 
     const fetchData = async () =>
@@ -40,7 +41,7 @@ const CreateTicket = () => {
             const patients = (res ?? []).map(p => ({
                 ...p,
                 Id: p.patientID,
-                Text: p.patientCode + " - " + p.fullName
+                Text: p?.patientCode ? p.patientCode + " - " + p.fullName : p.fullName,
             }))
             console.log(patients[0])
             setAllPatients(patients);
@@ -60,11 +61,6 @@ const CreateTicket = () => {
     }, [])
     
     const onSubmit = async () => {
-        if(otp != "000000")
-        {
-            snackbar.error("Mã OTP không đúng")
-            return;
-        }
         toggleLoading(true)
         setHavePatientError(false)
         console.log(selectedPatient)
@@ -86,13 +82,7 @@ const CreateTicket = () => {
             toggleLoading(false)
         })
     }
- 
-    useEffect(()=>{
-        if(!openOtp)
-        {
-            setOtp('');
-        }
-    },[openOtp])
+    
     const getAvailablePatients = async (_allPatients) => {
         toggleLoading(true);
         setPatientLoading(true)
@@ -116,57 +106,7 @@ const CreateTicket = () => {
                 height: '90vh',
                 backgroundColor:'white',
             }}>
-                {
-                    openOtp &&
-                    <Modal
-                        component={null}
-                        style={{display:'flex',alignItems:'center',justifyContent:'center'}}
-                        open={openOtp}
-                        onClose={()=>setOpenOtp(false)}>
-                        <FlexBox sx={{alignItems:'center',justifyContent:'center',backgroundColor:'white',flexDirection:'column',borderRadius:5}}>
-                            <Typography sx={{paddingTop:'2.5vh'}} variant={"h4"}>Xác nhận OTP</Typography>
-                            <OtpInput
-                                value={otp}
-                                onChange={setOtp}
-                                numInputs={6}
-                                renderSeparator={<span></span>}
-                                renderInput={(props) => <input {...props} />}
-                                inputStyle={{
-                                    width:'10vw',
-                                    height:'10vw', 
-                                    marginTop:'5vh',
-                                    marginBottom:'5vh',
-                                    marginLeft:'2vw',
-                                    marginRight:'2vw',
-                                    fontSize:'5vw',
-                                }}
-                            />
-                            <FlexBox sx={{alignItems:'center',justifyContent:'space-evenly', flexDirection:'row'}}>
-                                <Button 
-                                    sx={{margin:2, '&:hover': {backgroundColor: '#a12222'}}}
-                                    color={'error'} 
-                                    variant={'contained'} 
-                                    onClick={() => setOpenOtp(false)}>
-                                    ĐÓNG
-                                </Button>
-                                <Button
-                                    sx={{margin:2, '&:hover': {backgroundColor: '#cc9d00'},color:'white'}}
-                                    color={'warning'} 
-                                    variant={'contained'} 
-                                    onClick={null}>
-                                    GỬI LẠI OTP
-                                </Button>
-                                <Button 
-                                    sx={{margin:2}}
-                                    // color={'primary'} 
-                                    variant={'contained'} 
-                                    onClick={onSubmit}>
-                                    XÁC NHẬN
-                                </Button>
-                            </FlexBox>
-                        </FlexBox>
-                    </Modal>
-                }
+                <OTPComponent open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
                 {
                     selectedTicket &&
                     <Modal

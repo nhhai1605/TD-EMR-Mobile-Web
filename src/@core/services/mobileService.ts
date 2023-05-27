@@ -14,6 +14,10 @@ class MobileService {
     getUserInfo(){
         return identityServiceServer.getAsync('connect/userinfo', null,true, HTTP_CONTENT_TYPE.FORM_URLENCODED); // Done
     }
+    
+    updateUserInfo(payload){
+        return identityServiceServer.postAsync('User/UpdateProfileInfo', payload); // Done
+    }
 
     addFacilityToAccount(payload) {
         return identityServiceServer.postAsync('user/AddAccountToFacility', payload); // Done

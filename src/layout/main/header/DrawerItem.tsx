@@ -25,6 +25,7 @@ import ConfirmationNumberOutlinedIcon from '@mui/icons-material/ConfirmationNumb
 import QueueOutlinedIcon from '@mui/icons-material/QueueOutlined';
 import PeopleAltOutlinedIcon from '@mui/icons-material/PeopleAltOutlined';
 import LocalHospitalOutlinedIcon from '@mui/icons-material/LocalHospitalOutlined';
+import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
 
 const drawerWidth = 240;
 
@@ -58,16 +59,21 @@ const itemList = [
         icon: <PeopleAltOutlinedIcon/>,
         to: '/danh-sach-benh-nhan',
     },
+    // {
+    //     text: 'Cuộc Hẹn',
+    //     icon: <LocalHospitalOutlinedIcon/>,
+    //     to: '/danh-sach-cuoc-hen',
+    // },
+    // {
+    //     text: "Liên Hệ",
+    //     icon: <ContactSupportOutlinedIcon/>,
+    //     to: 'lien-he',
+    // },
     {
-        text: 'Cuộc Hẹn',
-        icon: <LocalHospitalOutlinedIcon/>,
-        to: '/danh-sach-cuoc-hen',
+        text: 'Tài Khoàn',
+        icon: <PersonOutlinedIcon/>,
+        to: '/tai-khoan',
     },
-    {
-        text: "Liên Hệ",
-        icon: <ContactSupportOutlinedIcon/>,
-        to: 'lien-he',
-    }
 ];
 
 

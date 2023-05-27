@@ -1,21 +1,21 @@
-// import addressService from './base/addressApiService';
-import internalApiService from "./base/internalApiService";
+import addressService from './base/addressApiService';
+// import internalApiService from "./base/internalApiService";
 
 class AddressService {
   getAllProvinces() {
-    return internalApiService.postAsync('Patient/GetAllProvinces');
+    return addressService.postAsync('Patient/GetAllProvinces');
   }
 
   getAllSuburbNames() {
-    return internalApiService.postAsync('Patient/GetAllSuburbNames');
+    return addressService.postAsync('Patient/GetAllSuburbNames');
   }
 
   getAllWardNames() {
-    return internalApiService.postAsync('Patient/GetAllWardNames');
+    return addressService.postAsync('Patient/GetAllWardNames');
   }
   
   getSearchPatients() {
-    return internalApiService.postAsync('Patient/SearchPatients');
+    return addressService.postAsync('Patient/SearchPatients');
   }
 }
 

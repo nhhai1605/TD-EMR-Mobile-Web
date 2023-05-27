@@ -9,6 +9,7 @@ import AppointmentList from "pages/AppointmentList";
 import CreateTicket from "pages/CreateTicket";
 import CreateAppointmentByService from "pages/CreateAppointmentByService";
 import CreateAppointmentByDoctor from "pages/CreateAppointmentByDoctor";
+import Profile from "../../pages/Profile";
 
 const masterLayoutRoutings = [
     {
@@ -68,6 +69,13 @@ const masterLayoutRoutings = [
                 path: '/danh-sach-phieu-kham',
                 element: <TicketList />,
                 title: 'Danh Sách Phiếu Khám',
+                loginRequired: true,
+                permissions: [],
+            },
+            {
+                path: '/tai-khoan',
+                element: <Profile />,
+                title: 'Tài Khoản',
                 loginRequired: true,
                 permissions: [],
             },

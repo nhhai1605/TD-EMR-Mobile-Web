@@ -69,13 +69,17 @@ const PatientList = () => {
 				<AddManagePatientDrawer open={addManagePatientDrawer} onClose={()=>setAddManagePatientDrawer(false)}/>
 				<Paper style={{height:'90vh', maxHeight: '90vh', overflow: 'auto', backgroundColor:'white'}} >
 					<FlexBox sx={{padding:2, justifyContent:'space-between', alignItems:'center'}}>
-						<Typography variant='h5'>Danh sách Bệnh Nhân</Typography>
+						<Typography variant='h3'>Danh sách Bệnh Nhân</Typography>
 						<FlexBox>
 							<Tooltip title="Tạo mới Bệnh Nhân">
-								<PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}} onClick={()=>setCreatePatientDrawer(true)}/>
+								<IconButton onClick={()=>setCreatePatientDrawer(true)}>
+									<PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}}/>
+								</IconButton>
 							</Tooltip>
 							<Tooltip title="Thêm BN vào DS Quản Lý">
-								<PlaylistAddOutlinedIcon sx={{marginX:1, fontSize: '2rem'}} onClick={()=>setAddManagePatientDrawer(true)} />
+								<IconButton onClick={()=>setAddManagePatientDrawer(true)} >
+									<PlaylistAddOutlinedIcon sx={{marginX:1, fontSize: '2rem'}} />
+								</IconButton>
 							</Tooltip>
 						</FlexBox>
 
@@ -105,7 +109,7 @@ const PatientList = () => {
 											</FlexBox>
 											<FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
 												<MedicalInformationOutlinedIcon sx={{color: '#22b0e3', marginRight:1}}/>
-												<Typography variant={"h6"} sx={{textAlign:'start'}}>Mã BN: {patient?.patientCode}</Typography>
+												<Typography variant={"h6"} sx={{textAlign:'start'}}>Mã BN: {patient?.patientCode ? patient?.patientCode : "[Chưa có mã BN]"}</Typography>
 											</FlexBox>
 											<FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
 												<DateRangeOutlinedIcon sx={{color: '#e3681b', marginRight:1}}/>

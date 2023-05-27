@@ -39,32 +39,9 @@ const TicketList = () => {
     {
         toggleLoading(true);
         let response : any = await mobileService.getListTicket(account.webUserAccID).catch(err => {
-            snackbar.error("Lỗi khi lấy danh sách phiếu khám");
+            snackbar.error(err.message);
         });
-        //remove duplicate ticket with patient on each date
-        const validTickets = [];
-        response.forEach((ticket) =>
-        {
-            if(!moment(ticket.issueDateTime).isBefore(moment()))
-            {
-                const date = moment(ticket.issueDateTime).format('YYYY-MM-DD');
-                const patientCode = ticket.patientCode;
-                const patientName = ticket.patientName;
-                const found = validTickets.find((item) =>
-                {
-                    return item.patientCode == patientCode && item.patientName == patientName && moment(item.issueDateTime).format('YYYY-MM-DD') == date;
-                })
-                if (!found)
-                {
-                    validTickets.push(ticket);
-                }
-            }
-        })
-        response = validTickets;
-        response = response.filter(x=>(!moment(x.issueDateTime).isBefore(moment()))).sort((a, b) => {
-            return moment(b.issueDateTime).diff(moment(a.issueDateTime));
-        });
-        setAllTickets(response);
+        setAllTickets(response.reverse());
         toggleLoading(false);
     }
 
@@ -117,7 +94,7 @@ const TicketList = () => {
                             <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:3}}>
                                 <FlexBox sx={{justifyContent:'center', flexDirection:'column',alignItems:'flex-start', paddingBottom:2}}>
                                     <Typography sx={{marginBottom:2, color:'#db220d'}} variant={"h4"}>STT: {selectedTicket.ticketNumberText}</Typography>
-                                    <Typography sx={{marginBottom:2}} variant={"h6"}>Bệnh Nhân: {selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
+                                    <Typography sx={{marginBottom:2}} variant={"h6"}>Bệnh Nhân: {selectedTicket.patientName} {selectedTicket.patientCode ? "- " + selectedTicket.patientCode : ""}</Typography>
                                     <Typography sx={{marginBottom:2}} variant={"h6"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD/MM/YYYY")}</Typography>
                                 </FlexBox>
                                 <QRCode
@@ -133,31 +110,35 @@ const TicketList = () => {
                 }
                 <Paper style={{height:'90vh', maxHeight: '90vh', overflow: 'auto', backgroundColor:'white'}} >
                     <FlexBox sx={{padding:2}}>
-                        <Typography variant='h5'>Danh sách Phiếu Khám Bệnh</Typography>
+                        <Typography variant='h3'>Danh sách Phiếu Khám Bệnh</Typography>
                     </FlexBox>
                     <List sx={{paddingBottom:4}}>
                     {
-                        allTickets.map((ticket, index) =>{
+                        allTickets.map((ticket) =>{
                             return (
                                 <Paper onClick={()=>setSelectedTicket(ticket)} variant="outlined" sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2, backgroundColor:"#f3f4f9",}}>
-                                    <IconButton onClick={(e)=>{
-                                        e.stopPropagation();
-                                        handleDelete(ticket);
-                                    }} sx={{position:'absolute', right:20, top:0}} size={'large'}>
-                                        <DeleteOutlineIcon />
-                                    </IconButton>
                                     <FlexBox sx={{flexDirection:'column', alignItems:'flex-start'}}>
-                                        <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
-                                            <DateRangeOutlinedIcon sx={{color: '#e3681b', marginRight:1}}/>
-                                            <Typography variant={"h6"} sx={{textAlign:'start'}}>Ngày Khám: {moment(ticket?.issueDateTime).format("DD/MM/YYYY")}</Typography>
+                                        <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'space-between', width:'100%',py:1, height:"50px"}}>
+                                            <FlexBox>
+                                                <DateRangeOutlinedIcon sx={{color: '#e3681b', marginRight:1}}/>
+                                                <Typography variant={"h6"} sx={{textAlign:'start'}}>Ngày Khám: {moment(ticket?.issueDateTime).format("DD/MM/YYYY")}</Typography>
+                                            </FlexBox>
+                                            <FlexBox>
+                                                <IconButton onClick={(e)=>{
+                                                    e.stopPropagation();
+                                                    handleDelete(ticket);
+                                                }}  size={'large'} >
+                                                    <DeleteOutlineIcon />
+                                                </IconButton>
+                                            </FlexBox>
                                         </FlexBox>
-                                        <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
+                                        <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1,height:"50px"}}>
                                             <PersonOutlinedIcon sx={{color: '#45b561',  marginRight:1}}/>
                                             <Typography variant={"h6"} sx={{textAlign:'start'}}>Bệnh Nhân: {ticket?.patientName}</Typography>
                                         </FlexBox>
-                                        <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
+                                        <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1,height:"50px"}}>
                                             <MedicalInformationOutlinedIcon sx={{color: '#22b0e3',  marginRight:1}}/>
-                                            <Typography variant={"h6"} sx={{textAlign:'start'}}>Mã BN: {ticket?.patientCode}</Typography>
+                                            <Typography variant={"h6"} sx={{textAlign:'start'}}>Mã BN: {ticket?.patientCode ? ticket?.patientCode : "[Chưa có mã BN]"}</Typography>
                                         </FlexBox>
                                     </FlexBox>
                                 </Paper>

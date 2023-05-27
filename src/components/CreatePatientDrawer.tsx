@@ -23,6 +23,7 @@ import {LoadingButton} from "@mui/lab";
 import {TdAutocomplete} from "../@core/components/controls/TdAutocomplete";
 import {CitiesProvince, SuburbNames, WardNames} from "../@core/models/refCountry";
 import {FamilyRelationship} from "../@core/models/enums/emrEnum";
+import OTPComponent from "./OTPComponent";
 export const FamilyRelationships = [
     {
         Id: 0,
@@ -82,7 +83,7 @@ const CreatePatientDrawer = (props) => {
     );
     const [autocompleteKey, setAutocompleteKey] = useState(new Date().getMilliseconds());
     const snackbar = useSnackbar();
-
+    const [openOtp, setOpenOtp] = useState(false);
     const initialDataForm = {
         fullName: patient?.fullName ?? '',
         dob: moment().format('YYYY-MM-DD'),
@@ -95,7 +96,9 @@ const CreatePatientDrawer = (props) => {
         contactMobileNum: patient?.patientCellPhoneNumber ?? '',
         identityNumber: patient?.idNumber?.trim() ?? '',
         fContactFullName: '',
-        fContactCellPhone: null,
+        fContactCellPhone: '',
+        fContactBusinessPhone: '',
+        fContactHomePhone: '',
         fContactAddress: '',
         v_FamilyRelationship: 0,
     };
@@ -163,9 +166,23 @@ const CreatePatientDrawer = (props) => {
             .nullable()
             .transform((_, val) => (val ? String(val) : null)),
         fContactCellPhone: yup
-            .number()
+            .string()
             .nullable()
-            .transform((_, val) => (val ? Number(val) : null)),
+            .min(9, 'Quá ngắn')
+            .max(12, 'Quá dài')
+            .matches(/^[0-9]+$/, 'SĐT chỉ được có số').transform((o, c) => o === "" ? null : c),
+        fContactBusinessPhone: yup
+            .string()
+            .nullable()
+            .min(9, 'Quá ngắn')
+            .max(12, 'Quá dài')
+            .matches(/^[0-9]+$/, 'SĐT chỉ được có số').transform((o, c) => o === "" ? null : c),
+        fContactHomePhone: yup
+            .string()
+            .nullable()
+            .min(9, 'Quá ngắn')
+            .max(12, 'Quá dài')
+            .matches(/^[0-9]+$/, 'SĐT chỉ được có số').transform((o, c) => o === "" ? null : c),
     });
 
     const {
@@ -273,10 +290,10 @@ const CreatePatientDrawer = (props) => {
 
     const onSubmit = async () => {
         console.log("submit", getValues())
-        const validateForm = await trigger();
-        if (!validateForm) {
-            return;
-        }
+        // const validateForm = await trigger();
+        // if (!validateForm) {
+        //     return;
+        // }
         let response = null;
         const values : any = getValues();
         values.dob = moment(values.dob).format('YYYY-MM-DD');
@@ -285,6 +302,10 @@ const CreatePatientDrawer = (props) => {
         values.wardNameID = values.wardNameID ?? -1;
         values.suburbNameID = values.suburbNameID ?? -1;
         values.v_FamilyRelationship = values.v_FamilyRelationship ?? 0;
+        values.fContactBusinessPhone = values.fContactBusinessPhone ? parseInt(values.fContactBusinessPhone) : null;
+        values.fContactCellPhone = values.fContactCellPhone ? parseInt(values.fContactCellPhone) : null;
+        values.fContactHomePhone = values.fContactHomePhone ? parseInt(values.fContactHomePhone) : null;
+        
         if(patient)
         {
             values.patientID = patient.patientID;
@@ -345,7 +366,10 @@ const CreatePatientDrawer = (props) => {
     }
 
     return (
-        <Drawer anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} open={open} onClose={thisOnClose}>
+        <Drawer 
+            anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} 
+            open={open} onClose={thisOnClose}>
+            <OTPComponent open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
             <Box sx={{padding: '20px'}}>
                 <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Typography variant='h3'>Tạo bệnh nhân</Typography>
@@ -617,6 +641,25 @@ const CreatePatientDrawer = (props) => {
                         )}
                     />
                     <Controller
+                        name='fContactAddress'
+                        control={control}
+                        render={({field: {value, ref, ...otherFields}}) => (
+                            <TdTextBox
+                                {...otherFields}
+                                moveToNextEleAfterEnter
+                                value={value}
+                                size={'small'}
+                                margin={'normal'}
+                                sx={{flex: 1}}
+                                inputRef={ref}
+                                error={errors.fContactAddress && Boolean(errors.fContactAddress)}
+                                helperText={errors.fContactAddress && <>{errors.fContactAddress.message}</>}
+                                label={'Địa chỉ người thân'}
+                                placeholder={'Nhập địa chỉ của người thân'}
+                            />
+                        )}
+                    />  
+                    <Controller
                         name='fContactCellPhone'
                         control={control}
                         render={({field: {value, ref, ...otherFields}}) => (
@@ -636,7 +679,7 @@ const CreatePatientDrawer = (props) => {
                         )}
                     />
                     <Controller
-                        name='fContactAddress'
+                        name='fContactBusinessPhone'
                         control={control}
                         render={({field: {value, ref, ...otherFields}}) => (
                             <TdTextBox
@@ -647,13 +690,33 @@ const CreatePatientDrawer = (props) => {
                                 margin={'normal'}
                                 sx={{flex: 1}}
                                 inputRef={ref}
-                                error={errors.fContactAddress && Boolean(errors.fContactAddress)}
-                                helperText={errors.fContactAddress && <>{errors.fContactAddress.message}</>}
-                                label={'Địa chỉ người thân'}
-                                placeholder={'Nhập địa chỉ của người thân'}
+                                error={errors.fContactBusinessPhone && Boolean(errors.fContactBusinessPhone)}
+                                helperText={errors.fContactBusinessPhone && <>{errors.fContactBusinessPhone.message}</>}
+                                label={'SĐT người thân'}
+                                placeholder={'Nhập số điện thoại làm việc của người thân'}
                             />
                         )}
                     />
+                    <Controller
+                        name='fContactHomePhone'
+                        control={control}
+                        render={({field: {value, ref, ...otherFields}}) => (
+                            <TdTextBox
+                                {...otherFields}
+                                moveToNextEleAfterEnter
+                                value={value}
+                                size={'small'}
+                                margin={'normal'}
+                                sx={{flex: 1}}
+                                inputRef={ref}
+                                error={errors.fContactHomePhone && Boolean(errors.fContactHomePhone)}
+                                helperText={errors.fContactHomePhone && <>{errors.fContactHomePhone.message}</>}
+                                label={'SĐT người thân'}
+                                placeholder={'Nhập số điện thoại nhà của người thân'}
+                            />
+                        )}
+                    />
+                    
                     <FlexBox
                         sx={{
                             position: 'fixed',
@@ -688,7 +751,13 @@ const CreatePatientDrawer = (props) => {
                         }} variant='contained'>
                             Đặt lại
                         </Button>
-                        <LoadingButton onClick={onSubmit} type='button' variant='contained'>
+                        <LoadingButton onClick={async ()=>{
+                            const validateForm = await trigger();
+                            if (!validateForm) {
+                                return;
+                            }
+                            setOpenOtp(true);
+                        }} type='button' variant='contained'>
                             Xác nhận
                         </LoadingButton>
                     </FlexBox>

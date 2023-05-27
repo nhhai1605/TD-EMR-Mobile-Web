@@ -60,11 +60,11 @@ const AuthProvider = ({ children }) => {
 
   const initContext = async () => {
     const authData = cookie.load('AUTH_DATA');
-
     if (authData) {
       const { exp }: any = jwt_decode(authData.access_token);
       const currentTime = new Date().getTime() / 1000;
       const isExpired = currentTime > exp - 30;
+      console.log('isExpired', isExpired)
       setAuth(isExpired ? undefined : authData);
       setIsAuthenticated(!isExpired);
     } else {

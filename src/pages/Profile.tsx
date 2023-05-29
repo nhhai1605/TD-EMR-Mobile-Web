@@ -10,7 +10,7 @@ import {EditOutlined} from "@mui/icons-material";
 import EditAccountDrawer from "../components/EditAccountDrawer";
 import {toggleLoading} from "../@core/components/loading/LoadingScreen";
 
-const Profile = () => {
+export const Profile = () => {
 	const [user, setUser] = useState(authService.getCurrentUser());
 	const [openEdit, setOpenEdit] = useState(false);
 	
@@ -63,4 +63,3 @@ const Profile = () => {
 		</CustomBox>
 	)
 }
-export default Profile;

@@ -29,7 +29,7 @@ export const downloadImage = (image, imageFileName) => {
     fakeLink.href = image;
     fakeLink.click();
 };
-const TicketList = () => {
+export const TicketList = () => {
     const [allTickets, setAllTickets] = useState([])
     const [selectedTicket, setSelectedTicket] = useState(null)
     const snackbar = useSnackbar();
@@ -94,7 +94,7 @@ const TicketList = () => {
                             <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:3}}>
                                 <FlexBox sx={{justifyContent:'center', flexDirection:'column',alignItems:'center', paddingBottom:2}}>
                                     <Typography sx={{marginBottom:1, fontSize:18}} variant={"h6"}>VIỆN TIM TP.HỒ CHÍ MINH</Typography>
-                                    <Typography sx={{marginBottom:1, color:'#db220d'}} variant={"h1"}>QUẦY ĐANG KÝ {selectedTicket?.ticketNumberText?.split("-")[0]}</Typography>
+                                    <Typography sx={{marginBottom:1, color:'#db220d'}} variant={"h1"}>QUẦY ĐĂNG KÝ {selectedTicket?.ticketNumberText?.split("-")[0]}</Typography>
                                     <Typography sx={{marginBottom:3, color:'#db220d', fontSize:28}} variant={"h2"}>{selectedTicket?.ticketNumberText}</Typography>
                                     <Typography sx={{marginBottom:1, fontSize:22}} variant={"h5"}>{selectedTicket?.patientName}</Typography>
                                     <Typography sx={{marginBottom:1, fontSize:20}} variant={"h5"}> {selectedTicket?.patientCode ? selectedTicket?.patientCode : "[Chưa có Mã BN]"}</Typography>
@@ -156,4 +156,3 @@ const TicketList = () => {
     )
 
 }
-export default TicketList;

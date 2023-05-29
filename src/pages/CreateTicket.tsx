@@ -17,7 +17,7 @@ import {CustomBox} from "./Home";
 import OtpInput from 'react-otp-input';
 import CloseIcon from "@mui/icons-material/Close";
 import OTPComponent from "../components/OTPComponent";
-const CreateTicket = () => {
+export const CreateTicket = () => {
     const snackbar = useSnackbar();
     const { getPatientList } = useAppointment()
     const [patientList, setPatientList] = useState([])
@@ -116,7 +116,7 @@ const CreateTicket = () => {
                             <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:3}}>
                                 <FlexBox sx={{justifyContent:'center', flexDirection:'column',alignItems:'center', paddingBottom:2}}>
                                     <Typography sx={{marginBottom:1, fontSize:18}} variant={"h6"}>VIỆN TIM TP.HỒ CHÍ MINH</Typography>
-                                    <Typography sx={{marginBottom:1, color:'#db220d'}} variant={"h1"}>QUẦY ĐANG KÝ {selectedTicket?.ticketNumberText?.split("-")[0]}</Typography>
+                                    <Typography sx={{marginBottom:1, color:'#db220d'}} variant={"h1"}>QUẦY ĐĂNG KÝ {selectedTicket?.ticketNumberText?.split("-")[0]}</Typography>
                                     <Typography sx={{marginBottom:3, color:'#db220d', fontSize:28}} variant={"h2"}>{selectedTicket?.ticketNumberText}</Typography>
                                     <Typography sx={{marginBottom:1, fontSize:22}} variant={"h5"}>{selectedTicket?.patientName}</Typography>
                                     <Typography sx={{marginBottom:1, fontSize:20}} variant={"h5"}> {selectedTicket?.patientCode ? selectedTicket?.patientCode : "[Chưa có Mã BN]"}</Typography>
@@ -201,4 +201,3 @@ const CreateTicket = () => {
     )
 
 }
-export default CreateTicket;

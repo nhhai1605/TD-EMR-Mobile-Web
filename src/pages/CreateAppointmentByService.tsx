@@ -4,7 +4,7 @@ import {useSnackbar} from "../@core/contexts/SnackbarProvider";
 import {Container} from "@mui/material";
 import { toggleLoading } from '@core/components/loading/LoadingScreen';
 
-const CreateAppointmentByService = () => {
+export const CreateAppointmentByService = () => {
     const snackbar = useSnackbar();
     const fetchData = async () =>
     {
@@ -22,4 +22,3 @@ const CreateAppointmentByService = () => {
     )
 
 }
-export default CreateAppointmentByService;

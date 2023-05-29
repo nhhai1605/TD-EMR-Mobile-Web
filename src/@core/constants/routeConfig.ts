@@ -2,6 +2,8 @@ enum ROUTE_PATHS {
   Home = '/home',
   Login = '/login',
   Register = '/register',
+  ForgotPassword = '/forgot-password',
+
   NotFound = '/not-found',
   NoPermission = '/no-permission',
   MyTasks = '/my-task',

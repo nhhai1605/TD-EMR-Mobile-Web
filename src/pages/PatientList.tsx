@@ -16,7 +16,7 @@ import {Female, Male} from "@mui/icons-material";
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import MedicalInformationOutlinedIcon from '@mui/icons-material/MedicalInformationOutlined';
 import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
-const PatientList = () => {
+export const PatientList = () => {
 	const [allPatients, setAllPatients] = useState([])
 	const { getPatientList} = useAppointment();
 	const [searchQuery, setSearchQuery] = useState('');
@@ -126,4 +126,3 @@ const PatientList = () => {
 	)
 
 }
-	export default PatientList;

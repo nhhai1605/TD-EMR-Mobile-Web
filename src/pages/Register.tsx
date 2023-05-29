@@ -24,7 +24,7 @@ import cookie from "react-cookies";
 import authService from "../@core/services/authService";
 import OTPComponent from "../components/OTPComponent";
 
-const Register = () => {
+export const Register = () => {
     const snackbar = useSnackbar();
     const [openOtp, setOpenOtp] = useState(false);
 
@@ -261,4 +261,3 @@ const Register = () => {
     )
 
 }
-export default Register;

@@ -3,13 +3,21 @@ import i18n from '@core/utils/i18n';
 import Home from 'pages/Home';
 import Contact from 'pages/Contact';
 import React from "react";
-import PatientList from "pages/PatientList";
-import TicketList from 'pages/TicketList';
-import AppointmentList from "pages/AppointmentList";
-import CreateTicket from "pages/CreateTicket";
-import CreateAppointmentByService from "pages/CreateAppointmentByService";
-import CreateAppointmentByDoctor from "pages/CreateAppointmentByDoctor";
-import Profile from "../../pages/Profile";
+// import PatientList from "pages/PatientList";
+// import TicketList from 'pages/TicketList';
+// import AppointmentList from "pages/AppointmentList";
+// import CreateTicket from "pages/CreateTicket";
+// import CreateAppointmentByService from "pages/CreateAppointmentByService";
+// import CreateAppointmentByDoctor from "pages/CreateAppointmentByDoctor";
+// import Profile from "pages/Profile";
+import {lazyMinLoadTime} from "../../@core/components/LazyLoaderDelay";
+const PatientList = lazyMinLoadTime(() => import('pages/PatientList').then(({ PatientList }) => ({ default: PatientList })));
+const TicketList = lazyMinLoadTime(() => import('pages/TicketList').then(({ TicketList }) => ({ default: TicketList })));
+const AppointmentList = lazyMinLoadTime(() => import('pages/AppointmentList').then(({ AppointmentList }) => ({ default: AppointmentList })));
+const CreateTicket = lazyMinLoadTime(() => import('pages/CreateTicket').then(({ CreateTicket }) => ({ default: CreateTicket })));
+const CreateAppointmentByService = lazyMinLoadTime(() => import('pages/CreateAppointmentByService').then(({ CreateAppointmentByService }) => ({ default: CreateAppointmentByService })));
+const CreateAppointmentByDoctor = lazyMinLoadTime(() => import('pages/CreateAppointmentByDoctor').then(({ CreateAppointmentByDoctor }) => ({ default: CreateAppointmentByDoctor })));
+const Profile = lazyMinLoadTime(() => import('pages/Profile').then(({ Profile }) => ({ default: Profile })));
 
 const masterLayoutRoutings = [
     {

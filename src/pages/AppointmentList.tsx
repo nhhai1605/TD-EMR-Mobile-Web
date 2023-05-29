@@ -20,7 +20,7 @@ import {exportAsImage} from "./TicketList";
 import AccessTimeOutlinedIcon from '@mui/icons-material/AccessTimeOutlined';
 import MedicalServicesOutlinedIcon from '@mui/icons-material/MedicalServicesOutlined';
 import MasksOutlinedIcon from '@mui/icons-material/MasksOutlined';
-const AppointmentList = () => {
+export const AppointmentList = () => {
     const [allAppointments, setAllAppointments] = useState([])
     const [selectedAppointment, setSelectedAppointment] = useState(null)
     const snackbar = useSnackbar();
@@ -101,4 +101,3 @@ const AppointmentList = () => {
     )
 
 }
-export default AppointmentList;

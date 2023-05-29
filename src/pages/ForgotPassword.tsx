@@ -19,6 +19,7 @@ import {useSnackbar} from "@core/contexts/SnackbarProvider";
 import OTPComponent from "../components/OTPComponent";
 import mobileService from "../@core/services/mobileService";
 import {toggleLoading} from "../@core/components/loading/LoadingScreen";
+import {SwalAlert} from "../@core/components/SwalAlert";
 export const ForgotPassword = () => {
 	const { t } = useTranslation();
 	const [openOtp, setOpenOtp] = useState(false);
@@ -26,8 +27,18 @@ export const ForgotPassword = () => {
 	const handleGetNewPassword = async () => {
 		console.log("get new password")
 		toggleLoading(true)
-		await  mobileService.getNewPassword(getValues().phoneNumber).then((res) => {
-			snackbar.success(`Reset mật khẩu thành công. Mật khẩu mới là: ${res}`);
+		await  mobileService.getNewPassword(getValues().phoneNumber).then((res : string) => {
+			SwalAlert.fire({
+				text: `Mật khẩu mới là: ${res}`,
+				icon: 'success',
+				confirmButtonText: 'Copy',
+				cancelButtonText: 'Đóng',
+			}).then((result) => {
+				if (result.isConfirmed) {
+					navigator.clipboard.writeText(res)
+					snackbar.success('Đã copy mật khẩu mới vào clipboard')
+				}
+			});
 		}).catch(err => {
 			snackbar.error(err.message);
 		}).finally(()=>toggleLoading(false))

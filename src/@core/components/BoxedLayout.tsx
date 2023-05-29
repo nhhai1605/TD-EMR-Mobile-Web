@@ -38,7 +38,7 @@ const BoxedLayout = ({ children }: BoxedLayoutProps) => {
           </IconButton> */}
         </Toolbar>
       </AppBar>
-      <Container component="main" maxWidth="xs" sx={{ mt: 6 }}>
+      <Container component="main" maxWidth="xs" sx={{ mt: 0, mb:6 }}>
         <Box
           sx={{
             display: "flex",

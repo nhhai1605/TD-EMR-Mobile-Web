@@ -30,8 +30,7 @@ const CreateTicket = () => {
     const [patientLoading, setPatientLoading]= useState(false);
     const [selectedTicket, setSelectedTicket] = useState(null)
     const flexBoxRef = useRef<any>();
-    // const [otp, setOtp] = useState('');
-    const [openOtp, setOpenOtp] = useState(false);
+    // const [openOtp, setOpenOtp] = useState(false);
 
     const fetchData = async () =>
     {
@@ -76,7 +75,6 @@ const CreateTicket = () => {
         await mobileService.createNewTicket(payload).then((res:any) => {
             getAvailablePatients(allPatients);
             setSelectedTicket(res)
-            setOpenOtp(false);
             snackbar.success("Tạo phiếu khám thành công")
         }).catch(err => snackbar.error(err.message.toString())).finally(()=> {
             toggleLoading(false)
@@ -106,7 +104,7 @@ const CreateTicket = () => {
                 height: '90vh',
                 backgroundColor:'white',
             }}>
-                <OTPComponent open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
+                {/*<OTPComponent open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>*/}
                 {
                     selectedTicket &&
                     <Modal
@@ -116,18 +114,22 @@ const CreateTicket = () => {
                         onClose={()=>setSelectedTicket(null)}>
                         <FlexBox sx={{alignItems:'center',justifyContent:'center',backgroundColor:'white',flexDirection:'column',padding:1,borderRadius:5}}>
                             <FlexBox ref={flexBoxRef} sx={{backgroundColor:'white',alignItems:'center',justifyContent:'center', flexDirection:'column', padding:3}}>
-                                <FlexBox sx={{justifyContent:'center', flexDirection:'column',alignItems:'flex-start', paddingBottom:2}}>
-                                    <Typography sx={{marginBottom:2, color:'#db220d'}} variant={"h4"}>STT: {selectedTicket.ticketNumberText}</Typography>
-                                    <Typography sx={{marginBottom:2}} variant={"h6"}>Bệnh Nhân: {selectedTicket.patientName} - {selectedTicket.patientCode}</Typography>
-                                    <Typography sx={{marginBottom:2}} variant={"h6"} >Ngày khám: {moment(selectedTicket.issueDateTime).format("DD/MM/YYYY")}</Typography>
+                                <FlexBox sx={{justifyContent:'center', flexDirection:'column',alignItems:'center', paddingBottom:2}}>
+                                    <Typography sx={{marginBottom:1, fontSize:18}} variant={"h6"}>VIỆN TIM TP.HỒ CHÍ MINH</Typography>
+                                    <Typography sx={{marginBottom:1, color:'#db220d'}} variant={"h1"}>QUẦY ĐANG KÝ {selectedTicket?.ticketNumberText?.split("-")[0]}</Typography>
+                                    <Typography sx={{marginBottom:3, color:'#db220d', fontSize:28}} variant={"h2"}>{selectedTicket?.ticketNumberText}</Typography>
+                                    <Typography sx={{marginBottom:1, fontSize:22}} variant={"h5"}>{selectedTicket?.patientName}</Typography>
+                                    <Typography sx={{marginBottom:1, fontSize:20}} variant={"h5"}> {selectedTicket?.patientCode ? selectedTicket?.patientCode : "[Chưa có Mã BN]"}</Typography>
+                                    <Typography sx={{marginBottom:1, fontSize:18}} variant={"h6"} >Ngày: {moment(selectedTicket?.issueDateTime).format("DD/MM/YYYY")}</Typography>
                                 </FlexBox>
                                 <QRCode
                                     size={250}
-                                    value={"qms" + selectedTicket.serialTicket}/>
+                                    value={"qms" + selectedTicket?.serialTicket}/>
+                                <Typography sx={{margin:1, fontSize:18}} variant={"h6"}>qms{selectedTicket?.serialTicket}</Typography>
                             </FlexBox>
                             <FlexBox>
                                 <Button sx={{margin:2, '&:hover': {backgroundColor: '#a12222'}}} color={'error'} variant={'contained'} onClick={() => setSelectedTicket(null)}>ĐÓNG</Button>
-                                <Button sx={{margin:2}} variant={'contained'} onClick={() => exportAsImage(flexBoxRef.current, selectedTicket.patientName + moment(selectedTicket.issueDateTime).format("DD-MM-YYYY"))}>LƯU</Button>
+                                <Button sx={{margin:2}} variant={'contained'} onClick={() => exportAsImage(flexBoxRef.current, selectedTicket?.patientName + moment(selectedTicket.issueDateTime).format("DD-MM-YYYY"))}>LƯU</Button>
                             </FlexBox>
                         </FlexBox>
                     </Modal>
@@ -188,7 +190,8 @@ const CreateTicket = () => {
                             snackbar.error("Vui lòng nhập đầy đủ thông tin");
                             return;
                         }
-                        setOpenOtp(true)
+                        onSubmit();
+                        // setOpenOtp(true)
                     }} type='button' variant='contained' fullWidth={true}>
                         Xác nhận
                     </LoadingButton>

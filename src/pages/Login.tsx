@@ -15,6 +15,9 @@ import { yupResolver } from '@hookform/resolvers/yup';
 import { Controller, useForm } from 'react-hook-form';
 import { TdTextBox } from '@core/components/controls/TdTextBox';
 import { ErrorMessage } from '@core/components/ErrorMessage';
+import React from "react";
+import {TdCheckbox} from "../@core/components/controls/TdCheckbox";
+import localStorageService from "../@core/services/localStorageService";
 export const Login = () => {
     const { isLoggingIn, login, isNotSucceed } = useAuth();
 
@@ -28,7 +31,7 @@ export const Login = () => {
             return;
         }
         const data: any = getValues();
-        const response = await login(data.username, data.password).catch((err) => {
+        const response = await login(data.username, data.password, data.remember).catch((err) => {
             snackbar.error(err.message.toString());
         });
         if (response) {
@@ -52,8 +55,9 @@ export const Login = () => {
     } = useForm({
         resolver: yupResolver(validateSchema),
         defaultValues: {
-            username: '',
-            password: '',
+            username: localStorageService.get('username') || '',
+            password: localStorageService.get('password') || '',
+            remember: localStorageService.get('remember')
         },
     });
 
@@ -92,7 +96,7 @@ export const Login = () => {
                                     required
                                     disabled={isLoggingIn}
                                     error={errors.username && Boolean(errors.username)}
-                                    helperText={errors.username && errors.username.message}
+                                    helperText={errors.username && <>{errors.username.message}</>}
                                     label={"Số Điện Thoại"}
                                 />
                             )}
@@ -109,28 +113,47 @@ export const Login = () => {
                                     margin='normal'
                                     moveToNextEleAfterEnter
                                     type='password'
+                                    onKeyDown={(e) => {
+                                        if (e.key === 'Enter') {
+                                            handleLogin();
+                                        }
+                                    }}
                                     variant='filled'
                                     required
                                     disabled={isLoggingIn}
                                     error={errors.password && Boolean(errors.password)}
-                                    helperText={errors.password && errors.password.message}
+                                    helperText={errors.password && <>{errors.password.message}</>}
                                     label={t('auth.login.password')}
                                 />
                             )}
                         />
-
-                        {/* <TdAutocomplete options={rooms} variant='filled' labelI18nKey={'Phòng khám'} /> */}
-                        {/* <Box sx={{ textAlign: 'right' }}>
-              <Link component={RouterLink} to={`/forgot-password`} variant='body2'>
-                {t('auth.login.forgotPassword')}
-              </Link>
-            </Box> */}
+                        <Controller
+                            name='remember'
+                            control={control}
+                            render={({ field: { ref, value, onChange, ...otherField }}) => (
+                                <TdCheckbox
+                                    {...otherField}
+                                    inputRef={ref}
+                                    label={t('Ghi nhớ mật khẩu lần đăng nhập sau')}
+                                    checked={value}
+                                    onChange={(e,checked)=>onChange(checked)}
+                                />
+                            )}
+                        />
                         <LoadingButton type='button' onClick={handleLogin} fullWidth loading={isLoggingIn} variant='contained' sx={{ mt: 3 }}>
                             {t('auth.login.submit')}
                         </LoadingButton>
 
                         {isNotSucceed && <ErrorMessage>Sai tên đăng nhập hoặc mật khẩu.</ErrorMessage>}
 
+                        <Box sx={{ textAlign: 'center', marginTop: '10px' }}>
+                            <Link
+                                component={RouterLink}
+                                to={`/forgot-password`}
+                                variant='body2'>
+                                {t('auth.login.forgotPassword')}
+                            </Link>
+                        </Box>
                         <Box sx={{ textAlign: 'center', marginTop: '10px' }}>
                             <Link component={RouterLink} to={`/register`} variant='body2'>
                                 {t('auth.login.newAccount')}

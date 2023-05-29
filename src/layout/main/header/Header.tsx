@@ -91,13 +91,13 @@ const Header = () => {
                         display: 'flex',
                         alignItems: 'center',
                         cursor: 'pointer',
-                        width: '150px',
+                        maxWidth: '200px',
                     }}
                     underline='none'
                     color='inherit'
                     onClick={(e: any) => openDropdownMenu(e)}
                 >
-                    <Typography display="inline" sx={{color: '#2b6bc4', fontWeight: 'bold', width:'100%'}}>{authService.getCurrentUser().accName}</Typography>
+                    <Typography sx={{color: '#2b6bc4', fontWeight: 'bold', width:'100%', paddingRight:1}}>{authService.getCurrentUser().accName}</Typography>
                     <KeyboardArrowDownOutlinedIcon sx={{color: '#2b6bc4'}} />
                 </MuiLink>
                 <Menu

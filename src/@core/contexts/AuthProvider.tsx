@@ -3,11 +3,12 @@ import { createContext, useState, useEffect, useContext } from 'react';
 import jwt_decode from 'jwt-decode';
 import authService from '@core/services/authService';
 import cookie from 'react-cookies';
+import localStorageService from "../services/localStorageService";
 interface IAuthContextInterface {
   isLoggingIn: boolean;
   isAuthenticated: boolean;
   initialized: boolean;
-  login: (username: number, password) => Promise<any>;
+  login: (username, password, remember) => Promise<any>;
   logout: () => Promise<any>;
   auth?: IInitialAuthState;
   isNotSucceed: boolean;
@@ -31,7 +32,7 @@ const AuthProvider = ({ children }) => {
 
   const [auth, setAuth] = useState(initialAuthState);
 
-  const login = async (username, password) => {
+  const login = async (username, password, remember = false) => {
     setIsNotSucceed(false);
     const payload = {
       username,
@@ -49,6 +50,16 @@ const AuthProvider = ({ children }) => {
       setIsAuthenticated(true);
       await authService.getProvider();
       setIsLoggingIn(false);
+      
+      if(remember) {
+        localStorageService.set('username', username);
+        localStorageService.set('password', password);
+      } else {
+        localStorageService.remove('username')
+        localStorageService.remove('password')
+      }
+      localStorageService.set('remember', remember);
+      
       return authData;
     }
   };

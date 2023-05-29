@@ -18,11 +18,11 @@ export const TdCheckbox = (props: TdCheckboxProps & typeof defaultProps) => {
   const { label, labelI18nKey, sx, labelPlacement, ...otherProps } = props;
   const { t } = useTranslation();
   return (
-    <>
-      {(label || labelI18nKey) ? (
-        <FormControlLabel labelPlacement={labelPlacement} sx={sx} control={<Checkbox {...otherProps} />} label={<Typography variant="body2">{label ? label : t(labelI18nKey)}</Typography>} />
-      ) : <Checkbox {...otherProps} sx={sx}  />}
-    </>
+      <>
+        {(label || labelI18nKey) ? (
+            <FormControlLabel labelPlacement={labelPlacement} sx={sx} control={<Checkbox {...otherProps} />} label={<Typography variant="body2">{label ? label : t(labelI18nKey)}</Typography>} />
+        ) : <Checkbox {...otherProps} sx={sx}  />}
+      </>
   );
 };
 TdCheckbox.defaultProps = defaultProps;

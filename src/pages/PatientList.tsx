@@ -98,7 +98,6 @@ const PatientList = () => {
 													<PersonOutlinedIcon sx={{color: '#45b561', marginRight:1}}/>
 													<Typography variant={"h6"} sx={{textAlign:'start'}}>Bệnh Nhân: {patient?.fullName}</Typography>
 												</FlexBox>
-												{/*<Typography variant={"h6"} sx={{lineHeight:'30px'}}>Bệnh Nhân: {patient?.fullName}</Typography>*/}
 												<Badge color='error' badgeContent={0}>
 													{patient?.gender == 'F' ? (
 														<Female sx={{ color: '#e322c9', fontSize: '1.5rem' }} />
@@ -109,7 +108,7 @@ const PatientList = () => {
 											</FlexBox>
 											<FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
 												<MedicalInformationOutlinedIcon sx={{color: '#22b0e3', marginRight:1}}/>
-												<Typography variant={"h6"} sx={{textAlign:'start'}}>Mã BN: {patient?.patientCode ? patient?.patientCode : "[Chưa có mã BN]"}</Typography>
+												<Typography variant={"h6"} sx={{textAlign:'start'}}>Mã BN: {patient?.patientCode ? patient?.patientCode : "[Chưa có Mã BN]"}</Typography>
 											</FlexBox>
 											<FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1}}>
 												<DateRangeOutlinedIcon sx={{color: '#e3681b', marginRight:1}}/>

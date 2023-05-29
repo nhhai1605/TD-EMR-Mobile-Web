@@ -14,9 +14,6 @@ import COOKIE_NAME from "../@core/constants/cookie";
 import cookie from "react-cookies";
 import {exportAsImage} from "./TicketList";
 import {CustomBox} from "./Home";
-import OtpInput from 'react-otp-input';
-import CloseIcon from "@mui/icons-material/Close";
-import OTPComponent from "../components/OTPComponent";
 export const CreateTicket = () => {
     const snackbar = useSnackbar();
     const { getPatientList } = useAppointment()
@@ -104,7 +101,6 @@ export const CreateTicket = () => {
                 height: '90vh',
                 backgroundColor:'white',
             }}>
-                {/*<OTPComponent open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>*/}
                 {
                     selectedTicket &&
                     <Modal

@@ -12,12 +12,14 @@ const OTPComponent = (props) => {
 	const cooldown = 5; //seconds
 	const [resendCooldown, setResendCooldown] = useState(cooldown);
 	const snackbar = useSnackbar();
+	const [curInterval, setCurInterval] = useState(null);
 
 	useEffect(()=>{
 		if(!open)
 		{
 			setOtp('');
 			setResendCooldown(cooldown)
+			curInterval && clearInterval(curInterval);
 		}
 	},[open])
 	
@@ -26,12 +28,13 @@ const OTPComponent = (props) => {
 		{
 			if(resendCooldown == cooldown)
 			{
-				let interval = setInterval(()=>{
+				const interval = setInterval(()=>{
 					setResendCooldown((prev)=>prev-1);
 				},1000);
+				setCurInterval(interval);
 				setTimeout(()=>{
-					console.log("clear interval")
 					clearInterval(interval);
+					setCurInterval(null);
 				},cooldown*1000);
 			}
 		}

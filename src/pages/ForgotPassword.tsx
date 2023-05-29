@@ -29,10 +29,10 @@ export const ForgotPassword = () => {
 		toggleLoading(true)
 		await  mobileService.getNewPassword(getValues().phoneNumber).then((res : string) => {
 			SwalAlert.fire({
-				text: `Mật khẩu mới là: ${res}`,
+				html: `<p  style="font-size:1.5rem;text-align:center">Mật khẩu mới là: <b>${res}</b></p>`,
 				icon: 'success',
 				confirmButtonText: 'Copy',
-				cancelButtonText: 'Đóng',
+				showCloseButton:true
 			}).then((result) => {
 				if (result.isConfirmed) {
 					navigator.clipboard.writeText(res)

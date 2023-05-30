@@ -5,7 +5,7 @@ const { getProvinceSuccess,getSuburbNameSuccess, getWardNamesSuccess} = addressS
 export const getProvinceAction = (): any => async (dispatch) => {
   const response: any = await addressService.getAllProvinces();
   if (response && response.data) {
-    const cities = response.data.map(o=>  ({
+    const cities = response.data.filter(item => item.cityProvinceID > 0 && item.cityProvinceName != "").map(o=>  ({
       cityProviceHICode : String(Number(o.cityProviceHICode)), //Remove empty space in string
       cityProvinceID: o.cityProvinceID,
       cityProvinceName: o.cityProvinceName,

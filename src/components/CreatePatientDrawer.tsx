@@ -21,7 +21,7 @@ import {TdSelect} from "../@core/components/controls/TdSelect";
 import {genders} from "../@core/constants/gender";
 import {LoadingButton} from "@mui/lab";
 import {TdAutocomplete} from "../@core/components/controls/TdAutocomplete";
-import {CitiesProvince, SuburbNames, WardNames} from "../@core/models/refCountry";
+import {CitiesProvince} from "../@core/models/refCountry";
 import {FamilyRelationship} from "../@core/models/enums/emrEnum";
 import OTPComponent from "./OTPComponent";
 export const FamilyRelationships = [
@@ -77,7 +77,6 @@ const CreatePatientDrawer = (props) => {
     const [suburbNameFilters, setSuburbNameFilters] = useState([]);
     const [wardNamesFilters, setWardNamesFilters] = useState([]);
     const dispatch = useDispatch();
-    const [haveFamilyContact, setHaveFamilyContact] = useState(false);
     const {citiesProvinces, suburbNames, wardNames} = useSelector(
         (state: RootState) => state.address,
     );
@@ -87,7 +86,7 @@ const CreatePatientDrawer = (props) => {
     const initialDataForm = {
         fullName: patient?.fullName ?? '',
         dob: moment().format('YYYY-MM-DD'),
-        gender: patient?.gender ?? '',
+        gender: patient?.gender ?? 'U',
         cityProvinceID: patient?.cityProvinceID ?? null,
         address: patient?.patientStreetAddress ?? '',
         suburbNameID: patient?.suburbNameID ?? patient?.suburbName.suburbNameID ?? null,
@@ -97,8 +96,6 @@ const CreatePatientDrawer = (props) => {
         identityNumber: patient?.idNumber?.trim() ?? '',
         fContactFullName: '',
         fContactCellPhone: '',
-        fContactBusinessPhone: '',
-        fContactHomePhone: '',
         fContactAddress: '',
         v_FamilyRelationship: 0,
     };
@@ -111,7 +108,7 @@ const CreatePatientDrawer = (props) => {
             .nullable()
             .min(9, 'Quá ngắn')
             .max(12, 'Quá dài')
-            .matches(/^[0-9]+$/, 'SĐT chỉ được có số').transform((o, c) => o === "" ? null : c),
+            .matches(/^[0-9]+$/, 'SĐT chỉ được có số').required('Bắt buộc').transform((o, c) => o === "" ? null : c),
         gender: yup.string().nullable().required('Bắt buộc'),
         address: yup.string().nullable().required('Bắt buộc'),
         cityProvinceID: yup.string().nullable().required('Bắt buộc'),
@@ -166,18 +163,6 @@ const CreatePatientDrawer = (props) => {
             .nullable()
             .transform((_, val) => (val ? String(val) : null)),
         fContactCellPhone: yup
-            .string()
-            .nullable()
-            .min(9, 'Quá ngắn')
-            .max(12, 'Quá dài')
-            .matches(/^[0-9]+$/, 'SĐT chỉ được có số').transform((o, c) => o === "" ? null : c),
-        fContactBusinessPhone: yup
-            .string()
-            .nullable()
-            .min(9, 'Quá ngắn')
-            .max(12, 'Quá dài')
-            .matches(/^[0-9]+$/, 'SĐT chỉ được có số').transform((o, c) => o === "" ? null : c),
-        fContactHomePhone: yup
             .string()
             .nullable()
             .min(9, 'Quá ngắn')
@@ -260,7 +245,6 @@ const CreatePatientDrawer = (props) => {
     const thisOnClose = () => {
         if (isDirty) {
             SwalAlert.fire({
-                title: 'THÔNG BÁO',
                 text: 'Bạn có chắc muốn đóng?',
                 icon: 'warning',
                 showCancelButton: true,
@@ -277,7 +261,6 @@ const CreatePatientDrawer = (props) => {
     const onReset = () => {
         if(!isDirty) return;
         SwalAlert.fire({
-            title: 'THÔNG BÁO',
             text: 'Bạn có chắc muốn đặt lại?',
             icon: 'warning',
             showCancelButton: true,
@@ -456,6 +439,7 @@ const CreatePatientDrawer = (props) => {
                                 {...otherFields}
                                 moveToNextEleAfterEnter
                                 value={value}
+                                required
                                 size={'small'}
                                 sx={{flex: 1}}
                                 margin={'normal'}
@@ -675,44 +659,6 @@ const CreatePatientDrawer = (props) => {
                                 helperText={errors.fContactCellPhone && <>{errors.fContactCellPhone.message}</>}
                                 label={'SĐT người thân'}
                                 placeholder={'Nhập số điện thoại của người thân'}
-                            />
-                        )}
-                    />
-                    <Controller
-                        name='fContactBusinessPhone'
-                        control={control}
-                        render={({field: {value, ref, ...otherFields}}) => (
-                            <TdTextBox
-                                {...otherFields}
-                                moveToNextEleAfterEnter
-                                value={value}
-                                size={'small'}
-                                margin={'normal'}
-                                sx={{flex: 1}}
-                                inputRef={ref}
-                                error={errors.fContactBusinessPhone && Boolean(errors.fContactBusinessPhone)}
-                                helperText={errors.fContactBusinessPhone && <>{errors.fContactBusinessPhone.message}</>}
-                                label={'SĐT người thân'}
-                                placeholder={'Nhập số điện thoại làm việc của người thân'}
-                            />
-                        )}
-                    />
-                    <Controller
-                        name='fContactHomePhone'
-                        control={control}
-                        render={({field: {value, ref, ...otherFields}}) => (
-                            <TdTextBox
-                                {...otherFields}
-                                moveToNextEleAfterEnter
-                                value={value}
-                                size={'small'}
-                                margin={'normal'}
-                                sx={{flex: 1}}
-                                inputRef={ref}
-                                error={errors.fContactHomePhone && Boolean(errors.fContactHomePhone)}
-                                helperText={errors.fContactHomePhone && <>{errors.fContactHomePhone.message}</>}
-                                label={'SĐT người thân'}
-                                placeholder={'Nhập số điện thoại nhà của người thân'}
                             />
                         )}
                     />

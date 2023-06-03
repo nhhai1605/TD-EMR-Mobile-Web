@@ -12,7 +12,7 @@ import CloseIcon from "@mui/icons-material/Close";
 import {TdTextBox} from "../@core/components/controls/TdTextBox";
 import FlexBox from "../@core/components/FlexBox";
 import {LoadingButton} from "@mui/lab";
-import React from "react";
+import React, {useEffect, useState} from "react";
 
 const EditAccountDrawer = (props) => {
 	const {open, onClose} = props;
@@ -23,6 +23,9 @@ const EditAccountDrawer = (props) => {
 		accName: user?.accName ?? '',
 		cccd:  user?.cccd ?? '',
 		email:  user?.email ?? '',
+		password: '',
+		newPassword: '',
+		reNewPassword: '',
 	};
 	
 	const validationFormSchema = yup.object().shape({
@@ -31,6 +34,40 @@ const EditAccountDrawer = (props) => {
 			.min(9, 'Quá ngắn')
 			.max(12, 'Quá dài'),
 		email: yup.string().nullable().email('Email không hợp lệ'),
+		password: yup.string().nullable()
+			.when('newPassword', {
+				is: (val) => val && val.length > 0,
+				then: yup.string().required('Bắt buộc')
+				.test(
+					"len",
+					"Mật khẩu phải từ 6 đến 24 ký tự",
+					(val) => {
+						if (!val) {
+							return true;
+						}
+						return (val.length >= 6 && val.length <= 24);
+					}
+				)
+				.nullable()
+				.transform((o, c) => o === "" ? null : c)
+				.matches(/[a-zA-Z0-9]/, 'Mật khẩu chỉ được có số và chữ'),
+			}),
+		newPassword: yup.string().nullable()
+			.test(
+				"len",
+				"Mật khẩu phải từ 6 đến 24 ký tự",
+				(val) => {
+					if (!val) {
+						return true;
+					}
+					return (val.length >= 6 && val.length <= 18);
+				}
+			)
+			.transform((o, c) => o === "" ? null : c)
+			.matches(/[a-zA-Z0-9]/, 'Mật khẩu chỉ được có số và chữ'),
+		reNewPassword: yup.string().nullable()
+			.transform((o, c) => o === "" ? null : c)
+			.oneOf([yup.ref('newPassword'), ''], 'Mật khẩu không khớp'),
 	});
 
 	const {
@@ -57,7 +94,15 @@ const EditAccountDrawer = (props) => {
 		}).then(async (result) => {
 			if (result.isConfirmed) {
 				toggleLoading(true);
-				await mobileService.updateUserInfo(getValues()).then((res) => {
+				const payload = {
+					webUserAccID: Number(user?.webUserAccID),
+					accName: getValues('accName'),
+					cccd: getValues('cccd'),
+					email: getValues('email'),
+					accPassword: getValues('password'),
+					accPasswordNew: getValues('newPassword'),
+				}
+				await mobileService.updateWebUserAccountInfo(payload).then((res) => {
 					snackbar.success('Cập nhật thành công');
 					onClose(true)
 				}).catch(err=>{
@@ -68,6 +113,12 @@ const EditAccountDrawer = (props) => {
 			}
 		})
 	}
+	
+	useEffect(()=>{
+		if(!open){
+			reset(initialDataForm);
+		}
+	},[open])
 	
 	return (
 		<Drawer anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} open={open} onClose={()=>onClose(false)}>
@@ -122,7 +173,6 @@ const EditAccountDrawer = (props) => {
 							/>
 						)}
 					/>
-					
 					<Controller
 						name='email'
 						control={control}
@@ -142,6 +192,73 @@ const EditAccountDrawer = (props) => {
 							/>
 						)}
 					/>
+
+					<Typography variant='h5' sx={{ marginTop: '50px' }}>Thay đổi mật khẩu</Typography>
+
+					<Controller
+						name='newPassword'
+						control={control}
+						render={({ field: { value, ref, ...otherFields } }) => (
+							<TdTextBox
+								{...otherFields}
+								value={value}
+								size={'small'}
+								margin='normal'
+								moveToNextEleAfterEnter
+								sx={{ flex:1 }}
+								inputRef={ref}
+								error={errors.newPassword && Boolean(errors.newPassword)}
+								helperText={errors.newPassword && <>{errors.newPassword.message}</>}
+								label={'Mật khẩu mới'}
+								placeholder={'Nhập mật khẩu mới'}
+							/>
+						)}
+					/>
+					
+					<Controller
+						name='reNewPassword'
+						control={control}
+						render={({ field: { value, ref, ...otherFields } }) => (
+							<TdTextBox
+								{...otherFields}
+								value={value}
+								required={getValues().newPassword?.length > 0}
+								disabled={getValues().newPassword?.length <= 0}
+								size={'small'}
+								margin='normal'
+								moveToNextEleAfterEnter
+								sx={{ flex:1 }}
+								inputRef={ref}
+								error={errors.reNewPassword && Boolean(errors.reNewPassword)}
+								helperText={errors.reNewPassword && <>{errors.reNewPassword.message}</>}
+								label={'Xác nhận mật khẩu mới'}
+								placeholder={'Nhập xác nhận mật khẩu mới'}
+							/>
+						)}
+					/>
+
+					<Controller
+						name='password'
+						control={control}
+						render={({ field: { value, ref, ...otherFields } }) => (
+							<TdTextBox
+								{...otherFields}
+								required={getValues().newPassword?.length > 0}
+								disabled={getValues().newPassword?.length <= 0}
+								value={value}
+								size={'small'}
+								margin='normal'
+								moveToNextEleAfterEnter
+								sx={{ flex:1 }}
+								inputRef={ref}
+								error={errors.password && Boolean(errors.password)}
+								helperText={errors.password && <>{errors.password.message}</>}
+								label={'Mật khẩu cũ'}
+								placeholder={'Nhập mật khẩu cũ'}
+							/>
+						)}
+					/>
+					
 					<FlexBox
 						sx={{
 							position: 'fixed',

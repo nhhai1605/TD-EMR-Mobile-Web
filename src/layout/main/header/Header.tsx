@@ -158,7 +158,7 @@ const Header = () => {
                 <Box sx={{ display: { xs: 'block', sm: 'none' } }}>
                     <DrawerItem />
                 </Box>
-                <ListMenu sx={{ width: '60%' }}>
+                <ListMenu sx={{ width: '50%' }}>
                     {itemList.map((item) => {
                         const { text } = item;
                         return (

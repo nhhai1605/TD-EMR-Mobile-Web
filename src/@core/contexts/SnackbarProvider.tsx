@@ -73,21 +73,21 @@ const SnackbarProvider = ({ children }: SnackbarProviderProps) => {
   return (
     <SnackbarContext.Provider value={{ error, success }}>
       {children}
-      <Snackbar
-        key={message}
-        anchorOrigin={{
-          vertical: "top",
-          horizontal: "right",
-        }}
-        open={open}
-        autoHideDuration={2000}
-        onClose={handleClose}
+      {open && <Snackbar
+          key={message}
+          anchorOrigin={{
+            vertical: "top",
+            horizontal: "right",
+          }}
+          open={open}
+          autoHideDuration={2000}
+          onClose={handleClose}
       >
         <Alert variant="filled" onClose={handleClose} severity={severity}>
           <AlertTitle>{title}</AlertTitle>
           <b>{message}</b>
         </Alert>
-      </Snackbar>
+      </Snackbar>}
     </SnackbarContext.Provider>
   );
 };

@@ -43,6 +43,7 @@ export const Register = () => {
         phoneNumber: yup.string().min(9, 'Quá ngắn').max(12, 'Quá dài').matches(/^[0-9]+$/, 'SĐT chỉ được có số').required('Bắt buộc'),
         password: yup.string().required('Phải nhập mật khẩu')
             .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
+            .max(18, 'Mật khẩu chỉ được nhiều nhất 18 ký tự')
             .matches(/[a-zA-Z0-9]/, 'Mật khẩu chỉ được có số và chữ'),
         confirmPassword: yup.string()
             .oneOf([yup.ref('password'), null], 'Mật khẩu không khớp'),

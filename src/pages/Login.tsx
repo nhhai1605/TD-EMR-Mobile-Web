@@ -44,7 +44,8 @@ export const Login = () => {
         username: Yup.number().typeError("SĐT phải là số").required(t('common.validations.required')),
         password: Yup.string()
             .required(t('common.validations.required'))
-            .min(1, t('common.validations.min', { size: 1 })),
+            // .min(6, 'Mật khẩu phải có ít nhất 6 ký tự')
+            // .max(18, 'Mật khẩu chỉ được nhiều nhất 18 ký tự')
     });
 
     const {

@@ -1,41 +1,45 @@
 ﻿import internalApiService from './base/internalApiService';
-import identityServiceServer from './base/identityServerService';
+import identityServerService from './base/identityServerService';
 import {getFormUrlEncoded, HTTP_CONTENT_TYPE} from "../utils/httpHelper";
 
 class MobileService {
     register(payload){
-        return identityServiceServer.postAsync('user/Register', payload); // Done
+        return identityServerService.postAsync('user/Register', payload); // Done
     }
 
     login(payload){
-        return identityServiceServer.postAsync('connect/token', getFormUrlEncoded(payload), true, HTTP_CONTENT_TYPE.FORM_URLENCODED); // Done
+        return identityServerService.postAsync('connect/token', getFormUrlEncoded(payload), true, HTTP_CONTENT_TYPE.FORM_URLENCODED); // Done
     }
 
     getUserInfo(){
-        return identityServiceServer.getAsync('connect/userinfo', null,true, HTTP_CONTENT_TYPE.FORM_URLENCODED); // Done
+        return identityServerService.getAsync('connect/userinfo', null,true, HTTP_CONTENT_TYPE.FORM_URLENCODED); // Done
     }
     
     getNewPassword(payload:string){
-        return identityServiceServer.postAsync('user/GetNewPassword', payload); // Done
+        return identityServerService.postAsync('user/GetNewPassword', payload); // Done
     }
     
     updateUserInfo(payload){
-        return identityServiceServer.postAsync('User/UpdateProfileInfo', payload); // Done
+        return identityServerService.postAsync('User/UpdateProfileInfo', payload); // Done
+    }
+    
+    updateWebUserAccountInfo(payload) {
+        return identityServerService.postAsync('user/UpdateWebUserAccountInfo', payload); // Done
     }
 
     addFacilityToAccount(payload) {
-        return identityServiceServer.postAsync('user/AddAccountToFacility', payload); // Done
+        return identityServerService.postAsync('user/AddAccountToFacility', payload); // Done
     }
 
     getFacilityDetail(pkhidString : string) {
-        return identityServiceServer.postAsync('user/GetFacilityDetails/' + pkhidString); // Done
+        return identityServerService.postAsync('user/GetFacilityDetails/' + pkhidString); // Done
     }
     getFacilityDetailByCode(facilityCode : string) {
-        return identityServiceServer.postAsync('user/GetFacilityByCode/' , facilityCode); // Done
+        return identityServerService.postAsync('user/GetFacilityByCode/' , facilityCode); // Done
     }
 
     updateUserNotificationToken(payload) {
-        return identityServiceServer.postAsync('user/Web_UpdateWebUserAccountNotiToken', payload); // Done
+        return identityServerService.postAsync('user/Web_UpdateWebUserAccountNotiToken', payload); // Done
     }
 
     getManagePatientList(payload: number){

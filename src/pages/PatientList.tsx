@@ -16,25 +16,24 @@ import {Female, Male} from "@mui/icons-material";
 import PersonOutlinedIcon from '@mui/icons-material/PersonOutlined';
 import MedicalInformationOutlinedIcon from '@mui/icons-material/MedicalInformationOutlined';
 import DateRangeOutlinedIcon from '@mui/icons-material/DateRangeOutlined';
+import CloseIcon from "@mui/icons-material/Close";
 export const PatientList = () => {
 	const [allPatients, setAllPatients] = useState([])
 	const { getPatientList} = useAppointment();
-	const [searchQuery, setSearchQuery] = useState('');
 	const snackbar = useSnackbar();
 	const [createPatientDrawer, setCreatePatientDrawer] = useState(false);
 	const [addManagePatientDrawer, setAddManagePatientDrawer] = useState(false);
 	const [selectedPatient, setSelectedPatient] = useState(null);
+	const [openDrawer, setOpenDrawer] = useState(false);
 	const fetchData = async () =>
 	{
 		toggleLoading(true);
 		await getPatientList().then(res =>
 		{
-			console.log("res: " , res);
 			setAllPatients(res ?? [])
 		}).catch(err =>
 		{
-			console.log("Error: ", err);
-			snackbar.error("Lỗi khi lấy danh sách bệnh nhân");
+			snackbar.error(err.message);
 		}).finally(() =>
 		{
 			toggleLoading(false);
@@ -60,27 +59,64 @@ export const PatientList = () => {
 					backgroundColor:'white',
 				}}
 			>
-				{/*<Button sx={{margin:2}} size='small' type='button' onClick={()=>setCreatePatientDrawer(true)} variant='contained'>Tạo mới BN</Button>*/}
-				{/*<Button sx={{margin:2}} size='small' type='button' onClick={()=>setAddManagePatientDrawer(true)} variant='contained'>Thêm BN vào DSQL</Button>*/}
+				<Drawer open={openDrawer} onClose={()=>setOpenDrawer(false)} anchor={'bottom'}>
+					<Paper style={{height:'auto', overflow: 'auto', backgroundColor:'white'}}  >
+						<IconButton sx={{position:'absolute',right:0}} onClick={()=>setOpenDrawer(false)}>
+							<CloseIcon sx={{fontSize: '2rem'}} />
+						</IconButton>
+						<FlexBox sx={{padding:5, justifyContent:'center', alignItems:'center'}}>
+							<Typography variant='h4' >Bạn đã từng khám tại Viện Tim TP.Hồ Chí Minh?</Typography>
+						</FlexBox>
+						<FlexBox sx={{px:5, justifyContent:'center', alignItems:'center'}}>
+							<Button variant={'contained'} onClick={()=> {
+								setCreatePatientDrawer(true);
+								setOpenDrawer(false);
+							}}>
+								<PlaylistAddOutlinedIcon sx={{marginX:1, fontSize: '2rem'}} />
+								<FlexBox sx={{flexDirection:'column', alignItems:'center',justifyContent:'center', width:'400px'}}>
+									<span>ĐÃ TỪNG KHÁM</span>
+									<span>THÊM BỆNH NHÂN VÀO DANH SÁCH</span>
+								</FlexBox>
+							</Button>
+						</FlexBox>
+						<FlexBox sx={{padding:5, justifyContent:'center', alignItems:'center'}}>
+							<Button variant={'outlined'} onClick={()=> {
+								setAddManagePatientDrawer(true);
+								setOpenDrawer(false);
+							}}>
+								<PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}} />
+								<FlexBox sx={{flexDirection:'column', alignItems:'center',justifyContent:'center', width:'400px'}}>
+									<span>CHƯA TỪNG KHÁM</span>
+									<span>TẠO MỚI BỆNH NHÂN</span>
+								</FlexBox>
+							</Button>
+						</FlexBox>
+					</Paper>
+				</Drawer>
 				<CreatePatientDrawer open={createPatientDrawer} onClose={()=> {
 					setSelectedPatient(null)
 					setCreatePatientDrawer(false)
 				}} patient={selectedPatient}/>
 				<AddManagePatientDrawer open={addManagePatientDrawer} onClose={()=>setAddManagePatientDrawer(false)}/>
-				<Paper style={{height:'90vh', maxHeight: '90vh', overflow: 'auto', backgroundColor:'white'}} >
+				<Paper style={{height:'90vh', overflow: 'auto', backgroundColor:'white'}} >
 					<FlexBox sx={{padding:2, justifyContent:'space-between', alignItems:'center'}}>
 						<Typography variant='h3'>Danh sách Bệnh Nhân</Typography>
 						<FlexBox>
-							<Tooltip title="Tạo mới Bệnh Nhân">
-								<IconButton onClick={()=>setCreatePatientDrawer(true)}>
+							<Tooltip title="Tạo mới / Thêm mới Bệnh Nhân">
+								<IconButton onClick={()=>setOpenDrawer(true)}>
 									<PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}}/>
 								</IconButton>
 							</Tooltip>
-							<Tooltip title="Thêm BN vào DS Quản Lý">
-								<IconButton onClick={()=>setAddManagePatientDrawer(true)} >
-									<PlaylistAddOutlinedIcon sx={{marginX:1, fontSize: '2rem'}} />
-								</IconButton>
-							</Tooltip>
+							{/*<Tooltip title="Tạo mới Bệnh Nhân">*/}
+							{/*	<IconButton onClick={()=>setCreatePatientDrawer(true)}>*/}
+							{/*		<PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}}/>*/}
+							{/*	</IconButton>*/}
+							{/*</Tooltip>*/}
+							{/*<Tooltip title="Thêm BN vào DS Quản Lý">*/}
+							{/*	<IconButton onClick={()=>setAddManagePatientDrawer(true)} >*/}
+							{/*		<PlaylistAddOutlinedIcon sx={{marginX:1, fontSize: '2rem'}} />*/}
+							{/*	</IconButton>*/}
+							{/*</Tooltip>*/}
 						</FlexBox>
 
 					</FlexBox>

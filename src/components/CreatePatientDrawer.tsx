@@ -392,7 +392,7 @@ const CreatePatientDrawer = (props) => {
                             render={({field: {value, ref, onChange, ...otherFields}}) => (
                                 <TdDatePicker
                                     disableFuture
-                                    disableHighlightToday
+                                    showDaysOutsideCurrentMonth={false}
                                     label={'Ngày sinh'}
                                     inputFormat='DD/MM/YYYY'
                                     value={value}

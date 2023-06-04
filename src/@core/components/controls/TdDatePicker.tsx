@@ -1,9 +1,9 @@
 import { BaseTextFieldProps, SxProps, TextField, TextFieldProps, Theme } from '@mui/material';
-import { DatePicker, DatePickerProps, LocalizationProvider } from '@mui/x-date-pickers';
+import {DatePickerProps, LocalizationProvider} from '@mui/x-date-pickers';
 import { useTranslation } from 'react-i18next';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
-import {useState} from "react";
 import { DesktopDatePicker  } from '@mui/x-date-pickers';
+
 type TdDatePickerProps<TInputDate, TDate> = DatePickerProps<TInputDate, TDate> & BaseTextFieldProps & {
   labelI18nKey?: string;
   label?: string;
@@ -85,7 +85,7 @@ export const TdDatePicker = <TInputDate, TDate>(props: TdDatePickerProps<TInputD
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterMoment}>
+    <LocalizationProvider dateAdapter={AdapterMoment} >
       <DesktopDatePicker
         {...datePickerProps}
         // open={dateOpen}

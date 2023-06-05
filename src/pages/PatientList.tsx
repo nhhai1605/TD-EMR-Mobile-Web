@@ -69,7 +69,7 @@ export const PatientList = () => {
 						</FlexBox>
 						<FlexBox sx={{px:5, justifyContent:'center', alignItems:'center'}}>
 							<Button variant={'contained'} onClick={()=> {
-								setCreatePatientDrawer(true);
+								setAddManagePatientDrawer(true);
 								setOpenDrawer(false);
 							}}>
 								<PlaylistAddOutlinedIcon sx={{marginX:1, fontSize: '2rem'}} />
@@ -81,7 +81,7 @@ export const PatientList = () => {
 						</FlexBox>
 						<FlexBox sx={{padding:5, justifyContent:'center', alignItems:'center'}}>
 							<Button variant={'outlined'} onClick={()=> {
-								setAddManagePatientDrawer(true);
+								setCreatePatientDrawer(true);
 								setOpenDrawer(false);
 							}}>
 								<PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}} />

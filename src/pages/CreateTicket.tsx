@@ -139,7 +139,7 @@ export const CreateTicket = () => {
                         minDate={moment().add(1,'days').toDate()}
                         label={'Ngày Khám'}
                         showDaysOutsideCurrentMonth={false}
-                        shouldDisableDate={(date) => {return  moment(date).get('day') === 0 || moment(date).get('day') === 6}}
+                        shouldDisableDate={(date) => {return  moment(date).get('day') === 0}}
                         inputFormat='DD/MM/YYYY'
                         maxDate={moment().add(1,'months').toDate()}
                         value={selectedDate}

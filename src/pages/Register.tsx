@@ -93,31 +93,31 @@ export const Register = () => {
             otp: otp,
         }
         await otpService.checkOTP(payload).then((res) =>{
-            if(!res)
-            {
-                snackbar.error("Mã OTP không hợp lệ. Vui lòng thử lại");
-            }
+            console.log("Res",res)
+            setOpenOtp(false);
         }).catch((err)=> {
+            toggleLoading(false);
             snackbar.error(err.message);
             return;
         })
-        const newAccount = {
-            accName: data.fullName,
-            accUserName: data.phoneNumber,
-            accPassword: data.password,
-            mobileNum: data.phoneNumber,
-            cccd: data.cccd,
-            email: data.email
-        };
-        console.log(newAccount);
-        await mobileService.register(newAccount).then(async () =>
-        {
-            snackbar.success("Đăng ký thành công");
-            navigate(ROUTE_PATHS.Login);
-        }).catch((err) => { 
-            console.log(err);
-            snackbar.error(err.message.toString());
-        }).finally(() => toggleLoading(false))
+        console.log("here")
+        // const newAccount = {
+        //     accName: data.fullName,
+        //     accUserName: data.phoneNumber,
+        //     accPassword: data.password,
+        //     mobileNum: data.phoneNumber,
+        //     cccd: data.cccd,
+        //     email: data.email
+        // };
+        // console.log(newAccount);
+        // await mobileService.register(newAccount).then(async () =>
+        // {
+        //     snackbar.success("Đăng ký thành công");
+        //     navigate(ROUTE_PATHS.Login);
+        // }).catch((err) => { 
+        //     console.log(err);
+        //     snackbar.error(err.message.toString());
+        // }).finally(() => toggleLoading(false))
     }
     
     return (

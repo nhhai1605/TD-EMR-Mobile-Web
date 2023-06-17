@@ -93,12 +93,7 @@ const OTPComponent = (props) => {
                         sx={{margin:2}}
                         variant={'contained'}
                         onClick={()=>{
-							if(otp != "000000") {
-								snackbar.error("Mã OTP không đúng. Vui lòng thử lại.")
-								return;
-							}
-							setOpen(false);
-							onSubmit();
+							onSubmit(otp);
 						}}>
                         XÁC NHẬN
                     </Button>

@@ -62,7 +62,7 @@ const OTPComponent = (props) => {
 						marginLeft:'2vw',
 						marginRight:'2vw',
 						fontSize:'5vw',
-	                    borderRadius:'2vw'
+						borderRadius:'2vw',
 					}}
                 />
                 <FlexBox sx={{alignItems:'center',justifyContent:'space-evenly', flexDirection:'row'}}>
@@ -85,8 +85,8 @@ const OTPComponent = (props) => {
 						}
                         variant={'contained'}
                         onClick={()=>{
-                            setResendCooldown(cooldown);
-                        }}>
+							setResendCooldown(cooldown);
+						}}>
                         GỬI LẠI OTP
                     </LoadingButton>
                     <Button
@@ -97,9 +97,9 @@ const OTPComponent = (props) => {
 								snackbar.error("Mã OTP không đúng. Vui lòng thử lại.")
 								return;
 							}
-	                        setOpen(false);
+							setOpen(false);
 							onSubmit();
-                        }}>
+						}}>
                         XÁC NHẬN
                     </Button>
                 </FlexBox>

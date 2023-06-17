@@ -43,10 +43,6 @@ const AddManagePatientDrawer = (props) => {
     } = useForm({ resolver: yupResolver(validationFormSchema), defaultValues: initialDataForm });
     
     const onSubmit = async () => {
-        // const validateForm = await trigger();
-        // if (!validateForm) {
-        //     return;
-        // }
         const facilityCode = cookie.load(COOKIE_NAME.USER).facilityCode;
         const payload = {...getValues(), facilityCode}
         addManagePatient(payload.facilityCode, payload.patientCode, payload.contactMobileNum);

@@ -23,6 +23,7 @@ import { ROUTE_PATHS } from "@core/constants/routeConfig";
 import cookie from "react-cookies";
 import authService from "../@core/services/authService";
 import OTPComponent from "../components/OTPComponent";
+import otpService from "../@core/services/otpService";
 
 export const Register = () => {
     const snackbar = useSnackbar();
@@ -84,14 +85,22 @@ export const Register = () => {
         
     }
     
-    
-    const onSubmit = async() => {
-        // const validateForm = await trigger();
-        // if (!validateForm) {
-        //     return;
-        // }
+    const onSubmit = async(otp: string) => {
         toggleLoading(true);
         const data = getValues();
+        const payload = {
+            patientCellPhoneNumber: getValues('phoneNumber'),
+            otp: otp,
+        }
+        await otpService.checkOTP(payload).then((res) =>{
+            if(!res)
+            {
+                snackbar.error("Mã OTP không hợp lệ. Vui lòng thử lại");
+            }
+        }).catch((err)=> {
+            snackbar.error(err.message);
+            return;
+        })
         const newAccount = {
             accName: data.fullName,
             accUserName: data.phoneNumber,
@@ -103,16 +112,14 @@ export const Register = () => {
         console.log(newAccount);
         await mobileService.register(newAccount).then(async () =>
         {
-            // addFacilityToAccount().catch(err => snackbar.error(err.message)).finally(() =>
-            // {
             snackbar.success("Đăng ký thành công");
             navigate(ROUTE_PATHS.Login);
-            // });
         }).catch((err) => { 
             console.log(err);
             snackbar.error(err.message.toString());
         }).finally(() => toggleLoading(false))
     }
+    
     return (
         <Grid container component='main' sx={{ height: '100vh' }}>
             <OTPComponent open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
@@ -248,7 +255,25 @@ export const Register = () => {
                             if (!validateForm) {
                                 return;
                             }
-                            setOpenOtp(true)
+                            
+                            toggleLoading(true)
+                            const payload = {
+                                otpType:1,
+                                patientCellPhoneNumber: getValues('phoneNumber'),
+                            }
+                            await otpService.sendOTP(payload).then((res) =>{
+                                if(res)
+                                {
+                                    snackbar.success("Gửi mã OTP thành công");
+                                    setOpenOtp(true)
+                                }
+                                else
+                                {
+                                    snackbar.error("Gửi mã OTP thất bại. Vui lòng thử lại");
+                                }
+                            }).catch((err)=>snackbar.error(err.message)).finally(() => toggleLoading(false))
+                            
+                            
                         }} fullWidth variant='contained' sx={{ my: 3 }}>
                             {"Đăng Ký"}
                         </LoadingButton>

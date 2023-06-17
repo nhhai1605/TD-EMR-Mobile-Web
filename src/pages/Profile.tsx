@@ -1,11 +1,9 @@
-﻿import React, {useEffect, useState} from "react";
+﻿import React, {useState} from "react";
 import {Container, Typography, Paper, IconButton} from "@mui/material";
 import {CustomBox} from "./Home";
 import FlexBox from "../@core/components/FlexBox";
 import authService from "../@core/services/authService";
 import Tooltip from "@mui/material/Tooltip";
-import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
-import PlaylistAddOutlinedIcon from "@mui/icons-material/PlaylistAddOutlined";
 import {EditOutlined} from "@mui/icons-material";
 import EditAccountDrawer from "../components/EditAccountDrawer";
 import {toggleLoading} from "../@core/components/loading/LoadingScreen";

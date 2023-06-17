@@ -273,10 +273,6 @@ const CreatePatientDrawer = (props) => {
 
     const onSubmit = async () => {
         console.log("submit", getValues())
-        // const validateForm = await trigger();
-        // if (!validateForm) {
-        //     return;
-        // }
         let response = null;
         const values : any = getValues();
         values.dob = moment(values.dob).format('YYYY-MM-DD');

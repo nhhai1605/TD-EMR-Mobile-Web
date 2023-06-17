@@ -16,35 +16,45 @@ import { TdTextBox } from "@core/components/controls/TdTextBox";
 import * as yup from "yup";
 import React, {useState} from "react";
 import {useSnackbar} from "@core/contexts/SnackbarProvider";
-import OTPComponent from "../components/OTPComponent";
+import OTPComponent, {sendOTP} from "../components/OTPComponent";
 import mobileService from "../@core/services/mobileService";
 import {toggleLoading} from "../@core/components/loading/LoadingScreen";
 import {SwalAlert} from "../@core/components/SwalAlert";
+import otpService from "../@core/services/otpService";
+
 export const ForgotPassword = () => {
 	const { t } = useTranslation();
 	const [openOtp, setOpenOtp] = useState(false);
 	const snackbar = useSnackbar();
-	const handleGetNewPassword = async () => {
-		console.log("get new password")
-		toggleLoading(true)
-		await  mobileService.getNewPassword(getValues().phoneNumber).then((res : string) => {
-			SwalAlert.fire({
-				html: `<p  style="font-size:1.5rem;text-align:center">Mật khẩu mới là: <b>${res}</b></p>`,
-				icon: 'success',
-				confirmButtonText: 'Copy',
-				showCloseButton:true
-			}).then((result) => {
-				if (result.isConfirmed) {
-					navigator.clipboard.writeText(res)
-					snackbar.success('Đã copy mật khẩu mới vào clipboard')
-				}
-			});
-		}).catch(err => {
+	
+	const onSubmit = async (otp) => {
+		toggleLoading(true);
+		const data = getValues();
+		const payload = {
+			patientCellPhoneNumber: data.phoneNumber,
+			otp: otp,
+		}
+		await otpService.checkOTP(payload).then(async () =>{
+			setOpenOtp(false);
+			await mobileService.getNewPassword(getValues().phoneNumber).then((res : string) => {
+				SwalAlert.fire({
+					html: `<p  style="font-size:1.5rem;text-align:center">Mật khẩu mới là: <b>${res}</b></p>`,
+					icon: 'success',
+					confirmButtonText: 'Copy',
+					showCloseButton:true
+				}).then((result) => {
+					if (result.isConfirmed) {
+						navigator.clipboard.writeText(res)
+						snackbar.success('Đã copy mật khẩu mới vào clipboard')
+					}
+				});
+			})
+		}).catch((err)=> {
 			snackbar.error(err.message);
-		}).finally(()=>toggleLoading(false))
-	};
-
-	const {control, handleSubmit, getValues} = useForm({
+		}).finally(() => toggleLoading(false))
+	}
+	
+	const {control, handleSubmit, getValues, trigger} = useForm({
 		defaultValues: {
 			phoneNumber: '',
 		},
@@ -55,7 +65,7 @@ export const ForgotPassword = () => {
 
 	return (
 		<Grid container component='main' sx={{ height: "100vh" }}>
-			<OTPComponent open={openOtp} setOpen={setOpenOtp} onSubmit={handleGetNewPassword}/>
+			<OTPComponent onResend={async() => await sendOTP(getValues('phoneNumber'), 4, snackbar, true)} open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
 			<Grid
 				item
 				xs={false}
@@ -105,6 +115,13 @@ export const ForgotPassword = () => {
 							fullWidth
 							variant='contained'
 							sx={{ mt: 3 }}
+							onClick={async ()=>{
+								const validateForm = await trigger();
+								if (!validateForm) {
+									return;
+								}
+								await sendOTP(getValues('phoneNumber'), 4, snackbar , false).finally(()=> setOpenOtp(true));
+							}}
 						>
 							{"Gửi mật khẩu mới"}
 						</LoadingButton>

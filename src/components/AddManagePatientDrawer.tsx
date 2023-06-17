@@ -15,7 +15,8 @@ import {toggleLoading} from "../@core/components/loading/LoadingScreen";
 import mobileService from "../@core/services/mobileService";
 import {useSnackbar} from "../@core/contexts/SnackbarProvider";
 import {useAppointment} from "../context/AppointmentContext";
-import OTPComponent from "./OTPComponent";
+import OTPComponent, {sendOTP} from "./OTPComponent";
+import otpService from "../@core/services/otpService";
 
 const AddManagePatientDrawer = (props) => {
     const {open, onClose} = props;
@@ -42,10 +43,21 @@ const AddManagePatientDrawer = (props) => {
         clearErrors,
     } = useForm({ resolver: yupResolver(validationFormSchema), defaultValues: initialDataForm });
     
-    const onSubmit = async () => {
-        const facilityCode = cookie.load(COOKIE_NAME.USER).facilityCode;
-        const payload = {...getValues(), facilityCode}
-        addManagePatient(payload.facilityCode, payload.patientCode, payload.contactMobileNum);
+    const onSubmit = async (otp) => {
+        toggleLoading(true);
+        const data = getValues();
+        const payload = {
+            patientCellPhoneNumber: data.contactMobileNum,
+            otp: otp,
+        }
+        await otpService.checkOTP(payload).then(async () =>{
+            setOpenOtp(false);
+            const facilityCode = cookie.load(COOKIE_NAME.USER).facilityCode;
+            const payload = {...getValues(), facilityCode}
+            await addManagePatient(payload.facilityCode, payload.patientCode, payload.contactMobileNum);
+        }).catch((err)=> {
+            snackbar.error(err.message);
+        }).finally(() => toggleLoading(false))
     }
     
     const addManagePatient = async (facilityCode, patientCode, contactMobileNum = null) =>
@@ -120,7 +132,7 @@ const AddManagePatientDrawer = (props) => {
 
     return (
         <Drawer anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} open={open} onClose={onClose}>
-            <OTPComponent open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
+            <OTPComponent onResend={async() => await sendOTP(getValues('contactMobileNum'), 3, snackbar, true)} open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
             <Box sx={{ padding: '20px' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant='h5'>Thêm bệnh nhân vào danh sách quản lí</Typography>
@@ -193,7 +205,7 @@ const AddManagePatientDrawer = (props) => {
                             if (!validateForm) {
                                 return;
                             }
-                            setOpenOtp(true);
+                            await sendOTP(getValues('contactMobileNum'), 3, snackbar , false).finally(()=> setOpenOtp(true));
                         }} type='button' variant='contained'>
                             Xác nhận
                         </LoadingButton>

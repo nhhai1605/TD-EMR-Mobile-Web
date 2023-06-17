@@ -22,7 +22,7 @@ import mobileService from "../@core/services/mobileService";
 import { ROUTE_PATHS } from "@core/constants/routeConfig";
 import cookie from "react-cookies";
 import authService from "../@core/services/authService";
-import OTPComponent from "../components/OTPComponent";
+import OTPComponent, {sendOTP} from "../components/OTPComponent";
 import otpService from "../@core/services/otpService";
 
 export const Register = () => {
@@ -89,40 +89,34 @@ export const Register = () => {
         toggleLoading(true);
         const data = getValues();
         const payload = {
-            patientCellPhoneNumber: getValues('phoneNumber'),
+            patientCellPhoneNumber: data.phoneNumber,
             otp: otp,
         }
-        await otpService.checkOTP(payload).then((res) =>{
-            console.log("Res",res)
+        await otpService.checkOTP(payload).then(async () =>{
             setOpenOtp(false);
+            const newAccount = {
+                accName: data.fullName,
+                accUserName: data.phoneNumber,
+                accPassword: data.password,
+                mobileNum: data.phoneNumber,
+                cccd: data.cccd,
+                email: data.email
+            };
+            console.log(newAccount);
+            await mobileService.register(newAccount).then(async () =>
+            {
+                snackbar.success("Đăng ký thành công");
+                navigate(ROUTE_PATHS.Login);
+            })
         }).catch((err)=> {
-            toggleLoading(false);
             snackbar.error(err.message);
-            return;
-        })
-        console.log("here")
-        // const newAccount = {
-        //     accName: data.fullName,
-        //     accUserName: data.phoneNumber,
-        //     accPassword: data.password,
-        //     mobileNum: data.phoneNumber,
-        //     cccd: data.cccd,
-        //     email: data.email
-        // };
-        // console.log(newAccount);
-        // await mobileService.register(newAccount).then(async () =>
-        // {
-        //     snackbar.success("Đăng ký thành công");
-        //     navigate(ROUTE_PATHS.Login);
-        // }).catch((err) => { 
-        //     console.log(err);
-        //     snackbar.error(err.message.toString());
-        // }).finally(() => toggleLoading(false))
+        }).finally(() => toggleLoading(false))
     }
+    
     
     return (
         <Grid container component='main' sx={{ height: '100vh' }}>
-            <OTPComponent open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
+            <OTPComponent onResend={async() => await sendOTP(getValues('phoneNumber'),1, snackbar, true)} open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
             <Grid
                 item
                 xs={false}
@@ -255,25 +249,7 @@ export const Register = () => {
                             if (!validateForm) {
                                 return;
                             }
-                            
-                            toggleLoading(true)
-                            const payload = {
-                                otpType:1,
-                                patientCellPhoneNumber: getValues('phoneNumber'),
-                            }
-                            await otpService.sendOTP(payload).then((res) =>{
-                                if(res)
-                                {
-                                    snackbar.success("Gửi mã OTP thành công");
-                                    setOpenOtp(true)
-                                }
-                                else
-                                {
-                                    snackbar.error("Gửi mã OTP thất bại. Vui lòng thử lại");
-                                }
-                            }).catch((err)=>snackbar.error(err.message)).finally(() => toggleLoading(false))
-                            
-                            
+                            await sendOTP(getValues('phoneNumber'), 1, snackbar , false).finally(()=> setOpenOtp(true));
                         }} fullWidth variant='contained' sx={{ my: 3 }}>
                             {"Đăng Ký"}
                         </LoadingButton>

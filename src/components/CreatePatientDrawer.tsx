@@ -23,7 +23,9 @@ import {LoadingButton} from "@mui/lab";
 import {TdAutocomplete} from "../@core/components/controls/TdAutocomplete";
 import {CitiesProvince} from "../@core/models/refCountry";
 import {FamilyRelationship} from "../@core/models/enums/emrEnum";
-import OTPComponent from "./OTPComponent";
+import OTPComponent, {sendOTP} from "./OTPComponent";
+import otpService from "../@core/services/otpService";
+import {ROUTE_PATHS} from "../@core/constants/routeConfig";
 export const FamilyRelationships = [
     {
         Id: 0,
@@ -271,44 +273,45 @@ const CreatePatientDrawer = (props) => {
         });
     };
 
-    const onSubmit = async () => {
-        console.log("submit", getValues())
+    const onSubmit = async (otp) => {
+        toggleLoading(true);
         let response = null;
         const values : any = getValues();
-        values.dob = moment(values.dob).format('YYYY-MM-DD');
-        values.webUserAccID = account.webUserAccID;
-        values.cityProvinceID = values.cityProvinceID ?? -1;
-        values.wardNameID = values.wardNameID ?? -1;
-        values.suburbNameID = values.suburbNameID ?? -1;
-        values.v_FamilyRelationship = values.v_FamilyRelationship ?? 0;
-        values.fContactBusinessPhone = values.fContactBusinessPhone ? parseInt(values.fContactBusinessPhone) : null;
-        values.fContactCellPhone = values.fContactCellPhone ? parseInt(values.fContactCellPhone) : null;
-        values.fContactHomePhone = values.fContactHomePhone ? parseInt(values.fContactHomePhone) : null;
-        
-        if(patient)
-        {
-            values.patientID = patient.patientID;
-            values.patientCode = patient.patientCode;
-            response = await mobileService.updatePatient(values).catch(err =>
+        const payload = {
+            patientCellPhoneNumber: values.contactMobileNum,
+            otp: otp,
+        }
+        await otpService.checkOTP(payload).then(async () =>{
+            setOpenOtp(false);
+            values.dob = moment(values.dob).format('YYYY-MM-DD');
+            values.webUserAccID = account.webUserAccID;
+            values.cityProvinceID = values.cityProvinceID ?? -1;
+            values.wardNameID = values.wardNameID ?? -1;
+            values.suburbNameID = values.suburbNameID ?? -1;
+            values.v_FamilyRelationship = values.v_FamilyRelationship ?? 0;
+            values.fContactBusinessPhone = values.fContactBusinessPhone ? parseInt(values.fContactBusinessPhone) : null;
+            values.fContactCellPhone = values.fContactCellPhone ? parseInt(values.fContactCellPhone) : null;
+            values.fContactHomePhone = values.fContactHomePhone ? parseInt(values.fContactHomePhone) : null;
+            if(patient)
             {
-                snackbar.error(err.message.toString());
-            });
-        }
-        else
-        {
-            response = await mobileService.addPatient(values).catch(err =>
+                values.patientID = patient.patientID;
+                values.patientCode = patient.patientCode;
+                response = await mobileService.updatePatient(values);
+            }
+            else
             {
-                snackbar.error(err.message.toString());
-            });
-        }
-        if (response)
-        {
-            console.log(response)
-            await initData();
-            onClose();
-            snackbar.success(patient ? 'Cập nhật thông tin thành công' : 'Thêm mới thành công',)
-        }
-        toggleLoading(false);
+                response = await mobileService.addPatient(values);
+            }
+            if (response)
+            {
+                console.log(response)
+                await initData();
+                onClose();
+                snackbar.success(patient ? 'Cập nhật thông tin thành công' : 'Thêm mới thành công',)
+            }
+        }).catch((err)=> {
+            snackbar.error(err.message);
+        }).finally(() => toggleLoading(false))
     }
     
     const handleDeletePatient = async () => {
@@ -348,7 +351,7 @@ const CreatePatientDrawer = (props) => {
         <Drawer 
             anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} 
             open={open} onClose={thisOnClose}>
-            <OTPComponent open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
+            <OTPComponent onResend={async() => await sendOTP(getValues('contactMobileNum'), 2, snackbar, true)} open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
             <Box sx={{padding: '20px'}}>
                 <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Typography variant='h3'>Tạo bệnh nhân</Typography>
@@ -698,7 +701,7 @@ const CreatePatientDrawer = (props) => {
                             if (!validateForm) {
                                 return;
                             }
-                            setOpenOtp(true);
+                            await sendOTP(getValues('contactMobileNum'), 2,snackbar , false).finally(()=> setOpenOtp(true));
                         }} type='button' variant='contained'>
                             Xác nhận
                         </LoadingButton>

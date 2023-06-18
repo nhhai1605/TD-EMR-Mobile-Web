@@ -221,10 +221,10 @@ const CreatePatientDrawer = (props) => {
             }
             else
             {
-                init.fContactFullName = patient?.otherContact?.contactFullName ?? '';
-                init.fContactAddress = patient?.otherContact?.contactAddress ?? '';
-                init.fContactCellPhone = patient?.otherContact?.contactCellPhone ?? '';
-                init.v_FamilyRelationship = patient?.otherContact?.familyRelationship ?? 0;
+                init.fContactFullName = patient?.fContactFullName ?? '';
+                init.fContactAddress = patient?.fContactAddress ?? '';
+                init.fContactCellPhone = patient?.fContactCellPhone ?? '';
+                init.v_FamilyRelationship = patient?.v_FamilyRelationship ?? 0;
             }
             
         }

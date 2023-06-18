@@ -281,37 +281,41 @@ const CreatePatientDrawer = (props) => {
             patientCellPhoneNumber: values.contactMobileNum,
             otp: otp,
         }
-        await otpService.checkOTP(payload).then(async () =>{
-            setOpenOtp(false);
-            values.dob = moment(values.dob).format('YYYY-MM-DD');
-            values.webUserAccID = account.webUserAccID;
-            values.cityProvinceID = values.cityProvinceID ?? -1;
-            values.wardNameID = values.wardNameID ?? -1;
-            values.suburbNameID = values.suburbNameID ?? -1;
-            values.v_FamilyRelationship = values.v_FamilyRelationship ?? 0;
-            values.fContactBusinessPhone = values.fContactBusinessPhone ? parseInt(values.fContactBusinessPhone) : null;
-            values.fContactCellPhone = values.fContactCellPhone ? parseInt(values.fContactCellPhone) : null;
-            values.fContactHomePhone = values.fContactHomePhone ? parseInt(values.fContactHomePhone) : null;
-            if(patient)
-            {
-                values.patientID = patient.patientID;
-                values.patientCode = patient.patientCode;
-                response = await mobileService.updatePatient(values);
-            }
-            else
-            {
+        values.dob = moment(values.dob).format('YYYY-MM-DD');
+        values.webUserAccID = account.webUserAccID;
+        values.cityProvinceID = values.cityProvinceID ?? -1;
+        values.wardNameID = values.wardNameID ?? -1;
+        values.suburbNameID = values.suburbNameID ?? -1;
+        values.v_FamilyRelationship = values.v_FamilyRelationship ?? 0;
+        values.fContactBusinessPhone = values.fContactBusinessPhone ? parseInt(values.fContactBusinessPhone) : null;
+        values.fContactCellPhone = values.fContactCellPhone ? parseInt(values.fContactCellPhone) : null;
+        values.fContactHomePhone = values.fContactHomePhone ? parseInt(values.fContactHomePhone) : null;
+        if(patient)
+        {
+            values.patientID = patient.patientID;
+            values.patientCode = patient.patientCode;
+            values.isTempPatient = !(patient.patientCode && patient.patientCode !== "")
+            response = await mobileService.updatePatient(values).catch((err)=> {
+                snackbar.error(err.message);
+            }).finally(() => toggleLoading(false))
+        }
+        else
+        {
+            await otpService.checkOTP(payload).then(async () =>{
+                setOpenOtp(false);
                 response = await mobileService.addPatient(values);
-            }
-            if (response)
-            {
-                console.log(response)
-                await initData();
-                onClose();
-                snackbar.success(patient ? 'Cập nhật thông tin thành công' : 'Thêm mới thành công',)
-            }
-        }).catch((err)=> {
-            snackbar.error(err.message);
-        }).finally(() => toggleLoading(false))
+            }).catch((err)=> {
+                snackbar.error(err.message);
+            }).finally(() => toggleLoading(false))
+        }
+        if (response)
+        {
+            await initData();
+            onClose();
+            snackbar.success(patient ? 'Cập nhật thông tin thành công' : 'Thêm mới thành công',)
+        }
+        
+        
     }
     
     const handleDeletePatient = async () => {

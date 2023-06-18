@@ -40,9 +40,8 @@ export const TicketList = () => {
         toggleLoading(true);
         let response : any = await mobileService.getListTicket(account.webUserAccID).catch(err => {
             snackbar.error(err.message);
-        });
+        }).finally(()=>toggleLoading(false));
         setAllTickets(response.reverse());
-        toggleLoading(false);
     }
 
     useEffect(() =>

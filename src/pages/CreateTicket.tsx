@@ -84,9 +84,9 @@ export const CreateTicket = () => {
         await mobileService.getListTicket(account.webUserAccID).then((res : any) => {
             const availablePatients = _allPatients.filter(p => !res.find(r => r.webAccManPtID === p.webAccManPtID));
             setPatientList(availablePatients)
-            availablePatients?.length > 0 && setSelectedPatient(availablePatients[0]);
+            availablePatients?.length > 0 ? setSelectedPatient(availablePatients[0]) : setSelectedPatient(null);
         }).catch(err => {
-            snackbar.error(err.message.toString());            
+            snackbar.error(err.message);            
         }).finally(()=> {
             setPatientLoading(false);
             toggleLoading(false);
@@ -179,7 +179,7 @@ export const CreateTicket = () => {
                     />
                 </FlexBox>
                 <FlexBox sx={{paddingY:2, justifyContent:'center'}}>
-                    <LoadingButton onClick={()=> {
+                    <LoadingButton disabled={!selectedPatient} onClick={()=> {
                         if(!selectedPatient || !selectedDate )
                         {
                             setHaveDateError(true)

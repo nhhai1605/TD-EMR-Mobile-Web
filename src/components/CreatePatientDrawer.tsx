@@ -359,7 +359,7 @@ const CreatePatientDrawer = (props) => {
             <OTPComponent onResend={async() => await sendOTP(getValues('contactMobileNum'), 2, snackbar, true)} open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
             <Box sx={{padding: '20px'}}>
                 <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-                    <Typography variant='h3'>Tạo bệnh nhân</Typography>
+                    <Typography variant='h3'>{patient ? "Thông tin bệnh nhân" : "Tạo bệnh nhân"}</Typography>
                     <IconButton onClick={thisOnClose}>
                         <CloseIcon/>
                     </IconButton>
@@ -686,6 +686,9 @@ const CreatePatientDrawer = (props) => {
                             gap: '20px',
                         }}
                     >
+                        <LoadingButton onClick={thisOnClose}  variant='contained'>
+                            Đóng
+                        </LoadingButton>
                         {
                             patient &&
                             <Button onClick={handleDeletePatient} color={'error'} sx={{
@@ -696,36 +699,34 @@ const CreatePatientDrawer = (props) => {
                                 Xóa BN
                             </Button>
                         }
-                        <Button onClick={thisOnClose} color={'error'} sx={{
-                            '&:hover': {
-                                backgroundColor: '#a12222',
-                            }
-                        }} variant='contained'>
-                            Đóng
-                        </Button>
-                        <Button disabled={patient?.patientCode && patient.patientCode !== ""} onClick={onReset} color={'warning'} sx={{
-                            color:'white',
-                            '&:hover': {
-                                color:'white',
-                                backgroundColor: '#dcc432',
-                            }
-                        }} variant='contained'>
-                            Đặt lại
-                        </Button>
-                        <LoadingButton onClick={async ()=>{
-                            const validateForm = await trigger();
-                            if (!validateForm) {
-                                return;
-                            }
-                            if(patient) {
-                                await onSubmit(null);
-                            }
-                            else {
-                                await sendOTP(getValues('contactMobileNum'), 2, setOpenOtp,snackbar , false);
-                            }
-                        }} type='button' variant='contained'>
-                            Xác nhận
-                        </LoadingButton>
+                        {!(patient?.patientCode && patient.patientCode !== "") &&
+                            <>
+                                <Button onClick={onReset} color={'warning'} sx={{
+                                    color:'white',
+                                    '&:hover': {
+                                        color:'white',
+                                        backgroundColor: '#dcc432',
+                                    }
+                                }} variant='contained'>
+                                    Đặt lại
+                                </Button>
+                                <LoadingButton onClick={async ()=>{
+                                    const validateForm = await trigger();
+                                    if (!validateForm) {
+                                        return;
+                                    }
+                                    if(patient) {
+                                        await onSubmit(null);
+                                    }
+                                    else {
+                                        await sendOTP(getValues('contactMobileNum'), 2, setOpenOtp,snackbar , false);
+                                    }
+                                }} type='button' variant='contained'>
+                                    {patient ? "Cập nhật" :  "Tạo bệnh nhân"}
+                                </LoadingButton>
+                            </>
+                        }
+                        
                     </FlexBox>
                 </Box>
             </Box>

@@ -110,6 +110,7 @@ const DrawerItem = () => {
                 }}
                 anchor="right"
                 open={open}
+                variant={'temporary'}
             >
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>

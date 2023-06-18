@@ -183,11 +183,12 @@ const CreatePatientDrawer = (props) => {
     } = useForm({resolver: yupResolver(validationFormSchema), defaultValues: initialDataForm});
 
     const getAddress = async () => {
+        toggleLoading(true)
         await Promise.all([
             dispatch(getProvinceAction()),
             dispatch(getSuburbNameAction()),
             dispatch(getWardNamesAction()),
-        ]);
+        ]).finally(()=>toggleLoading(false));
     };
 
     const cityChange = cityProvinceID => {

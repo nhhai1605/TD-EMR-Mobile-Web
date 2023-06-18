@@ -82,7 +82,7 @@ export const CreateTicket = () => {
         toggleLoading(true);
         setPatientLoading(true)
         await mobileService.getListTicket(account.webUserAccID).then((res : any) => {
-            const availablePatients = _allPatients.filter(p => !res.find(r => r.patientCode === p.patientCode && r.patientName == p.fullName));
+            const availablePatients = _allPatients.filter(p => !res.find(r => r.webAccManPtID === p.webAccManPtID));
             setPatientList(availablePatients)
             availablePatients?.length > 0 && setSelectedPatient(availablePatients[0]);
         }).catch(err => {

@@ -100,7 +100,6 @@ const DrawerItem = () => {
             >
                 <MenuIcon/>
             </IconButton>
-
             <Drawer
                 sx={{
                     flexGrow: 1,
@@ -109,7 +108,6 @@ const DrawerItem = () => {
                         width: drawerWidth,
                     },
                 }}
-                variant="persistent"
                 anchor="right"
                 open={open}
             >

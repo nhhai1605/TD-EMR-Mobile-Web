@@ -101,7 +101,7 @@ const DrawerItem = () => {
             >
                 <MenuIcon/>
             </IconButton>
-            <Drawer
+            {open && <Drawer
                 sx={{
                     flexGrow: 1,
                     flexShrink: 0,
@@ -130,7 +130,7 @@ const DrawerItem = () => {
                                 to={item.to}
                                 sx={{
                                     color: '#414141',
-                                    borderRadius:0,
+                                    borderRadius: 0,
                                     "&:hover": {
                                         backgroundColor: '#e9e5e5',
                                         color: '#1c2859',
@@ -159,7 +159,7 @@ const DrawerItem = () => {
                             to={"/login"}
                             sx={{
                                 color: '#414141',
-                                borderRadius:0,
+                                borderRadius: 0,
                                 "&:hover": {
                                     backgroundColor: '#e9e5e5',
                                     color: '#1c2859',
@@ -182,14 +182,14 @@ const DrawerItem = () => {
                     {
                         isAuthenticated &&
                         <ListItem
-                            onClick={async ()=>{
+                            onClick={async () => {
                                 await logout();
                             }}
                             component={Link}
                             to={"#"}
                             sx={{
                                 color: '#414141',
-                                borderRadius:0,
+                                borderRadius: 0,
                                 "&:hover": {
                                     backgroundColor: '#e9e5e5',
                                     color: '#1c2859',
@@ -210,7 +210,7 @@ const DrawerItem = () => {
                         </ListItem>
                     }
                 </List>
-            </Drawer>
+            </Drawer>}
         </>
     )
 }

@@ -49,8 +49,8 @@ const ListMenu = styled(List)(({ theme }) => ({
 //rotas
 const itemList = [
     {
-        text: 'Lấy Phiếu Khám',
-        to: '/lay-phieu-kham',
+        text: 'Lấy Số Thứ Tự',
+        to: '/lay-so-thu-tu',
     },
     {
         text: 'DS Phiếu Khám',

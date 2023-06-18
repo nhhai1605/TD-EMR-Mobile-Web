@@ -19,7 +19,7 @@ const Home = () => {
                         textAlign:'start',
                     }}
                 >
-                    Đặt lịch khám bệnh
+                    Lấy số thứ tự khám bệnh
                 </Typography>
 
                 <Typography
@@ -37,10 +37,10 @@ const Home = () => {
                     <Button
                         variant='contained'
                         component={Link}
-                        to={'/lay-phieu-kham'}
+                        to={'/lay-so-thu-tu'}
                         sx={buttonStyle}
                     >
-                        Lấy Phiếu Khám
+                        Lấy số thứ tự
                     </Button>
                     {/*<Button*/}
                     {/*    variant='contained'*/}

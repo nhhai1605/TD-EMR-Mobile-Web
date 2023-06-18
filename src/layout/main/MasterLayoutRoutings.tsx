@@ -39,9 +39,9 @@ const masterLayoutRoutings = [
                 permissions: [],
             },
             {
-                path: '/lay-phieu-kham',
+                path: '/lay-so-thu-tu',
                 element: <CreateTicket />,
-                title: 'Lấy Phiếu Khám',
+                title: 'Lấy Số Thứ Tự',
                 loginRequired: true,
                 permissions: [],
             },

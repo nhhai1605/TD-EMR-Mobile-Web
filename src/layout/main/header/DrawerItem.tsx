@@ -45,9 +45,9 @@ const itemList = [
         to: "/"
     },
     {
-        text: 'Lấy Phiếu Khám',
+        text: 'Lấy Số Thứ Tự',
         icon: <QueueOutlinedIcon/>,
-        to: '/lay-phieu-kham',
+        to: '/lay-so-thu-tu',
     },
     {
         text: 'DS Phiếu Khám',

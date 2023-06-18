@@ -93,10 +93,10 @@ export const PatientList = () => {
 						</FlexBox>
 					</Paper>
 				</Drawer>
-				<CreatePatientDrawer open={createPatientDrawer} onClose={()=> {
+				{createPatientDrawer && <CreatePatientDrawer open={createPatientDrawer} onClose={() => {
 					setSelectedPatient(null)
 					setCreatePatientDrawer(false)
-				}} patient={selectedPatient}/>
+				}} patient={selectedPatient}/>}
 				<AddManagePatientDrawer open={addManagePatientDrawer} onClose={()=>setAddManagePatientDrawer(false)}/>
 				<Paper style={{height:'90vh', overflow: 'auto', backgroundColor:'white'}} >
 					<FlexBox sx={{padding:2, justifyContent:'space-between', alignItems:'center'}}>

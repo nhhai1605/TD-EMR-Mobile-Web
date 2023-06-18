@@ -19,7 +19,7 @@ const Home = () => {
                         textAlign:'start',
                     }}
                 >
-                    Lấy số thứ tự khám bệnh
+                    Lấy số thứ tự đăng ký
                 </Typography>
 
                 <Typography

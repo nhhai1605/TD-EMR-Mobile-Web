@@ -209,15 +209,24 @@ const CreatePatientDrawer = (props) => {
             init.dob = moment().format('YYYY-MM-DD')
         } else {
             init.dob = moment(patient.dob).format('YYYY-MM-DD')
-            await mobileService.getPtFamilyRelationship(patient.patientID).then((res: any) => {
-                console.log("family", res)
-                init.fContactFullName = res?.fContactFullName ?? '';
-                init.fContactAddress = res?.fContactAddress ?? '';
-                init.fContactCellPhone = res?.fContactCellPhone ?? '';
-                init.v_FamilyRelationship = res?.v_FamilyRelationship ?? 0;
-            }).catch(err => {
-                snackbar.error("Lỗi khi lấy thông tin người thân");
-            });
+            if(patient?.patientCode && patient?.patientCode?.length > 0) {
+                await mobileService.getPtFamilyRelationship(patient.patientID).then((res: any) => {
+                    init.fContactFullName = res?.fContactFullName ?? '';
+                    init.fContactAddress = res?.fContactAddress ?? '';
+                    init.fContactCellPhone = res?.fContactCellPhone ?? '';
+                    init.v_FamilyRelationship = res?.v_FamilyRelationship ?? 0;
+                }).catch(err => {
+                    snackbar.error(err.message);
+                });
+            }
+            else
+            {
+                init.fContactFullName = patient?.otherContact?.contactFullName ?? '';
+                init.fContactAddress = patient?.otherContact?.contactAddress ?? '';
+                init.fContactCellPhone = patient?.otherContact?.contactCellPhone ?? '';
+                init.v_FamilyRelationship = patient?.otherContact?.familyRelationship ?? 0;
+            }
+            
         }
         cityChange(init.cityProvinceID);
         suburbChange(init.suburbNameID);

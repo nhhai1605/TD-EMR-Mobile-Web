@@ -50,9 +50,9 @@ const itemList = [
         to: '/lay-so-thu-tu',
     },
     {
-        text: 'DS Phiếu Khám',
+        text: 'DS Số Thứ Tự',
         icon: <ConfirmationNumberOutlinedIcon/>,
-        to: '/danh-sach-phieu-kham',
+        to: '/danh-sach-so-thu-tu',
     },
     {
         text: 'Bệnh Nhân',
@@ -87,6 +87,7 @@ const DrawerItem = () => {
     };
 
     const handleDrawerClose = () => {
+        console.log("here")
         setOpen(false);
     };
 
@@ -110,7 +111,7 @@ const DrawerItem = () => {
                 }}
                 anchor="right"
                 open={open}
-                variant={'temporary'}
+                variant={'persistent'}
             >
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>

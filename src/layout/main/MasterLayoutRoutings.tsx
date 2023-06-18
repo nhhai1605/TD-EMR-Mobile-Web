@@ -74,9 +74,9 @@ const masterLayoutRoutings = [
                 permissions: [],
             },
             {
-                path: '/danh-sach-phieu-kham',
+                path: '/danh-sach-so-thu-tu',
                 element: <TicketList />,
-                title: 'Danh Sách Phiếu Khám',
+                title: 'Danh Sách Số Thứ Tự',
                 loginRequired: true,
                 permissions: [],
             },

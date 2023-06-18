@@ -53,8 +53,8 @@ const itemList = [
         to: '/lay-so-thu-tu',
     },
     {
-        text: 'DS Phiếu Khám',
-        to: '/danh-sach-phieu-kham',
+        text: 'DS Số Thứ Tự',
+        to: '/danh-sach-so-thu-tu',
     },
     {
         text: 'Bệnh Nhân',

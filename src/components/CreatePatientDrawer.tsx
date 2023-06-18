@@ -705,7 +705,12 @@ const CreatePatientDrawer = (props) => {
                             if (!validateForm) {
                                 return;
                             }
-                            await sendOTP(getValues('contactMobileNum'), 2,snackbar , false).finally(()=> setOpenOtp(true));
+                            if(patient) {
+                                await onSubmit(null);
+                            }
+                            else {
+                                await sendOTP(getValues('contactMobileNum'), 2,snackbar , false).finally(()=> setOpenOtp(true));
+                            }
                         }} type='button' variant='contained'>
                             Xác nhận
                         </LoadingButton>

@@ -270,7 +270,7 @@ export const TdAutocomplete = <T,>(props: TdAutocompleteProps<T> & typeof defaul
           required={required}
           placeholder={t(placeholderI18nKey ?? labelI18nKey)}
           label={labelI18nKey ? t(labelI18nKey) : label}
-          inputProps={{ ...params.inputProps, maxLength: 3999 }}
+          inputProps={{ ...params.inputProps, maxLength: 3999 , autocomplete: 'new-password'}}
           InputLabelProps={{ shrink: true }}
         />
       )}

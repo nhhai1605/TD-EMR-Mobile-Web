@@ -42,6 +42,7 @@ export const TdTextBox = React.forwardRef<TextFieldProps, TdTextBoxProps>(({ shr
   const inputLabelPropsCustom = shrink ? { shrink: true, ...InputLabelProps } : InputLabelProps;
   const inputPropsDefault = {
     maxLength: 4000,
+    autocomplete: 'new-password',
     ...inputProps,
   };
 

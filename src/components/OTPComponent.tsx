@@ -1,5 +1,5 @@
 ﻿import React, {useEffect,useState} from "react";
-import {Button, CircularProgress, Modal, Typography} from "@mui/material";
+import {Button, CircularProgress, Modal, Theme, Typography, useMediaQuery} from "@mui/material";
 import FlexBox from "../@core/components/FlexBox";
 import OtpInput from "react-otp-input";
 import {useSnackbar} from "../@core/contexts/SnackbarProvider";
@@ -7,7 +7,7 @@ import {LoadingButton} from "@mui/lab";
 import {toggleLoading} from "../@core/components/loading/LoadingScreen";
 import otpService from "../@core/services/otpService";
 
-export const sendOTP = async (phoneNumber, type, snackbar=null, isResend = false) => {
+export const sendOTP = async (phoneNumber, type, setOpen=null, snackbar=null, isResend = false) => {
 	toggleLoading(true);
 	const payload = {
 		otpType:type,
@@ -18,6 +18,7 @@ export const sendOTP = async (phoneNumber, type, snackbar=null, isResend = false
 		if(res)
 		{
 			snackbar?.success("Gửi mã OTP thành công");
+			setOpen?.(true);
 		}
 		else
 		{
@@ -31,8 +32,8 @@ const OTPComponent = (props) => {
 	const [otp, setOtp] = React.useState('');
 	const cooldown = 30; //seconds
 	const [resendCooldown, setResendCooldown] = useState(cooldown);
-	const snackbar = useSnackbar();
 	const [curInterval, setCurInterval] = useState(null);
+	const mobileView = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
 
 	useEffect(()=>{
 		if(!open)
@@ -73,7 +74,18 @@ const OTPComponent = (props) => {
                     onChange={setOtp}
                     numInputs={6}
                     renderSeparator={<></>}
-                    renderInput={(props) => <input {...props} />}
+                    renderInput={(props,index) => {
+						if(index == 5) {
+							return <input {...props} onKeyDown={(event)=>{
+								if(event.key == 'Enter')
+								{
+									event.preventDefault();
+									onSubmit?.(otp);
+								}
+							}}/>
+						}
+	                    return <input {...props} />
+                    }}
                     inputStyle={{
 						width:'10vw',
 						height:'10vw',
@@ -89,6 +101,7 @@ const OTPComponent = (props) => {
                     <Button
                         sx={{margin:2, '&:hover': {backgroundColor: '#a12222'}}}
                         color={'error'}
+                        size={mobileView ? 'small' : 'medium'}
                         variant={'contained'}
                         onClick={() => setOpen(false)}>
                         ĐÓNG
@@ -96,6 +109,7 @@ const OTPComponent = (props) => {
                     <LoadingButton
                         sx={{margin:2, '&:hover': {backgroundColor: '#cc9d00'},color:'white'}}
                         color={'warning'}
+                        size={mobileView ? 'small' : 'medium'}
                         loading={resendCooldown > 0}
                         loadingIndicator={
 							<FlexBox style={{flexDirection:'row',alignItems:'center'}}>
@@ -113,6 +127,7 @@ const OTPComponent = (props) => {
                     <Button
                         sx={{margin:2}}
                         variant={'contained'}
+                        size={mobileView ? 'small' : 'medium'}
                         onClick={()=>{
 							onSubmit?.(otp);
 						}}>

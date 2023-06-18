@@ -141,7 +141,7 @@ export const CreateTicket = () => {
                         showDaysOutsideCurrentMonth={false}
                         shouldDisableDate={(date) => {return  moment(date).get('day') === 0}}
                         inputFormat='DD/MM/YYYY'
-                        maxDate={moment().add(1,'months').toDate()}
+                        maxDate={moment().add(22, 'days').toDate()}
                         value={selectedDate}
                         size='small'
                         shrink

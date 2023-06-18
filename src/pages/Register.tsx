@@ -133,7 +133,7 @@ export const Register = () => {
             <Grid item xs={12} sm={8} md={5} component={Paper} square>
                 <BoxedLayout>
                     <Typography component='h1' variant='h5'>Đăng Ký</Typography>
-                    <Box component='form' marginTop={3} noValidate>
+                    <Box marginTop={3}>
                         <Controller
                             name='fullName'
                             control={control}
@@ -249,7 +249,7 @@ export const Register = () => {
                             if (!validateForm) {
                                 return;
                             }
-                            await sendOTP(getValues('phoneNumber'), 1, snackbar , false).finally(()=> setOpenOtp(true));
+                            await sendOTP(getValues('phoneNumber'), 1, setOpenOtp, snackbar , false)
                         }} fullWidth variant='contained' sx={{ my: 3 }}>
                             {"Đăng Ký"}
                         </LoadingButton>

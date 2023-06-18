@@ -140,7 +140,7 @@ const AddManagePatientDrawer = (props) => {
                         <CloseIcon />
                     </IconButton>
                 </Box>
-                <Box component={"form"} sx={{
+                <Box sx={{
                     display: "flex",
                     marginBottom:5,
                     flexDirection: "column",}}>
@@ -205,7 +205,7 @@ const AddManagePatientDrawer = (props) => {
                             if (!validateForm) {
                                 return;
                             }
-                            await sendOTP(getValues('contactMobileNum'), 3, snackbar , false).finally(()=> setOpenOtp(true));
+                            await sendOTP(getValues('contactMobileNum'), 3, setOpenOtp, snackbar , false);
                         }} type='button' variant='contained'>
                             Xác nhận
                         </LoadingButton>

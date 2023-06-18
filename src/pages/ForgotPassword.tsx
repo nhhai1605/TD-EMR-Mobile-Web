@@ -85,12 +85,8 @@ export const ForgotPassword = () => {
 						Quên Mật Khẩu
 					</Typography>
 					<Box
-						component='form'
 						marginTop={3}
-						noValidate
-						width={'100%'}
-						onSubmit={handleSubmit(()=>setOpenOtp(true))}
-					>
+						width={'100%'}>
 						<FlexBox gap={1}>
 							<Controller
 								name='phoneNumber'
@@ -120,7 +116,7 @@ export const ForgotPassword = () => {
 								if (!validateForm) {
 									return;
 								}
-								await sendOTP(getValues('phoneNumber'), 4, snackbar , false).finally(()=> setOpenOtp(true));
+								await sendOTP(getValues('phoneNumber'), 4, setOpenOtp, snackbar , false);
 							}}
 						>
 							{"Gửi mật khẩu mới"}

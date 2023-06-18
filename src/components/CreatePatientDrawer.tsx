@@ -228,7 +228,7 @@ const CreatePatientDrawer = (props) => {
     };
 
     useEffect(() => {
-        if (citiesProvinces?.length === 0) {
+        if (citiesProvinces?.length === 0 || suburbNames?.length === 0 || wardNames?.length === 0) {
             getAddress();
         }
         setSuburbNameFilters([]);
@@ -363,7 +363,7 @@ const CreatePatientDrawer = (props) => {
                         <CloseIcon/>
                     </IconButton>
                 </Box>
-                <Box component={"form"} sx={{
+                <Box sx={{
                     display: "flex",
                     flexDirection: "column",
                     marginBottom: 5,
@@ -374,6 +374,7 @@ const CreatePatientDrawer = (props) => {
                         render={({field: {value, ref, ...otherFields}}) => (
                             <TdTextBox
                                 {...otherFields}
+                                disabled={patient?.patientCode && patient.patientCode !== ""}
                                 moveToNextEleAfterEnter
                                 value={value}
                                 size={'small'}
@@ -394,6 +395,7 @@ const CreatePatientDrawer = (props) => {
                             control={control}
                             render={({field: {value, ref, onChange, ...otherFields}}) => (
                                 <TdDatePicker
+                                    disabled={patient?.patientCode && patient.patientCode !== ""}
                                     disableFuture
                                     showDaysOutsideCurrentMonth={false}
                                     label={'Ngày sinh'}
@@ -416,6 +418,7 @@ const CreatePatientDrawer = (props) => {
                             render={({field: {value,onChange, ref, ...otherFields}}) => (
                                 <TdSelect
                                     {...otherFields}
+                                    disabled={patient?.patientCode && patient.patientCode !== ""}
                                     inputRef={ref}
                                     size={'small'}
                                     required
@@ -440,6 +443,7 @@ const CreatePatientDrawer = (props) => {
                         render={({field: {value, ref, ...otherFields}}) => (
                             <TdTextBox
                                 {...otherFields}
+                                disabled={patient?.patientCode && patient.patientCode !== ""}
                                 moveToNextEleAfterEnter
                                 value={value}
                                 required
@@ -460,6 +464,7 @@ const CreatePatientDrawer = (props) => {
                         render={({field: {value, ref, ...otherFields}}) => (
                             <TdTextBox
                                 {...otherFields}
+                                disabled={patient?.patientCode && patient.patientCode !== ""}
                                 moveToNextEleAfterEnter
                                 value={value}
                                 size={'small'}
@@ -480,6 +485,7 @@ const CreatePatientDrawer = (props) => {
                             <TdTextBox
                                 {...otherFields}
                                 value={value}
+                                disabled={patient?.patientCode && patient.patientCode !== ""}
                                 required
                                 moveToNextEleAfterEnter
                                 size={'small'}
@@ -499,6 +505,7 @@ const CreatePatientDrawer = (props) => {
                         render={({field: {value, ref, onChange, ...otherFields}}) => (
                             <TdAutocomplete
                                 {...otherFields}
+                                disabled={patient?.patientCode && patient.patientCode !== ""}
                                 size='small'
                                 key={autocompleteKey}
                                 inputRef={ref}
@@ -532,7 +539,7 @@ const CreatePatientDrawer = (props) => {
                                 inputRef={ref}
                                 size={'small'}
                                 required={suburbNameFilters.length > 0}
-                                disabled={suburbNameFilters.length === 0}
+                                disabled={suburbNameFilters.length === 0 || (patient?.patientCode && patient.patientCode !== "")}
                                 shrink
                                 notched
                                 //@ts-ignore
@@ -564,7 +571,7 @@ const CreatePatientDrawer = (props) => {
                                 inputRef={ref}
                                 size={'small'}
                                 required={wardNamesFilters.length > 0}
-                                disabled={wardNamesFilters.length === 0}
+                                disabled={wardNamesFilters.length === 0 || (patient?.patientCode && patient.patientCode !== "")}
                                 shrink
                                 notched
                                 value={value}
@@ -590,6 +597,7 @@ const CreatePatientDrawer = (props) => {
                         render={({field: {value, ref, ...otherFields}}) => (
                             <TdTextBox
                                 {...otherFields}
+                                disabled={patient?.patientCode && patient.patientCode !== ""}
                                 moveToNextEleAfterEnter
                                 value={value}
                                 size={'small'}
@@ -610,6 +618,7 @@ const CreatePatientDrawer = (props) => {
                         render={({field: {value, ref, onChange, ...otherFields}}) => (
                             <TdSelect
                                 {...otherFields}
+                                disabled={patient?.patientCode && patient.patientCode !== ""}
                                 inputRef={ref}
                                 size={'small'}
                                 required={getValues().fContactFullName != ''}
@@ -633,6 +642,7 @@ const CreatePatientDrawer = (props) => {
                         render={({field: {value, ref, ...otherFields}}) => (
                             <TdTextBox
                                 {...otherFields}
+                                disabled={patient?.patientCode && patient.patientCode !== ""}
                                 moveToNextEleAfterEnter
                                 value={value}
                                 size={'small'}
@@ -652,6 +662,7 @@ const CreatePatientDrawer = (props) => {
                         render={({field: {value, ref, ...otherFields}}) => (
                             <TdTextBox
                                 {...otherFields}
+                                disabled={patient?.patientCode && patient.patientCode !== ""}
                                 moveToNextEleAfterEnter
                                 value={value}
                                 size={'small'}
@@ -691,7 +702,7 @@ const CreatePatientDrawer = (props) => {
                         }} variant='contained'>
                             Đóng
                         </Button>
-                        <Button onClick={onReset} color={'warning'} sx={{
+                        <Button disabled={patient?.patientCode && patient.patientCode !== ""} onClick={onReset} color={'warning'} sx={{
                             color:'white',
                             '&:hover': {
                                 color:'white',
@@ -709,7 +720,7 @@ const CreatePatientDrawer = (props) => {
                                 await onSubmit(null);
                             }
                             else {
-                                await sendOTP(getValues('contactMobileNum'), 2,snackbar , false).finally(()=> setOpenOtp(true));
+                                await sendOTP(getValues('contactMobileNum'), 2, setOpenOtp,snackbar , false);
                             }
                         }} type='button' variant='contained'>
                             Xác nhận

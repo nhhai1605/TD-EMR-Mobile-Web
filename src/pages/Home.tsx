@@ -29,8 +29,6 @@ const Home = () => {
                         lineHeight: 1.6,
                     }}
                 >
-                    {/*Mô tả dài 10000 ký tự mô tả dài 10000 ký tự mô tả dài 10000 ký tự mô tả dài 10000 ký tự mô tả dài 10000 ký tự mô tả*/}
-                    {/*dài 10000 ký tự*/}
                 </Typography>
 
                 <MobileFlexBox gap={'10px'}>
@@ -93,10 +91,12 @@ const MobileFlexBox = styled(FlexBox)(({ theme }) => ({
 
 const BoxText = styled(Box)(({ theme }) => ({
     position:'relative',
-    top:'-50%',
-    [theme.breakpoints.up('sm')]: {
+    [theme.breakpoints.up('md')]: {
         top:'20%',
-        left:'-10%',
+        left:'10%',
+    },
+    [theme.breakpoints.down('sm')]: {
+        top:'-100%',
     },
 }));
 

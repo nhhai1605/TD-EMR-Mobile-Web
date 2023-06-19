@@ -36,7 +36,7 @@ export const ForgotPassword = () => {
 		}
 		await otpService.checkOTP(payload).then(async () =>{
 			setOpenOtp(false);
-			await mobileService.getNewPassword(getValues().phoneNumber).then((res : string) => {
+			await mobileService.resetPassword(getValues().phoneNumber).then((res : string) => {
 				if(res)
 				{
 					snackbar.success('Đã gửi mật khẩu mới vào số điện thoại của bạn')

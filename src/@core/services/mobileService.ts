@@ -14,9 +14,9 @@ class MobileService {
     getUserInfo(){
         return identityServerService.getAsync('connect/userinfo', null,true, HTTP_CONTENT_TYPE.FORM_URLENCODED); // Done
     }
-    
-    getNewPassword(payload:string){
-        return identityServerService.postAsync('user/GetNewPassword', payload); // Done
+
+    resetPassword(payload:string){
+        return identityServerService.postAsync('user/ResetPassword', payload); // Done
     }
     
     updateUserInfo(payload){

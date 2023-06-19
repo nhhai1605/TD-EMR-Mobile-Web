@@ -47,6 +47,15 @@ export const PatientList = () => {
 			fetchData();
 		}
 	}, [createPatientDrawer, addManagePatientDrawer]);
+	
+	const handleOpenDrawer = () => {
+		if(allPatients.length >= import.meta.env.VITE_MAX_PATIENTS)
+		{
+			snackbar.error(`Số lượng bệnh nhân tối đa là ${import.meta.env.VITE_MAX_PATIENTS}!`);
+			return;
+		}
+		setOpenDrawer(true)
+	}
 
 	return (
 		<CustomBox>
@@ -103,7 +112,7 @@ export const PatientList = () => {
 						<Typography variant='h3'>Danh sách Bệnh Nhân</Typography>
 						<FlexBox>
 							<Tooltip title="Tạo mới / Thêm mới Bệnh Nhân">
-								<IconButton onClick={()=>setOpenDrawer(true)}>
+								<IconButton onClick={handleOpenDrawer}>
 									<PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}}/>
 								</IconButton>
 							</Tooltip>

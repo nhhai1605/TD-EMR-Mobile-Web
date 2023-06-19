@@ -27,6 +27,10 @@ class MobileService {
         return identityServerService.postAsync('user/UpdateWebUserAccountInfo', payload); // Done
     }
 
+    updateWebUserPassword(payload) {
+        return identityServerService.postAsync('user/UpdateWebUserPassword', payload); // Done
+    }
+
     addFacilityToAccount(payload) {
         return identityServerService.postAsync('user/AddAccountToFacility', payload); // Done
     }

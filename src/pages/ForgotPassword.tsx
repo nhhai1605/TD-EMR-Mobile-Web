@@ -37,24 +37,32 @@ export const ForgotPassword = () => {
 		await otpService.checkOTP(payload).then(async () =>{
 			setOpenOtp(false);
 			await mobileService.getNewPassword(getValues().phoneNumber).then((res : string) => {
-				SwalAlert.fire({
-					html: `<p  style="font-size:1.5rem;text-align:center">Mật khẩu mới là: <b>${res}</b></p>`,
-					icon: 'success',
-					confirmButtonText: 'Copy',
-					showCloseButton:true
-				}).then((result) => {
-					if (result.isConfirmed) {
-						navigator.clipboard.writeText(res)
-						snackbar.success('Đã copy mật khẩu mới vào clipboard')
-					}
-				});
+				if(res)
+				{
+					snackbar.success('Đã gửi mật khẩu mới vào số điện thoại của bạn')
+				}
+				else
+				{
+					snackbar.error('Không thể gửi mật khẩu mới')
+				}
+				// SwalAlert.fire({
+				// 	html: `<p  style="font-size:1.5rem;text-align:center">Mật khẩu mới là: <b>${res}</b></p>`,
+				// 	icon: 'success',
+				// 	confirmButtonText: 'Copy',
+				// 	showCloseButton:true
+				// }).then((result) => {
+				// 	if (result.isConfirmed) {
+				// 		navigator.clipboard.writeText(res)
+				// 		snackbar.success('Đã copy mật khẩu mới vào clipboard')
+				// 	}
+				// });
 			})
 		}).catch((err)=> {
 			snackbar.error(err.message);
 		}).finally(() => toggleLoading(false))
 	}
 	
-	const {control, handleSubmit, getValues, trigger} = useForm({
+	const {control, getValues, trigger} = useForm({
 		defaultValues: {
 			phoneNumber: '',
 		},

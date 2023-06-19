@@ -73,11 +73,9 @@ const EditAccountDrawer = (props) => {
 	const {
 		reset,
 		trigger,
-		formState: { isDirty, errors },
+		formState: { errors },
 		control,
-		setValue,
 		getValues,
-		clearErrors,
 	} = useForm({ resolver: yupResolver(validationFormSchema), defaultValues: initialDataForm });
 
 	const onSubmit = async () => {
@@ -201,6 +199,7 @@ const EditAccountDrawer = (props) => {
 						render={({ field: { value, ref, ...otherFields } }) => (
 							<TdTextBox
 								{...otherFields}
+								type={'password'}
 								value={value}
 								size={'small'}
 								margin='normal'
@@ -222,6 +221,7 @@ const EditAccountDrawer = (props) => {
 							<TdTextBox
 								{...otherFields}
 								value={value}
+								type={'password'}
 								required={getValues().newPassword?.length > 0}
 								disabled={getValues().newPassword?.length <= 0}
 								size={'small'}
@@ -246,6 +246,7 @@ const EditAccountDrawer = (props) => {
 								required={getValues().newPassword?.length > 0}
 								disabled={getValues().newPassword?.length <= 0}
 								value={value}
+								type={'password'}
 								size={'small'}
 								margin='normal'
 								moveToNextEleAfterEnter

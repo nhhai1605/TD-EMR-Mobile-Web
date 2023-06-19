@@ -56,12 +56,13 @@ export const CreateTicket = () => {
         fetchData();
     }, [])
     
+    
     const onSubmit = async () => {
         toggleLoading(true)
         setHavePatientError(false)
         console.log(selectedPatient)
         const payload = {
-            aType: 1,
+            aType: (getAge(selectedPatient.dob) < 6 || getAge(selectedPatient.dob) > 80) ? 32 : 30,
             webAccountUserID: account.webUserAccID,
             webAccManPtID: selectedPatient.webAccManPtID,
             hiCardNo: "",
@@ -91,6 +92,13 @@ export const CreateTicket = () => {
             setPatientLoading(false);
             toggleLoading(false);
         })
+    }
+    
+    const getAge = (date) => {
+        const now = moment();
+        const birthMoment = moment(date);
+        let age = now.diff(birthMoment, 'years');
+        return age;
     }
     
     return (

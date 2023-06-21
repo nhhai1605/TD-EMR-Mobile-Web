@@ -4,7 +4,7 @@ import Link from "@mui/material/Link";
 import Paper from "@mui/material/Paper";
 import Typography from "@mui/material/Typography";
 import { useTranslation } from "react-i18next";
-import { Link as RouterLink } from "react-router-dom";
+import {Link as RouterLink, useNavigate} from "react-router-dom";
 import * as Yup from "yup";
 import BoxedLayout from "@core/components/BoxedLayout";
 import LoadingButton from "@mui/lab/LoadingButton";
@@ -19,14 +19,14 @@ import {useSnackbar} from "@core/contexts/SnackbarProvider";
 import OTPComponent, {sendOTP} from "../components/OTPComponent";
 import mobileService from "../@core/services/mobileService";
 import {toggleLoading} from "../@core/components/loading/LoadingScreen";
-import {SwalAlert} from "../@core/components/SwalAlert";
 import otpService from "../@core/services/otpService";
+import {ROUTE_PATHS} from "../@core/constants/routeConfig";
 
 export const ForgotPassword = () => {
 	const { t } = useTranslation();
 	const [openOtp, setOpenOtp] = useState(false);
 	const snackbar = useSnackbar();
-	
+	const navigate = useNavigate();
 	const onSubmit = async (otp) => {
 		toggleLoading(true);
 		const data = getValues();
@@ -40,6 +40,7 @@ export const ForgotPassword = () => {
 				if(res)
 				{
 					snackbar.success('Đã gửi mật khẩu mới vào số điện thoại của bạn')
+					navigate(ROUTE_PATHS.Login);
 				}
 				else
 				{

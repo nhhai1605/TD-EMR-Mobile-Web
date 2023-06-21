@@ -297,9 +297,6 @@ const CreatePatientDrawer = (props) => {
         values.wardNameID = values.wardNameID ?? -1;
         values.suburbNameID = values.suburbNameID ?? -1;
         values.v_FamilyRelationship = values.v_FamilyRelationship ?? 0;
-        values.fContactBusinessPhone = values.fContactBusinessPhone ? parseInt(values.fContactBusinessPhone) : null;
-        values.fContactCellPhone = values.fContactCellPhone ? parseInt(values.fContactCellPhone) : null;
-        values.fContactHomePhone = values.fContactHomePhone ? parseInt(values.fContactHomePhone) : null;
         if(patient)
         {
             values.patientID = patient.patientID;

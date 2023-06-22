@@ -22,9 +22,9 @@ class MobileService {
     updateUserInfo(payload){
         return identityServerService.postAsync('User/UpdateProfileInfo', payload); // Done
     }
-    
-    updateWebUserAccountInfo(payload) {
-        return identityServerService.postAsync('user/UpdateWebUserAccountInfo', payload); // Done
+
+    UpdateProfileInfo(payload) {
+        return identityServerService.postAsync('user/UpdateProfileInfo', payload); // Done
     }
 
     updateWebUserPassword(payload) {

@@ -61,7 +61,7 @@ const EditAccountDrawer = (props) => {
 					cccd: getValues('cccd'),
 					email: getValues('email'),
 				}
-				await mobileService.updateWebUserAccountInfo(payload).then((res) => {
+				await mobileService.UpdateProfileInfo(payload).then((res) => {
 					snackbar.success('Cập nhật thành công');
 					onClose(true)
 				}).catch(err=>{

@@ -15,13 +15,14 @@ class MobileService {
         return identityServerService.getAsync('connect/userinfo', null,true, HTTP_CONTENT_TYPE.FORM_URLENCODED); // Done
     }
 
-    resetPassword(payload:string){
-        return identityServerService.postAsync('user/ResetPassword', payload); // Done
+    resetPassword(patientCellPhoneNumber:string){
+        return identityServerService.postAsync('user/ResetPassword', patientCellPhoneNumber); // Done
+    }
+
+    checkResetPassword(patientCellPhoneNumber:string){
+        return identityServerService.postAsync('user/CheckResetPassword', patientCellPhoneNumber); // Done
     }
     
-    updateUserInfo(payload){
-        return identityServerService.postAsync('User/UpdateProfileInfo', payload); // Done
-    }
 
     UpdateProfileInfo(payload) {
         return identityServerService.postAsync('user/UpdateProfileInfo', payload); // Done

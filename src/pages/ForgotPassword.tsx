@@ -125,7 +125,19 @@ export const ForgotPassword = () => {
 								if (!validateForm) {
 									return;
 								}
-								await sendOTP(getValues('phoneNumber'), 4, setOpenOtp, snackbar , false);
+								toggleLoading(true);
+								await mobileService.checkResetPassword(getValues('phoneNumber')).then(async (res : boolean) => {
+									if(res)
+									{
+										await sendOTP(getValues('phoneNumber'), 4, setOpenOtp, snackbar , false);
+									}
+									else
+									{
+										snackbar.error("Đã hết lượt reset trong ngày")
+									}
+								}).catch((err)=> {
+									snackbar.error(err.message)
+								}).finally(() => toggleLoading(false))
 							}}
 						>
 							{"Gửi mật khẩu mới"}

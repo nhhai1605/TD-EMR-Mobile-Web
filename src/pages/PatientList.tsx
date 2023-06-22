@@ -51,7 +51,7 @@ export const PatientList = () => {
 	const handleOpenDrawer = () => {
 		if(allPatients.length >= import.meta.env.VITE_MAX_PATIENTS)
 		{
-			snackbar.error(`Số lượng bệnh nhân tối đa là ${import.meta.env.VITE_MAX_PATIENTS}!`);
+			snackbar.error(`Không thể thêm mới BN do đã đạt số lượng tối đa (${import.meta.env.VITE_MAX_PATIENTS} BN)`);
 			return;
 		}
 		setOpenDrawer(true)

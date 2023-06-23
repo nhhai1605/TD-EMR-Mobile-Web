@@ -130,8 +130,23 @@ const AddManagePatientDrawer = (props) => {
         })
     }
 
+    const handleSubmitButton = async () =>
+    {
+        const validateForm = await trigger();
+        if (!validateForm) {
+            return;
+        }
+        await sendOTP(getValues('contactMobileNum'), 3, setOpenOtp, snackbar , false);
+    }
+    
+    
+    
     return (
-        <Drawer anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} open={open} onClose={onClose}>
+        <Drawer 
+            anchor={'right'} 
+            sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} 
+            open={open} 
+            onClose={onClose}>
             <OTPComponent onResend={async() => await sendOTP(getValues('contactMobileNum'), 3, snackbar, true)} open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
             <Box sx={{ padding: '20px' }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
@@ -172,6 +187,11 @@ const AddManagePatientDrawer = (props) => {
                             <TdTextBox
                                 {...otherFields}
                                 value={value}
+                                onKeyDown={async (e) => {
+                                    if (e.key === 'Enter') {
+                                        await handleSubmitButton()
+                                    }
+                                }}
                                 size={'small'}
                                 required
                                 margin='normal'
@@ -201,11 +221,7 @@ const AddManagePatientDrawer = (props) => {
                             Đóng
                         </Button>
                         <LoadingButton onClick={async ()=> {
-                            const validateForm = await trigger();
-                            if (!validateForm) {
-                                return;
-                            }
-                            await sendOTP(getValues('contactMobileNum'), 3, setOpenOtp, snackbar , false);
+                            await handleSubmitButton()
                         }} type='button' variant='contained'>
                             Xác nhận
                         </LoadingButton>

@@ -71,6 +71,26 @@ export const ForgotPassword = () => {
 			phoneNumber: yup.string().min(9, 'Quá ngắn').max(12, 'Quá dài').matches(/^[0-9]+$/, 'SĐT chỉ được có số').required('Bắt buộc'),
 		})),
 	});
+	
+	const handleSubmitButton = async () => {
+		const validateForm = await trigger();
+		if (!validateForm) {
+			return;
+		}
+		toggleLoading(true);
+		await mobileService.checkResetPassword(getValues('phoneNumber')).then(async (res : boolean) => {
+			if(res)
+			{
+				await sendOTP(getValues('phoneNumber'), 4, setOpenOtp, snackbar , false);
+			}
+			else
+			{
+				snackbar.error("Đã hết lượt reset trong ngày")
+			}
+		}).catch((err)=> {
+			snackbar.error(err.message)
+		}).finally(() => toggleLoading(false))
+	}
 
 	return (
 		<Grid container component='main' sx={{ height: "100vh" }}>
@@ -103,6 +123,11 @@ export const ForgotPassword = () => {
 								render={({ field: { ...otherField }, fieldState: {error} }) => (
 									<TdTextBox
 										{...otherField}
+										onKeyDown={async (e) => {
+											if (e.key === 'Enter') {
+												await handleSubmitButton();
+											}
+										}}
 										margin='normal'
 										variant='filled'
 										required
@@ -121,23 +146,7 @@ export const ForgotPassword = () => {
 							variant='contained'
 							sx={{ mt: 3 }}
 							onClick={async ()=>{
-								const validateForm = await trigger();
-								if (!validateForm) {
-									return;
-								}
-								toggleLoading(true);
-								await mobileService.checkResetPassword(getValues('phoneNumber')).then(async (res : boolean) => {
-									if(res)
-									{
-										await sendOTP(getValues('phoneNumber'), 4, setOpenOtp, snackbar , false);
-									}
-									else
-									{
-										snackbar.error("Đã hết lượt reset trong ngày")
-									}
-								}).catch((err)=> {
-									snackbar.error(err.message)
-								}).finally(() => toggleLoading(false))
+								await handleSubmitButton()
 							}}
 						>
 							{"Gửi mật khẩu mới"}

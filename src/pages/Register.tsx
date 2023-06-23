@@ -108,6 +108,13 @@ export const Register = () => {
         }).finally(() => toggleLoading(false))
     }
     
+    const handleSubmitButton = async () => {
+        const validateForm = await trigger();
+        if (!validateForm) {
+            return;
+        }
+        await sendOTP(getValues('phoneNumber'), 1, setOpenOtp, snackbar , false)
+    }
     
     return (
         <Grid container component='main' sx={{ height: '100vh' }}>
@@ -224,6 +231,11 @@ export const Register = () => {
                             render={({ field: { ref, ...otherField } }) => (
                                 <TdTextBox
                                     {...otherField}
+                                    onKeyDown={async (e) => {
+                                        if (e.key === 'Enter') {
+                                            await handleSubmitButton();
+                                        }
+                                    }}
                                     inputRef={ref}
                                     sx={{ marginBottom: '20px' }}
                                     fullWidth
@@ -240,11 +252,7 @@ export const Register = () => {
                         />
                         
                         <LoadingButton type='button' onClick={async ()=> {
-                            const validateForm = await trigger();
-                            if (!validateForm) {
-                                return;
-                            }
-                            await sendOTP(getValues('phoneNumber'), 1, setOpenOtp, snackbar , false)
+                            await handleSubmitButton();
                         }} fullWidth variant='contained' sx={{ my: 3 }}>
                             {"Đăng Ký"}
                         </LoadingButton>

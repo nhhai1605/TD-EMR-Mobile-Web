@@ -146,6 +146,11 @@ const ChangePasswordDrawer = (props) =>
 								{...otherFields}
 								value={value}
 								type={'password'}
+								onKeyDown={(e) => {
+									if (e.key === 'Enter') {
+										onSubmit();
+									}
+								}}
 								required
 								size={'small'}
 								margin='normal'

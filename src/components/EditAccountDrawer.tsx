@@ -17,13 +17,6 @@ import React, {useEffect, useState} from "react";
 const EditAccountDrawer = (props) => {
 	const {open, onClose} = props;
 	const snackbar = useSnackbar();
-	const user = cookie.load(COOKIE_NAME.USER);
-	
-	const initialDataForm = {
-		accName: user?.accName ?? '',
-		cccd:  user?.cccd ?? '',
-		email:  user?.email ?? '',
-	};
 	
 	const validationFormSchema = yup.object().shape({
 		accName: yup.string().min(5, 'Quá ngắn').max(50, 'Quá dài').required('Bắt buộc'),
@@ -36,10 +29,20 @@ const EditAccountDrawer = (props) => {
 	const {
 		reset,
 		trigger,
-		formState: { errors, isDirty },
+		formState: { errors },
 		control,
 		getValues,
-	} = useForm({ resolver: yupResolver(validationFormSchema), defaultValues: initialDataForm });
+	} = useForm({ resolver: yupResolver(validationFormSchema)});
+	
+	useEffect(()=>{
+		const user = cookie.load(COOKIE_NAME.USER);
+		const initialDataForm = {
+			accName: user?.accName ?? '',
+			cccd:  user?.cccd ?? '',
+			email:  user?.email ?? '',
+		};
+		reset(initialDataForm)
+	},[open])
 
 	const onSubmit = async () => {
 		const validateForm = await trigger();
@@ -55,13 +58,14 @@ const EditAccountDrawer = (props) => {
 		}).then(async (result) => {
 			if (result.isConfirmed) {
 				toggleLoading(true);
+				const user = cookie.load(COOKIE_NAME.USER);
 				const payload = {
 					webUserAccID: Number(user?.webUserAccID),
 					accName: getValues('accName'),
 					cccd: getValues('cccd'),
 					email: getValues('email'),
 				}
-				await mobileService.UpdateProfileInfo(payload).then((res) => {
+				await mobileService.UpdateProfileInfo(payload).then(() => {
 					snackbar.success('Cập nhật thành công');
 					onClose(true)
 				}).catch(err=>{
@@ -72,12 +76,6 @@ const EditAccountDrawer = (props) => {
 			}
 		})
 	}
-	
-	useEffect(()=>{
-		if(!open){
-			reset(initialDataForm);
-		}
-	},[open])
 	
 	return (
 		<Drawer anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} open={open} onClose={()=>onClose(false)}>
@@ -138,6 +136,11 @@ const EditAccountDrawer = (props) => {
 						render={({ field: { value, ref, ...otherFields } }) => (
 							<TdTextBox
 								{...otherFields}
+								onKeyDown={(e) => {
+									if (e.key === 'Enter') {
+										onSubmit();
+									}
+								}}
 								value={value}
 								size={'small'}
 								margin='normal'

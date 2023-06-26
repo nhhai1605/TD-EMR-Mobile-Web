@@ -119,7 +119,7 @@ export const TicketList = () => {
                     {
                         allTickets.map((ticket) =>{
                             return (
-                                <Paper onClick={()=>setSelectedTicket(ticket)} variant="outlined" sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2, backgroundColor:"#f3f4f9",}}>
+                                <Paper onClick={()=>setSelectedTicket(ticket)} elevation={3} sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2,backgroundColor:"#f3f4f9", border:1, borderColor:'#cecfd3'}}>
                                     <FlexBox sx={{flexDirection:'column', alignItems:'flex-start'}}>
                                         <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'space-between', width:'100%',py:1, height:"50px"}}>
                                             <FlexBox>

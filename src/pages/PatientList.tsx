@@ -136,7 +136,7 @@ export const PatientList = () => {
 									<Paper onClick={()=> {
 										setSelectedPatient(patient);
 										setCreatePatientDrawer(true);
-									}} variant="outlined" sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2, backgroundColor:"#f3f4f9",}}>
+									}} elevation={3} sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2, backgroundColor:"#f3f4f9", border:1, borderColor:'#cecfd3'}}>
 										<FlexBox sx={{flexDirection:'column', alignItems:'flex-start'}}>
 											<FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent: 'space-between', width: '100%',py:1}}>
 												<FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%'}}>

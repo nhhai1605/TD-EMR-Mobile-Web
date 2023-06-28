@@ -6,13 +6,15 @@ import {useSnackbar} from "../@core/contexts/SnackbarProvider";
 import {LoadingButton} from "@mui/lab";
 import {toggleLoading} from "../@core/components/loading/LoadingScreen";
 import otpService from "../@core/services/otpService";
+import CryptoJS from 'crypto-js';
 
 export const sendOTP = async (phoneNumber, type, setOpen=null, snackbar=null, isResend = false) => {
 	toggleLoading(true);
 	const payload = {
 		otpType:type,
-		patientCellPhoneNumber: phoneNumber,
+		// patientCellPhoneNumber: phoneNumber,
 		isResendOTP: isResend,
+		patientCellPhoneNumber: CryptoJS.HmacSHA256(`${Date.now().toString()}:${phoneNumber}`, "#Tuan$Dao$QMS~VT#@").toString()
 	}
 	await otpService.sendOTP(payload).then((res) =>{
 		if(res)

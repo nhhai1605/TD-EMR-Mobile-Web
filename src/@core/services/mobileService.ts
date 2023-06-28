@@ -177,5 +177,13 @@ class MobileService {
     {
         return internalApiService.postAsync('QMS/App_GetListTicketByWebAccountUserID', payload);
     }
+    checkManagePatient(payload)
+    {
+        return internalApiService.postAsync('Appointment/AppointmentWeb/Web_CheckManagePatient', payload);
+    }
+    checkRemovePatient(webUserAccID : number)
+    {
+        return internalApiService.postAsync('Appointment/AppointmentWeb/Web_CheckRemovePatient', webUserAccID);
+    }
 }
 export default new MobileService()

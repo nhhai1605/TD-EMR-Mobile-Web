@@ -26,6 +26,7 @@ import {FamilyRelationship} from "../@core/models/enums/emrEnum";
 import OTPComponent, {sendOTP} from "./OTPComponent";
 import otpService from "../@core/services/otpService";
 import {ROUTE_PATHS} from "../@core/constants/routeConfig";
+import authService from "../@core/services/authService";
 export const FamilyRelationships = [
     {
         Id: 0,
@@ -321,41 +322,68 @@ const CreatePatientDrawer = (props) => {
             onClose();
             snackbar.success(patient ? 'Cập nhật thông tin thành công' : 'Thêm mới thành công',)
         }
-        
-        
     }
     
     const handleDeletePatient = async () => {
-        SwalAlert.fire({
-            text: 'Bạn có chắc muốn xóa bệnh nhân này khỏi DSQL?',
-            icon: 'warning',
-            showCancelButton: true,
-            confirmButtonText: 'Xóa',
-            cancelButtonText: 'Hủy',
-        }).then(async (result) => {
-            if (result.isConfirmed) {
-                const payload = {
-                    webUserAccID: account.webUserAccID,
-                    patientID: patient.patientID,
-                    isPatientAppt: (patient.patientCode && patient.patientCode !== '') ? false : true,
-                }
-                await mobileService.removeManagePatient(payload).then((res) =>
-                {
-                    if(res)
-                    {
-                        snackbar.success('Xóa thành công');
-                    }
-                    else
-                    {
-                        snackbar.error('Xóa thất bại');
-                    }
-                }).catch(err=>{
-                    snackbar.error(err.message.toString());
-                }).finally(()=>{
-                    onClose();
+        toggleLoading(true);
+        const user = authService.getCurrentUser();
+        await mobileService.checkRemovePatient(user.webUserAccID).then(async (res) => {
+            if(res)
+            {
+                let ticketList : any = await mobileService.getListTicket(account.webUserAccID).catch(err => {
+                    snackbar.error(err.message);
                 })
+                const ticketOfThisPatient = ticketList.filter(t => t.webAccManPtID == patient.webAccManPtID);
+                await SwalAlert.fire({
+                    text: ticketOfThisPatient?.length > 0 ? "BN này đã tạo số thứ tự. Nếu xóa BN sẽ xóa luôn những phiếu này. Bạn có chắc muốn xóa bệnh nhân này khỏi DSQL?" : 'Bạn có chắc muốn xóa bệnh nhân này khỏi DSQL?',
+                    icon: 'warning',
+                    showCancelButton: true,
+                    confirmButtonText: 'Xóa',
+                    cancelButtonText: 'Hủy',
+                }).then(async (result) => {
+                    if (result.isConfirmed) {
+                        if(ticketOfThisPatient?.length > 0)
+                        {
+                            for(let ticket of ticketOfThisPatient)
+                            {
+                                await mobileService.cancelTicket(Number(ticket.ticketID)).catch(err => {
+                                    snackbar.error(err.message);
+                                })
+                            }
+                        }
+                        const payload = {
+                            webUserAccID: account.webUserAccID,
+                            patientID: patient.patientID,
+                            isPatientAppt: (patient.patientCode && patient.patientCode !== '') ? false : true,
+                        }
+                        await mobileService.removeManagePatient(payload).then((res) =>
+                        {
+                            if(res)
+                            {
+                                snackbar.success('Xóa BN thành công');
+                            }
+                            else
+                            {
+                                snackbar.error('Xóa BN thất bại');
+                            }
+                        }).catch(err=>{
+                            snackbar.error(err.message.toString());
+                        }).finally(()=>{
+                            onClose();
+                        })
+                    }
+                });
             }
-        });
+            else
+            {
+                snackbar.error('Không thể xóa bệnh nhân này');
+                return;
+            }
+        }).catch(err=>{
+            snackbar.error(err.message);
+        }).finally(()=>{
+            toggleLoading(false)
+        })
     }
 
     return (

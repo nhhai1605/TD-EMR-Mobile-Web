@@ -17,6 +17,7 @@ import {useSnackbar} from "../@core/contexts/SnackbarProvider";
 import {useAppointment} from "../context/AppointmentContext";
 import OTPComponent, {sendOTP} from "./OTPComponent";
 import otpService from "../@core/services/otpService";
+import authService from "../@core/services/authService";
 
 const AddManagePatientDrawer = (props) => {
     const {open, onClose} = props;
@@ -136,7 +137,23 @@ const AddManagePatientDrawer = (props) => {
         if (!validateForm) {
             return;
         }
-        await sendOTP(getValues('contactMobileNum'), 3, setOpenOtp, snackbar , false);
+        const currentUser = authService.getCurrentUser()
+        await mobileService.checkManagePatient({
+            webUserAccID: currentUser?.webUserAccID,
+            patientCode: getValues('patientCode'),
+        }).then(async (res)=>{
+            if(res)
+            {
+                await sendOTP(getValues('contactMobileNum'), 3, setOpenOtp, snackbar , false);
+            }
+            else
+            {
+                snackbar.error("Không thể thêm BN vào DSQL")
+            }
+        }).catch(err => {
+            snackbar.error(err.message)
+        })
+
     }
     
     

@@ -13,12 +13,13 @@ import CloseIcon from "@mui/icons-material/Close";
 import {TdTextBox} from "../@core/components/controls/TdTextBox";
 import FlexBox from "../@core/components/FlexBox";
 import {LoadingButton} from "@mui/lab";
+import authService from "../@core/services/authService";
 
 const ChangePasswordDrawer = (props) =>
 {
 	const {open, onClose} = props;
 	const snackbar = useSnackbar();
-	const user = cookie.load(COOKIE_NAME.USER);
+	const user = authService.getCurrentUser();
 	
 	const initialDataForm = {
 		password: '',

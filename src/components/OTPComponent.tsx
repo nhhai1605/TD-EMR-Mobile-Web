@@ -1,18 +1,23 @@
-﻿import React, {useEffect,useState} from "react";
+﻿/*eslint-disable*/
+import React, {useEffect,useState} from "react";
 import {Button, CircularProgress, Modal, Theme, Typography, useMediaQuery} from "@mui/material";
 import FlexBox from "../@core/components/FlexBox";
 import OtpInput from "react-otp-input";
 import {LoadingButton} from "@mui/lab";
 import {toggleLoading} from "../@core/components/loading/LoadingScreen";
 import otpService from "../@core/services/otpService";
-import AES from 'crypto-js/aes';
+import CryptoJS from 'crypto-js';
 export const sendOTP = async (phoneNumber, type, setOpen=null, snackbar=null, isResend = false) => {
+	
 	toggleLoading(true);
+	const key = Date.now().toString();
+	const encrypted = CryptoJS.HmacSHA256(key + phoneNumber, key).toString();
 	const payload = {
 		otpType:type,
 		// patientCellPhoneNumber: phoneNumber,
 		isResendOTP: isResend,
-		patientCellPhoneNumber: AES.encrypt(`${Date.now().toString()}:${phoneNumber}`, "#QMS~$VT#@TD~!@#").toString()
+		patientCellPhoneNumber: phoneNumber,
+		signature: key + "/" + encrypted,
 	}
 	await otpService.sendOTP(payload).then((res) =>{
 		if(res)

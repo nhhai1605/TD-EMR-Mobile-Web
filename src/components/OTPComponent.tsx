@@ -2,19 +2,17 @@
 import {Button, CircularProgress, Modal, Theme, Typography, useMediaQuery} from "@mui/material";
 import FlexBox from "../@core/components/FlexBox";
 import OtpInput from "react-otp-input";
-import {useSnackbar} from "../@core/contexts/SnackbarProvider";
 import {LoadingButton} from "@mui/lab";
 import {toggleLoading} from "../@core/components/loading/LoadingScreen";
 import otpService from "../@core/services/otpService";
-import CryptoJS from 'crypto-js';
-
+import AES from 'crypto-js/aes';
 export const sendOTP = async (phoneNumber, type, setOpen=null, snackbar=null, isResend = false) => {
 	toggleLoading(true);
 	const payload = {
 		otpType:type,
 		// patientCellPhoneNumber: phoneNumber,
 		isResendOTP: isResend,
-		patientCellPhoneNumber: CryptoJS.HmacSHA256(`${Date.now().toString()}:${phoneNumber}`, "#Tuan$Dao$QMS~VT#@").toString()
+		patientCellPhoneNumber: AES.encrypt(`${Date.now().toString()}:${phoneNumber}`, "#Tuan$Dao$QMS~VT#@").toString()
 	}
 	await otpService.sendOTP(payload).then((res) =>{
 		if(res)

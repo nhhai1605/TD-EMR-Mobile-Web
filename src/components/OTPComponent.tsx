@@ -12,7 +12,7 @@ export const sendOTP = async (phoneNumber, type, setOpen=null, snackbar=null, is
 		otpType:type,
 		// patientCellPhoneNumber: phoneNumber,
 		isResendOTP: isResend,
-		patientCellPhoneNumber: AES.encrypt(`${Date.now().toString()}:${phoneNumber}`, "#Tuan$Dao$QMS~VT#@").toString()
+		patientCellPhoneNumber: AES.encrypt(`${Date.now().toString()}:${phoneNumber}`, "#QMS~$VT#@TD~!@#").toString()
 	}
 	await otpService.sendOTP(payload).then((res) =>{
 		if(res)

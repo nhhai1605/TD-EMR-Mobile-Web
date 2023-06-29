@@ -10,14 +10,15 @@ import CryptoJS from 'crypto-js';
 export const sendOTP = async (phoneNumber, type, setOpen=null, snackbar=null, isResend = false) => {
 	
 	toggleLoading(true);
-	const key = Date.now().toString();
-	const encrypted = CryptoJS.HmacSHA256(key + phoneNumber, key).toString();
+	const time = Date.now().toString();
+	const key = "#QMS~$VT#@TD~!@#"
+	const encrypted = CryptoJS.HmacSHA256(time + phoneNumber, key).toString();
 	const payload = {
 		otpType:type,
 		// patientCellPhoneNumber: phoneNumber,
 		isResendOTP: isResend,
 		patientCellPhoneNumber: phoneNumber,
-		signature: key + "/" + encrypted,
+		signature: time + "/" + encrypted,
 	}
 	await otpService.sendOTP(payload).then((res) =>{
 		if(res)

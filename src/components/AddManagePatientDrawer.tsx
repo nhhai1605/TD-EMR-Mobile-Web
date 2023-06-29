@@ -73,6 +73,7 @@ const AddManagePatientDrawer = (props) => {
             }).then((res) =>
             {
                 snackbar.success("Thêm BN thành công");
+                reset();
                 onClose();
             }).catch((err) =>
             {

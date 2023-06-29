@@ -141,6 +141,7 @@ const AddManagePatientDrawer = (props) => {
         await mobileService.checkManagePatient({
             webUserAccID: currentUser?.webUserAccID,
             patientCode: getValues('patientCode'),
+            patientCellPhoneNumber: getValues('contactMobileNum'),
         }).then(async (res)=>{
             if(res)
             {

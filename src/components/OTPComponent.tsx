@@ -77,6 +77,7 @@ const OTPComponent = (props) => {
                 <Typography sx={{paddingTop:'2.5vh'}} variant={"h4"}>Xác nhận OTP</Typography>
                 <OtpInput
                     value={otp}
+                    inputType={'tel'}
                     onChange={setOtp}
                     numInputs={6}
                     renderSeparator={<></>}

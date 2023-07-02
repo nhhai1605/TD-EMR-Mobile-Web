@@ -10,7 +10,7 @@ export const getAllFunctionActions = () : any => async (dispatch) => {
     dispatch(setAllFunction(res));
   }
   catch (err) {
-    console.log(err);
+    // console.log(err);
   }
   toggleLoading(false);
 }

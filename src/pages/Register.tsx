@@ -97,7 +97,7 @@ export const Register = () => {
                 cccd: data.cccd,
                 email: data.email
             };
-            console.log(newAccount);
+            // console.log(newAccount);
             await mobileService.register(newAccount).then(async () =>
             {
                 snackbar.success("Đăng ký thành công");

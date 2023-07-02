@@ -23,7 +23,7 @@ export const getHospitalSetting = () : any => async (dispatch) => {
     dispatch(setHiSetting(res));
   }
   catch(err) {
-    console.log(err);
+    // console.log(err);
   }
   finally {
     toggleLoading(false);

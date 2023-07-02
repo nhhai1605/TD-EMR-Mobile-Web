@@ -95,7 +95,7 @@ export function AppointmentContextProvider({ children }) {
                     item.Id = String(item.medServiceID) 
                     item.Text = String(item.medServiceName)
                 })
-                console.log(services)
+                // console.log(services)
                 setMedServices(services);
                 return services;
             }

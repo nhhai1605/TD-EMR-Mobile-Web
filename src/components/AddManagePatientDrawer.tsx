@@ -85,7 +85,7 @@ const AddManagePatientDrawer = (props) => {
       
         await searchPatient({ patientCode: patientCode }).then(async (patient) =>
         {
-            console.log(patient)
+            // console.log(patient)
             if (patient && patient.patientID)
             {
                 if (contactMobileNum)
@@ -124,7 +124,7 @@ const AddManagePatientDrawer = (props) => {
             }
         }).catch((err) =>
         {
-            console.log(err)
+            // console.log(err)
             snackbar.error('Lỗi khi tìm BN')
         }).finally(() =>
         {

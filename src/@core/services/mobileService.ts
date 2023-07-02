@@ -101,7 +101,7 @@ class MobileService {
     }
 
     getAllPatientAppointment(patientCode:string) {
-        console.log(patientCode)
+        // console.log(patientCode)
         return internalApiService.postAsync('Appointment/AppointmentWeb/Web_GetAllPatientAppointment', patientCode); // Done
     }
 

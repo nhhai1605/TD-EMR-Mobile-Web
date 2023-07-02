@@ -26,7 +26,7 @@ class AuthService {
 
   getProvider = async () => {
     const userInfo : any = await identityServerService.postAsync(API_PATH.GET_USER_INFO);
-    console.log("user info", userInfo)
+    // console.log("user info", userInfo)
     if(userInfo)
     {
       const facility: any = await mobileService.getFacilityDetail('260'); // 260 là PKHID của Viện Tim

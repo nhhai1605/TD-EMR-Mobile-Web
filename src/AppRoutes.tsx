@@ -17,7 +17,7 @@ const NotFound = lazy(() => import('pages/NotFound').then(({ NotFound }) => ({ d
 function AppRoutes() {
   const location = useLocation();
   useEffect(() => {
-    console.log('%c ⛔ KHÔNG PHẬN SỰ MIỄN VÀO!!', 'font-weight: bold; font-size: 30px;color: red; ');
+    // console.log('%c ⛔ KHÔNG PHẬN SỰ MIỄN VÀO!!', 'font-weight: bold; font-size: 30px;color: red; ');
   }, []);
 
 
@@ -42,7 +42,7 @@ function AppRoutes() {
   }
   
   useEffect(() => {
-    console.log("here");
+    // console.log("here");
     window.history.pushState(null, null, window.location.pathname);
     window.addEventListener('popstate', eventListener);
     return () => {

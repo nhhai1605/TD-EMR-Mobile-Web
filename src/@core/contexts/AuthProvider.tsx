@@ -75,7 +75,7 @@ const AuthProvider = ({ children }) => {
       const { exp }: any = jwt_decode(authData.access_token);
       const currentTime = new Date().getTime() / 1000;
       const isExpired = currentTime > exp - 30;
-      console.log('isExpired', isExpired)
+      // console.log('isExpired', isExpired)
       setAuth(isExpired ? undefined : authData);
       setIsAuthenticated(!isExpired);
     } else {

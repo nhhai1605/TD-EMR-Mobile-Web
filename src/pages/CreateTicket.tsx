@@ -39,13 +39,13 @@ export const CreateTicket = () => {
                 Id: p.patientID,
                 Text: p?.patientCode ? p.patientCode + " - " + p.fullName : p.fullName,
             }))
-            console.log(patients[0])
+            // console.log(patients[0])
             setAllPatients(patients);
             getAvailablePatients(patients);
         }).catch(err=>{
             snackbar.error(err.message.toString());
         }).finally(()=>{
-            setSelectedDate(moment().add(1,'days').toDate());
+            setSelectedDate(moment().add(moment().day() === 6 ? 2 : 1,'days').toDate());
             toggleLoading(false);
         });
         
@@ -60,7 +60,7 @@ export const CreateTicket = () => {
     const onSubmit = async () => {
         toggleLoading(true)
         setHavePatientError(false)
-        console.log(selectedPatient)
+        // console.log(selectedPatient)
         const payload = {
             aType: (getAge(selectedPatient.dob) < 6 || getAge(selectedPatient.dob) > 80) ? 32 : 30,
             webAccountUserID: account.webUserAccID,

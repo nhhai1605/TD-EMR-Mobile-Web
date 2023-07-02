@@ -111,7 +111,7 @@ export const getBase64FromUrl = async (url) => {
     canvas.height = baseImage.height;
     const ctx = canvas.getContext('2d');
     ctx.drawImage(baseImage, 0, 0, canvas.width, canvas.height);
-    console.log(baseImage, ctx);
+    // console.log(baseImage, ctx);
     const dataURL = ctx.canvas.toDataURL('image/png');
     return dataURL;
   };
@@ -213,7 +213,7 @@ export const xml2json = (xml) => {
     }
     return toCamel(json);
   } catch (e) {
-    console.log(e.message);
+    // console.log(e.message);
   }
 };
 

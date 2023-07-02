@@ -231,7 +231,7 @@ const CreatePatientDrawer = (props) => {
         }
         cityChange(init.cityProvinceID);
         suburbChange(init.suburbNameID);
-        console.log("init", init)
+        // console.log("init", init)
 
         reset(init);
         setAutocompleteKey(new Date().getMilliseconds());

@@ -87,7 +87,7 @@ const DrawerItem = () => {
     };
 
     const handleDrawerClose = () => {
-        console.log("here")
+        // console.log("here")
         setOpen(false);
     };
 

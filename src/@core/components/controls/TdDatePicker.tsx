@@ -27,7 +27,7 @@ const defaultProps = {
   views: ['year', 'month', 'day'],
   renderInput: undefined,
   onChange: (e) => {
-    console.log(e);
+    // console.log(e);
   },
   shrink: true,
 };

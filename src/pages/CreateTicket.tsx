@@ -1,7 +1,18 @@
 ﻿import React, {useCallback, useEffect, useRef, useState} from "react";
 import {useAppointment} from "../context/AppointmentContext";
 import {useSnackbar} from "../@core/contexts/SnackbarProvider";
-import {Box, Button, Container, Grid, IconButton, Modal, Paper, TextField, Typography} from "@mui/material";
+import {
+    Box,
+    Button,
+    Container,
+    Grid,
+    IconButton,
+    Modal,
+    Paper,
+    TextField, Theme,
+    Typography,
+    useMediaQuery
+} from "@mui/material";
 import { toggleLoading } from '@core/components/loading/LoadingScreen';
 import FlexBox from "../@core/components/FlexBox";
 import {LoadingButton} from "@mui/lab";
@@ -14,6 +25,7 @@ import COOKIE_NAME from "../@core/constants/cookie";
 import cookie from "react-cookies";
 import {exportAsImage} from "./TicketList";
 import {CustomBox} from "./Home";
+import {InfoOutlined} from "@mui/icons-material";
 export const CreateTicket = () => {
     const snackbar = useSnackbar();
     const { getPatientList } = useAppointment()
@@ -27,7 +39,8 @@ export const CreateTicket = () => {
     const [patientLoading, setPatientLoading]= useState(false);
     const [selectedTicket, setSelectedTicket] = useState(null)
     const flexBoxRef = useRef<any>();
-    // const [openOtp, setOpenOtp] = useState(false);
+    const mobileView = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
 
     const fetchData = async () =>
     {
@@ -108,6 +121,9 @@ export const CreateTicket = () => {
                 flexDirection: 'column',
                 height: '90vh',
                 backgroundColor:'white',
+                display:"flex",
+                justifyContent: mobileView ? 'space-between' : 'flex-start',
+                py:2
             }}>
                 {
                     selectedTicket &&
@@ -139,67 +155,80 @@ export const CreateTicket = () => {
                     </Modal>
                 }
 
-                <FlexBox sx={{paddingY:2}}>
-                    <Typography variant='h5'>Lấy Phiếu Khám Bệnh</Typography>
+                <FlexBox flexDirection={'column'}>
+                    <FlexBox sx={{paddingY:2}}>
+                        <Typography variant='h5'>Lấy Phiếu Khám Bệnh</Typography>
+                    </FlexBox>
+                    <FlexBox sx={{paddingY:2}}>
+                        <Paper sx={{padding:2, width:'100%', borderRadius:2, border:1, borderColor:"#ddd", backgroundColor:'#dbecfd', flexDirection:'row', display:'flex', alignItems:'center' }}>
+                            <Typography sx={{ px:2, color:'#5195dc', alignItems:'center', display:'flex', textAlign:'left',fontSize:mobileView ? 14 : 18, fontWeight:800}}>
+                                <InfoOutlined sx={{color:'#5195dc', marginRight: 2, fontSize:mobileView ? 21 : 27}}/> Việc đăng ký chỉ thực hiện trước ngày khám 1 ngày
+                            </Typography>
+                        </Paper>
+                    </FlexBox>
+                    <FlexBox sx={{paddingY:2}}>
+                        <TdDatePicker
+                            minDate={moment().add(1,'days').toDate()}
+                            label={'Ngày Khám'}
+                            disableOpenPicker={Number(import.meta.env.VITE_DISABLE_TICKET_DATE) == 1}
+                            disableKeyboardInput={Number(import.meta.env.VITE_DISABLE_TICKET_DATE) == 1}
+                            showDaysOutsideCurrentMonth={false}
+                            shouldDisableDate={(date) => {return  moment(date).get('day') === 0}}
+                            inputFormat='DD/MM/YYYY'
+                            maxDate={moment().add(22, 'days').toDate()}
+                            value={selectedDate}
+                            size='small'
+                            shrink
+                            required
+                            error={haveDateError && !selectedDate}
+                            helperText={haveDateError && !selectedDate && <>Vui lòng chọn ngày</>}
+                            onChange={(e : any) => {
+                                if(e && moment(e.toDate()).isValid())
+                                {
+                                    setSelectedDate(e.toDate())
+                                }
+                                else {
+                                    setSelectedDate(null)
+                                }
+                            }}
+                        />
+                    </FlexBox>
+                    <FlexBox sx={{paddingY:2}}>
+                        <TdSelect
+                            size={'small'}
+                            required
+                            shrink
+                            value={selectedPatient?.Id ?? null}
+                            notched
+                            onChange={e=>{
+                                setSelectedPatient(patientList.find(p => p.Id === e.target.value))
+                            }}
+                            disabled={patientLoading || !selectedDate || patientList.length == 0}
+                            data={patientList}
+                            error={havePatientError && !selectedPatient}
+                            helperText={havePatientError && !selectedPatient && <>Vui lòng chọn bệnh nhân</>}
+                            // placeholder={!selectedDate ? "Chọn ngày trước" : (patientLoading ? "Đang tải..." : (patientList.length == 0 ? "Không có BN nào có thể lấy phiếu" : 'Chọn bệnh nhân'))}
+                            placeholder={patientLoading ? "Đang tải..." : (patientList.length == 0 ? "Không có BN nào có thể lấy phiếu" : 'Chọn bệnh nhân')}
+                            label={'Bệnh Nhân'}
+                        />
+                    </FlexBox>
                 </FlexBox>
-                <FlexBox sx={{paddingY:2}}>
-                    <TdDatePicker
-                        minDate={moment().add(1,'days').toDate()}
-                        label={'Ngày Khám'}
-                        showDaysOutsideCurrentMonth={false}
-                        shouldDisableDate={(date) => {return  moment(date).get('day') === 0}}
-                        inputFormat='DD/MM/YYYY'
-                        maxDate={moment().add(22, 'days').toDate()}
-                        value={selectedDate}
-                        size='small'
-                        shrink
-                        required
-                        error={haveDateError && !selectedDate}
-                        helperText={haveDateError && !selectedDate && <>Vui lòng chọn ngày</>}
-                        onChange={(e : any) => {
-                            if(e && moment(e.toDate()).isValid())
+                <FlexBox flexDirection={'column'}>
+                    <FlexBox sx={{paddingY:2, justifyContent:'center'}}>
+                        <LoadingButton disabled={!selectedPatient} onClick={()=> {
+                            if(!selectedPatient || !selectedDate )
                             {
-                                setSelectedDate(e.toDate())
+                                setHaveDateError(true)
+                                setHavePatientError(true)
+                                snackbar.error("Vui lòng nhập đầy đủ thông tin");
+                                return;
                             }
-                            else {
-                                setSelectedDate(null)
-                            }
-                        }}
-                    />
-                </FlexBox>
-                <FlexBox sx={{paddingY:2}}>
-                    <TdSelect
-                        size={'small'}
-                        required
-                        shrink
-                        value={selectedPatient?.Id ?? null}
-                        notched
-                        onChange={e=>{
-                            setSelectedPatient(patientList.find(p => p.Id === e.target.value))
-                        }}
-                        disabled={patientLoading || !selectedDate || patientList.length == 0}
-                        data={patientList}
-                        error={havePatientError && !selectedPatient}
-                        helperText={havePatientError && !selectedPatient && <>Vui lòng chọn bệnh nhân</>}
-                        // placeholder={!selectedDate ? "Chọn ngày trước" : (patientLoading ? "Đang tải..." : (patientList.length == 0 ? "Không có BN nào có thể lấy phiếu" : 'Chọn bệnh nhân'))}
-                        placeholder={patientLoading ? "Đang tải..." : (patientList.length == 0 ? "Không có BN nào có thể lấy phiếu" : 'Chọn bệnh nhân')}
-                        label={'Bệnh Nhân'}
-                    />
-                </FlexBox>
-                <FlexBox sx={{paddingY:2, justifyContent:'center'}}>
-                    <LoadingButton disabled={!selectedPatient} onClick={()=> {
-                        if(!selectedPatient || !selectedDate )
-                        {
-                            setHaveDateError(true)
-                            setHavePatientError(true)
-                            snackbar.error("Vui lòng nhập đầy đủ thông tin");
-                            return;
-                        }
-                        onSubmit();
-                        // setOpenOtp(true)
-                    }} type='button' variant='contained' fullWidth={true}>
-                        Xác nhận
-                    </LoadingButton>
+                            onSubmit();
+                            // setOpenOtp(true)
+                        }} type='button' variant='contained' fullWidth={true}>
+                            Xác nhận
+                        </LoadingButton>
+                    </FlexBox>
                 </FlexBox>
             </Container>
         </CustomBox>     

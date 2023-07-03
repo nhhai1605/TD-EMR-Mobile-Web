@@ -1,8 +1,10 @@
+/*eslint-disable*/
 import { BaseTextFieldProps, SxProps, TextField, TextFieldProps, Theme } from '@mui/material';
 import {DatePickerProps, LocalizationProvider} from '@mui/x-date-pickers';
 import { useTranslation } from 'react-i18next';
 import { AdapterMoment } from '@mui/x-date-pickers/AdapterMoment';
 import { DesktopDatePicker  } from '@mui/x-date-pickers';
+import 'moment/dist/locale/vi';
 
 type TdDatePickerProps<TInputDate, TDate> = DatePickerProps<TInputDate, TDate> & BaseTextFieldProps & {
   labelI18nKey?: string;
@@ -16,7 +18,8 @@ type TdDatePickerProps<TInputDate, TDate> = DatePickerProps<TInputDate, TDate> &
   helperText?: JSX.Element;
   inputRef?: any;
   renderInput?: (props: TextFieldProps) => React.ReactElement<any, string | React.JSXElementConstructor<any>>;
-  shrink: boolean;
+  shrink?: boolean;
+  disableKeyboardInput?: boolean;
 };
 //make value default
 const defaultProps = {
@@ -30,6 +33,7 @@ const defaultProps = {
     // console.log(e);
   },
   shrink: true,
+  disableKeyboardInput:false,
 };
 
 export const TdDatePicker = <TInputDate, TDate>(props: TdDatePickerProps<TInputDate, TDate> & typeof defaultProps) => {
@@ -48,6 +52,7 @@ export const TdDatePicker = <TInputDate, TDate>(props: TdDatePickerProps<TInputD
     shrink,
     InputLabelProps,
     required,
+    disableKeyboardInput,
     ...datePickerProps
   } = props;
   const { t } = useTranslation();
@@ -76,6 +81,11 @@ export const TdDatePicker = <TInputDate, TDate>(props: TdDatePickerProps<TInputD
           ...sx,
           ...styles,
         }}
+        {...(disableKeyboardInput && {
+          onKeyDown: (e) => {
+            e.preventDefault();
+          }
+        })}
         size={size}
         error={error}
         required={required}
@@ -85,36 +95,17 @@ export const TdDatePicker = <TInputDate, TDate>(props: TdDatePickerProps<TInputD
   };
 
   return (
-    <LocalizationProvider dateAdapter={AdapterMoment} >
+    <LocalizationProvider dateAdapter={AdapterMoment}>
       <DesktopDatePicker
         {...datePickerProps}
-        // open={dateOpen}
-        // onClose={() => setDateOpen(false)}
+        dayOfWeekFormatter={(day) => {
+          return day.slice(-1) != "N" ? "T" + day.slice(-1) : "CN"
+        }}
         label={labelI18nKey ? t(labelI18nKey) : label}
         value={value}
         onChange={onChange}
         inputFormat={format}
         renderInput={renderInput || onRenderInputDefault}
-        // renderInput={(props) => (
-        //     <TextField
-        //         onClick={() => setDateOpen(true)}
-        //         onKeyDown={e => {e.preventDefault()}}
-        //         {...props}
-        //         fullWidth
-        //         InputLabelProps={{ shrink: shrink, ...InputLabelProps }}
-        //         sx={{
-        //           '& .MuiInputBase-inputSizeSmall': {
-        //             height: '1.7375em !important',
-        //           },
-        //           ...sx,
-        //           ...styles,
-        //         }}
-        //         size={size}
-        //         error={error}
-        //         required={required}
-        //         helperText={helperText}
-        //     />
-        // )}
       />
     </LocalizationProvider>
   );

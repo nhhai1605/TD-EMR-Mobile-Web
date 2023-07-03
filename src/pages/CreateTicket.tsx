@@ -170,8 +170,8 @@ export const CreateTicket = () => {
                         <TdDatePicker
                             minDate={moment().add(1,'days').toDate()}
                             label={'Ngày Khám'}
-                            disableOpenPicker={Number(import.meta.env.VITE_DISABLE_TICKET_DATE) == 1}
-                            disableKeyboardInput={Number(import.meta.env.VITE_DISABLE_TICKET_DATE) == 1}
+                            disableOpenPicker={Number(import.meta.env.VITE_DISABLE_TICKET_DATE) > 0}
+                            disableKeyboardInput={Number(import.meta.env.VITE_DISABLE_TICKET_DATE) > 0}
                             showDaysOutsideCurrentMonth={false}
                             shouldDisableDate={(date) => {return  moment(date).get('day') === 0}}
                             inputFormat='DD/MM/YYYY'

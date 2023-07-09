@@ -1,5 +1,16 @@
 ﻿import React, {useEffect, useRef, useState} from "react";
-import {Box, Button, Container, Drawer, Grid, IconButton, Paper, Typography} from "@mui/material";
+import {
+    Accordion, AccordionDetails,
+    AccordionSummary,
+    Box,
+    Button,
+    Container,
+    Drawer,
+    Grid,
+    IconButton,
+    Paper, Theme,
+    Typography, useMediaQuery
+} from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import FlexBox from "@core/components/FlexBox";
 import {Controller, useForm} from "react-hook-form";
@@ -27,6 +38,7 @@ import OTPComponent, {sendOTP} from "./OTPComponent";
 import otpService from "../@core/services/otpService";
 import {ROUTE_PATHS} from "../@core/constants/routeConfig";
 import authService from "../@core/services/authService";
+import {ExpandMore, InfoOutlined} from "@mui/icons-material";
 export const FamilyRelationships = [
     {
         Id: 0,
@@ -86,9 +98,11 @@ const CreatePatientDrawer = (props) => {
     const [autocompleteKey, setAutocompleteKey] = useState(new Date().getMilliseconds());
     const snackbar = useSnackbar();
     const [openOtp, setOpenOtp] = useState(false);
+    const mobileView = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
     const initialDataForm = {
         fullName: patient?.fullName ?? '',
-        dob: moment().format('YYYY-MM-DD'),
+        dob: null,
         gender: patient?.gender ?? 'U',
         cityProvinceID: patient?.cityProvinceID ?? null,
         address: patient?.patientStreetAddress ?? '',
@@ -153,7 +167,7 @@ const CreatePatientDrawer = (props) => {
             .when('dob', {
                 is: dob => {
                     const age = moment().diff(dob, 'years');
-                    return age <= 6;
+                    return age < 6 || age > 80;
                 },
                 then: yup.string().nullable().required('Trẻ em duới 6 tuổi phải có thông tin người thân'),
             }),
@@ -180,7 +194,7 @@ const CreatePatientDrawer = (props) => {
         control,
         setValue,
         getValues,
-        clearErrors,
+        watch
     } = useForm({resolver: yupResolver(validationFormSchema), defaultValues: initialDataForm});
 
     const getAddress = async () => {
@@ -283,7 +297,7 @@ const CreatePatientDrawer = (props) => {
             }
         });
     };
-
+    
     const onSubmit = async (otp) => {
         toggleLoading(true);
         let response = null;
@@ -385,7 +399,16 @@ const CreatePatientDrawer = (props) => {
             toggleLoading(false)
         })
     }
-
+    const dobWatch = watch('dob');
+    const relativeNameWatch = watch('fContactFullName');
+    const relativeRequired = moment().diff(moment(dobWatch), 'years') < 6 || moment(dobWatch).diff(moment(), 'years') > 80
+    const [relativeExpanded, setRelativeExpanded] = useState<boolean>(false);
+    useEffect(()=>{
+        if(relativeRequired)
+        {
+            setRelativeExpanded(true);
+        }
+    },[relativeRequired])
     return (
         <Drawer 
             anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} 
@@ -439,8 +462,8 @@ const CreatePatientDrawer = (props) => {
                                     inputRef={ref}
                                     margin={'normal'}
                                     size='small'
-                                    error={!moment(getValues().dob).isValid() || (errors.dob && Boolean(errors.dob))}
-                                    helperText={(!moment(getValues().dob).isValid() || errors.dob) &&  <>{errors.dob?.message ?? "Ngày không hợp lệ"}</>}
+                                    error={(getValues().dob != null && !moment(getValues().dob).isValid()) || (errors.dob && Boolean(errors.dob))}
+                                    helperText={(getValues().dob != null && !moment(getValues().dob).isValid()) ? <>Ngày không hợp lệ</> : (errors.dob && <>{errors.dob.message}</>)}
                                     shrink
                                     required
                                     onChange={onChange}
@@ -625,92 +648,116 @@ const CreatePatientDrawer = (props) => {
                             />
                         )}
                     />
-                    <Typography variant='h5' sx={{paddingTop: 3, paddingBottom: 1}}>Thông tin người thân</Typography>
-                    <Controller
-                        name='fContactFullName'
-                        control={control}
-                        render={({field: {value, ref, ...otherFields}}) => (
-                            <TdTextBox
-                                {...otherFields}
-                                disabled={patient?.patientCode && patient.patientCode !== ""}
-                                moveToNextEleAfterEnter
-                                value={value}
-                                size={'small'}
-                                required={moment().diff(moment(getValues().dob), 'years') <= 6}
-                                margin={'normal'}
-                                sx={{flex: 1}}
-                                inputRef={ref}
-                                error={errors.fContactFullName && Boolean(errors.fContactFullName)}
-                                helperText={errors.fContactFullName && <>{errors.fContactFullName.message}</>}
-                                label={'Họ và Tên người thân'}
-                                placeholder={'Nhập họ và tên người thân'}
+                    <Accordion expanded={relativeExpanded} onChange={(e,newExpanded)=>{setRelativeExpanded(newExpanded)}} sx={{display:'flex', flexDirection:'column', marginTop:5}} disableGutters >
+                        <AccordionSummary expandIcon={<ExpandMore />} sx={{display:'flex', width:'100%', alignItems:'center', justifyContent:'flex-start', margin:0, padding:0}}>
+                            <Typography variant='h5' sx={{paddingRight:5}}>Thông tin người thân</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails sx={{display:'flex', width:'100%', alignItems:'flex-start', justifyContent:'flex-start', flexDirection:'column', margin:0, padding:0}}>
+                            {
+                                relativeRequired &&
+                                <FlexBox sx={{paddingY:2}}>
+                                    <Paper sx={{padding:2, width:'100%', borderRadius:2, border:1, borderColor:"#ddd", backgroundColor:'#dbecfd', flexDirection:'row', display:'flex', alignItems:'center' }}>
+                                        <Typography sx={{ px:2, color:'#5195dc', alignItems:'center', display:'flex', textAlign:'left',fontSize:mobileView ? 14 : 18, fontWeight:800}}>
+                                            <InfoOutlined sx={{color:'#5195dc', marginRight: 2, fontSize:mobileView ? 21 : 27}}/> Bệnh nhân dưới 6 tuổi hoặc trên 80 tuổi phải có thông tin người thân
+                                        </Typography>
+                                    </Paper>
+                                </FlexBox>
+                            }
+                            
+                            <Box sx={{
+                                display: "flex",
+                                flexDirection: "column",
+                                width:'100%'
+                            }}>
+                            <Controller
+                                name='fContactFullName'
+                                control={control}
+                                render={({field: {value, ref, ...otherFields}}) => (
+                                    <TdTextBox
+                                        {...otherFields}
+                                        disabled={patient?.patientCode && patient.patientCode !== ""}
+                                        moveToNextEleAfterEnter
+                                        value={value}
+                                        size={'small'}
+                                        required={relativeRequired}
+                                        margin={'normal'}
+                                        sx={{flex:1}}
+                                        inputRef={ref}
+                                        error={errors.fContactFullName && Boolean(errors.fContactFullName)}
+                                        helperText={errors.fContactFullName && <>{errors.fContactFullName.message}</>}
+                                        label={'Họ và Tên người thân'}
+                                        placeholder={'Nhập họ và tên người thân'}
+                                    />
+                                )}
                             />
-                        )}
-                    />
-                    <Controller
-                        name='v_FamilyRelationship'
-                        control={control}
-                        render={({field: {value, ref, onChange, ...otherFields}}) => (
-                            <TdSelect
-                                {...otherFields}
-                                disabled={patient?.patientCode && patient.patientCode !== ""}
-                                inputRef={ref}
-                                size={'small'}
-                                required={getValues().fContactFullName != ''}
-                                shrink
-                                notched
-                                value={value}
-                                //@ts-ignore
-                                margin={'normal'}
-                                error={errors.v_FamilyRelationship && Boolean(errors.v_FamilyRelationship)}
-                                helperText={errors.v_FamilyRelationship && <>{errors.v_FamilyRelationship.message}</>}
-                                onChange={onChange}
-                                data={FamilyRelationships}
-                                placeholder={'Chọn quan hệ với bệnh nhân'}
-                                label={'Quan hệ'}
+                            <Controller
+                                name='v_FamilyRelationship'
+                                control={control}
+                                render={({field: {value, ref, onChange, ...otherFields}}) => (
+                                    <TdSelect
+                                        {...otherFields}
+                                        disabled={patient?.patientCode && patient.patientCode !== ""}
+                                        inputRef={ref}
+                                        size={'small'}
+                                        required={Boolean(relativeNameWatch) || relativeRequired}
+                                        shrink
+                                        notched
+                                        value={value}
+                                        //@ts-ignore
+                                        margin={'normal'}
+                                        error={errors.v_FamilyRelationship && Boolean(errors.v_FamilyRelationship)}
+                                        helperText={errors.v_FamilyRelationship && <>{errors.v_FamilyRelationship.message}</>}
+                                        onChange={onChange}
+                                        data={FamilyRelationships}
+                                        placeholder={'Chọn quan hệ với bệnh nhân'}
+                                        label={'Quan hệ'}
+                                    />
+                                )}
                             />
-                        )}
-                    />
-                    <Controller
-                        name='fContactAddress'
-                        control={control}
-                        render={({field: {value, ref, ...otherFields}}) => (
-                            <TdTextBox
-                                {...otherFields}
-                                disabled={patient?.patientCode && patient.patientCode !== ""}
-                                moveToNextEleAfterEnter
-                                value={value}
-                                size={'small'}
-                                margin={'normal'}
-                                sx={{flex: 1}}
-                                inputRef={ref}
-                                error={errors.fContactAddress && Boolean(errors.fContactAddress)}
-                                helperText={errors.fContactAddress && <>{errors.fContactAddress.message}</>}
-                                label={'Địa chỉ người thân'}
-                                placeholder={'Nhập địa chỉ của người thân'}
+                            <Controller
+                                name='fContactAddress'
+                                control={control}
+                                render={({field: {value, ref, ...otherFields}}) => (
+                                    <TdTextBox
+                                        {...otherFields}
+                                        disabled={patient?.patientCode && patient.patientCode !== ""}
+                                        moveToNextEleAfterEnter
+                                        value={value}
+                                        size={'small'}
+                                        margin={'normal'}
+                                        sx={{flex: 1}}
+                                        inputRef={ref}
+                                        error={errors.fContactAddress && Boolean(errors.fContactAddress)}
+                                        helperText={errors.fContactAddress && <>{errors.fContactAddress.message}</>}
+                                        label={'Địa chỉ người thân'}
+                                        placeholder={'Nhập địa chỉ của người thân'}
+                                    />
+                                )}
                             />
-                        )}
-                    />  
-                    <Controller
-                        name='fContactCellPhone'
-                        control={control}
-                        render={({field: {value, ref, ...otherFields}}) => (
-                            <TdTextBox
-                                {...otherFields}
-                                disabled={patient?.patientCode && patient.patientCode !== ""}
-                                moveToNextEleAfterEnter
-                                value={value}
-                                size={'small'}
-                                margin={'normal'}
-                                sx={{flex: 1}}
-                                inputRef={ref}
-                                error={errors.fContactCellPhone && Boolean(errors.fContactCellPhone)}
-                                helperText={errors.fContactCellPhone && <>{errors.fContactCellPhone.message}</>}
-                                label={'SĐT người thân'}
-                                placeholder={'Nhập số điện thoại của người thân'}
+                            <Controller
+                                name='fContactCellPhone'
+                                control={control}
+                                render={({field: {value, ref, ...otherFields}}) => (
+                                    <TdTextBox
+                                        {...otherFields}
+                                        disabled={patient?.patientCode && patient.patientCode !== ""}
+                                        moveToNextEleAfterEnter
+                                        value={value}
+                                        size={'small'}
+                                        margin={'normal'}
+                                        sx={{flex: 1}}
+                                        inputRef={ref}
+                                        error={errors.fContactCellPhone && Boolean(errors.fContactCellPhone)}
+                                        helperText={errors.fContactCellPhone && <>{errors.fContactCellPhone.message}</>}
+                                        label={'SĐT người thân'}
+                                        placeholder={'Nhập số điện thoại của người thân'}
+                                    />
+                                )}
                             />
-                        )}
-                    />
+                            </Box>
+                        </AccordionDetails>
+                    </Accordion>
+                    
                     
                     <FlexBox
                         sx={{

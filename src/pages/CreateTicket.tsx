@@ -159,13 +159,16 @@ export const CreateTicket = () => {
                     <FlexBox sx={{paddingY:2}}>
                         <Typography variant='h5'>Lấy Phiếu Khám Bệnh</Typography>
                     </FlexBox>
-                    <FlexBox sx={{paddingY:2}}>
-                        <Paper sx={{padding:2, width:'100%', borderRadius:2, border:1, borderColor:"#ddd", backgroundColor:'#dbecfd', flexDirection:'row', display:'flex', alignItems:'center' }}>
-                            <Typography sx={{ px:2, color:'#5195dc', alignItems:'center', display:'flex', textAlign:'left',fontSize:mobileView ? 14 : 18, fontWeight:800}}>
-                                <InfoOutlined sx={{color:'#5195dc', marginRight: 2, fontSize:mobileView ? 21 : 27}}/> Việc đăng ký chỉ thực hiện trước ngày khám 1 ngày
-                            </Typography>
-                        </Paper>
-                    </FlexBox>
+                    {
+                        Number(import.meta.env.VITE_DISABLE_TICKET_DATE) > 0 &&
+                        <FlexBox sx={{paddingY:2}}>
+                            <Paper sx={{padding:2, width:'100%', borderRadius:2, border:1, borderColor:"#ddd", backgroundColor:'#dbecfd', flexDirection:'row', display:'flex', alignItems:'center' }}>
+                                <Typography sx={{ px:2, color:'#5195dc', alignItems:'center', display:'flex', textAlign:'left',fontSize:mobileView ? 14 : 18, fontWeight:800}}>
+                                    <InfoOutlined sx={{color:'#5195dc', marginRight: 2, fontSize:mobileView ? 21 : 27}}/> Việc đăng ký chỉ thực hiện trước ngày khám 1 ngày
+                                </Typography>
+                            </Paper>
+                        </FlexBox>
+                    }
                     <FlexBox sx={{paddingY:2}}>
                         <TdDatePicker
                             minDate={moment().add(1,'days').toDate()}

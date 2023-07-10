@@ -152,7 +152,7 @@ export const TicketList = () => {
                                                 <Typography variant={"h6"} sx={{textAlign:'start'}}>Ngày Khám: {moment(ticket?.issueDateTime).format("DD/MM/YYYY")}</Typography>
                                             </FlexBox>
                                             {
-                                                Number(import.meta.env.VITE_DISABLE_TICKET_DATE) > 0 &&
+                                                Number(import.meta.env.VITE_DISABLE_TICKET_DATE) <= 0 &&
                                                 <FlexBox>
                                                     <IconButton onClick={(e)=>{
                                                         e.stopPropagation();

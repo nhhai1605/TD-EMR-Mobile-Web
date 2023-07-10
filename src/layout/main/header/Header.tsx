@@ -137,7 +137,8 @@ const Header = () => {
             sx={{
                 backgroundColor: '#f3f4f9',
                 justifyContent:'center',
-                alignItems:'center',
+                flexDirection:'row',
+                alignItems: "space-between",
                 height:'10vh',
             }}
             elevation={0}

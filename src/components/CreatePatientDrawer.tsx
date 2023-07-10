@@ -414,7 +414,7 @@ const CreatePatientDrawer = (props) => {
             anchor={'right'} sx={{zIndex: '1300', '& > .MuiPaper-root': { width: {xs:'100%', sm: '100%', md:'50%', lg:'50%'} }}} 
             open={open} onClose={thisOnClose}>
             <OTPComponent onResend={async() => await sendOTP(getValues('contactMobileNum'), 2, snackbar, true)} open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
-            <Box sx={{padding: '20px'}}>
+            <Box sx={{padding: '20px', paddingBottom:0}}>
                 <Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Typography variant='h3'>{patient ? "Thông tin bệnh nhân" : "Tạo bệnh nhân"}</Typography>
                     <IconButton onClick={thisOnClose}>
@@ -757,13 +757,13 @@ const CreatePatientDrawer = (props) => {
                             </Box>
                         </AccordionDetails>
                     </Accordion>
-                    
-                    
                     <FlexBox
                         sx={{
-                            position: 'fixed',
-                            bottom: 10,
-                            right:10,
+                            // position: 'fixed',
+                            // bottom: 10,
+                            // right:10,
+                            marginTop:5,
+                            justifyContent:'flex-end',
                             gap: '20px',
                         }}
                     >
@@ -786,7 +786,7 @@ const CreatePatientDrawer = (props) => {
                                     color:'white',
                                     '&:hover': {
                                         color:'white',
-                                        backgroundColor: '#dcc432',
+                                        backgroundColor: '#e0ab00',
                                     }
                                 }} variant='contained'>
                                     Đặt lại

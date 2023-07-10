@@ -167,7 +167,7 @@ const AddManagePatientDrawer = (props) => {
             open={open} 
             onClose={onClose}>
             <OTPComponent onResend={async() => await sendOTP(getValues('contactMobileNum'), 3, snackbar, true)} open={openOtp} setOpen={setOpenOtp} onSubmit={onSubmit}/>
-            <Box sx={{ padding: '20px' }}>
+            <Box sx={{ padding: '20px', paddingBottom:0 }}>
                 <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                     <Typography variant='h5'>Thêm bệnh nhân vào danh sách quản lí</Typography>
                     <IconButton onClick={onClose}>
@@ -226,9 +226,11 @@ const AddManagePatientDrawer = (props) => {
                     />
                     <FlexBox
                         sx={{
-                            position: 'fixed',
-                            bottom: 10,
-                            right:10,
+                            // position: 'fixed',
+                            // bottom: 10,
+                            // right:10,
+                            marginTop:5,
+                            justifyContent:'flex-end',
                             gap: '20px',
                         }}
                     >

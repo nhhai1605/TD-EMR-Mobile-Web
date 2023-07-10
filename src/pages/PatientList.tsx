@@ -106,7 +106,9 @@ export const PatientList = () => {
 					setSelectedPatient(null)
 					setCreatePatientDrawer(false)
 				}} patient={selectedPatient}/>}
-				<AddManagePatientDrawer open={addManagePatientDrawer} onClose={()=>setAddManagePatientDrawer(false)}/>
+
+				{addManagePatientDrawer && <AddManagePatientDrawer open={addManagePatientDrawer} onClose={()=>setAddManagePatientDrawer(false)}/>}
+				
 				<Paper style={{height:'90vh', overflow: 'auto', backgroundColor:'white'}} >
 					<FlexBox sx={{padding:2, justifyContent:'space-between', alignItems:'center'}}>
 						<Typography variant='h3'>Danh sách Bệnh Nhân</Typography>
@@ -116,16 +118,6 @@ export const PatientList = () => {
 									<PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}}/>
 								</IconButton>
 							</Tooltip>
-							{/*<Tooltip title="Tạo mới Bệnh Nhân">*/}
-							{/*	<IconButton onClick={()=>setCreatePatientDrawer(true)}>*/}
-							{/*		<PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}}/>*/}
-							{/*	</IconButton>*/}
-							{/*</Tooltip>*/}
-							{/*<Tooltip title="Thêm BN vào DS Quản Lý">*/}
-							{/*	<IconButton onClick={()=>setAddManagePatientDrawer(true)} >*/}
-							{/*		<PlaylistAddOutlinedIcon sx={{marginX:1, fontSize: '2rem'}} />*/}
-							{/*	</IconButton>*/}
-							{/*</Tooltip>*/}
 						</FlexBox>
 
 					</FlexBox>
@@ -136,7 +128,7 @@ export const PatientList = () => {
 									<Paper onClick={()=> {
 										setSelectedPatient(patient);
 										setCreatePatientDrawer(true);
-									}} elevation={3} sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2, backgroundColor:"#f3f4f9", border:1, borderColor:'#cecfd3'}}>
+									}} elevation={1} sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2, backgroundColor:"#f3f4f9", border:1, borderColor:'#cecfd3'}}>
 										<FlexBox sx={{flexDirection:'column', alignItems:'flex-start'}}>
 											<FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent: 'space-between', width: '100%',py:1}}>
 												<FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%'}}>
@@ -169,5 +161,4 @@ export const PatientList = () => {
 			</Container>
 		</CustomBox>
 	)
-
 }

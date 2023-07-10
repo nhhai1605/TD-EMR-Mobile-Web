@@ -4,7 +4,7 @@ import {useSnackbar} from "../@core/contexts/SnackbarProvider";
 import {
     Box,
     Button,
-    Container,
+    Container, Drawer,
     Grid,
     IconButton,
     Modal,
@@ -26,6 +26,12 @@ import cookie from "react-cookies";
 import {exportAsImage} from "./TicketList";
 import {CustomBox} from "./Home";
 import {InfoOutlined} from "@mui/icons-material";
+import CloseIcon from "@mui/icons-material/Close";
+import PlaylistAddOutlinedIcon from "@mui/icons-material/PlaylistAddOutlined";
+import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined";
+import CreatePatientDrawer from "../components/CreatePatientDrawer";
+import AddManagePatientDrawer from "../components/AddManagePatientDrawer";
+import Tooltip from "@mui/material/Tooltip";
 export const CreateTicket = () => {
     const snackbar = useSnackbar();
     const { getPatientList } = useAppointment()
@@ -40,7 +46,10 @@ export const CreateTicket = () => {
     const [selectedTicket, setSelectedTicket] = useState(null)
     const flexBoxRef = useRef<any>();
     const mobileView = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
-
+    
+    const [createPatientDrawer, setCreatePatientDrawer] = useState(false);
+    const [addManagePatientDrawer, setAddManagePatientDrawer] = useState(false);
+    const [openDrawer, setOpenDrawer] = useState(false);
 
     const fetchData = async () =>
     {
@@ -114,6 +123,23 @@ export const CreateTicket = () => {
         return age;
     }
     
+    const handleOpenDrawer = () => {
+        if(allPatients.length >= Number(import.meta.env.VITE_MAX_PATIENTS))
+        {
+        	snackbar.error(`Không thể thêm mới BN do đã đạt số lượng tối đa (${import.meta.env.VITE_MAX_PATIENTS} BN)`);
+        	return;
+        }
+        setOpenDrawer(true)
+    }
+
+    useEffect(() =>
+    {
+        if(!createPatientDrawer && !addManagePatientDrawer)
+        {
+            fetchData();
+        }
+    }, [createPatientDrawer, addManagePatientDrawer]);
+    
     return (
         <CustomBox>
             <Container sx={{
@@ -122,7 +148,7 @@ export const CreateTicket = () => {
                 height: '90vh',
                 backgroundColor:'white',
                 display:"flex",
-                justifyContent: mobileView ? 'space-between' : 'flex-start',
+                justifyContent: 'flex-start',
                 py:2
             }}>
                 {
@@ -138,14 +164,25 @@ export const CreateTicket = () => {
                                     <Typography sx={{marginBottom:1, fontSize:18}} variant={"h6"}>VIỆN TIM TP.HỒ CHÍ MINH</Typography>
                                     <Typography sx={{marginBottom:1, color:'#db220d'}} variant={"h1"}>QUẦY ĐĂNG KÝ {selectedTicket?.ticketNumberText?.split("-")[0]}</Typography>
                                     <Typography sx={{marginBottom:3, color:'#db220d', fontSize:28}} variant={"h2"}>{selectedTicket?.ticketNumberText}</Typography>
-                                    <Typography sx={{marginBottom:1, fontSize:22}} variant={"h5"}>{selectedTicket?.patientName}</Typography>
+                                    <Typography sx={{marginBottom:1, fontSize:26}} variant={"h5"}>{selectedTicket?.patientName}</Typography>
                                     <Typography sx={{marginBottom:1, fontSize:20}} variant={"h5"}> {selectedTicket?.patientCode ? selectedTicket?.patientCode : "[Chưa có Mã BN]"}</Typography>
                                     <Typography sx={{marginBottom:1, fontSize:18}} variant={"h6"} >Ngày: {moment(selectedTicket?.issueDateTime).format("DD/MM/YYYY")}</Typography>
+                                    {
+                                        selectedTicket?.patientCode?.length == 0 &&
+                                        <Typography sx={{marginBottom:1, fontSize:18}} variant={"h6"} >Vui lòng đến quầy tư vấn để xác nhận thông tin</Typography>
+                                    }
                                 </FlexBox>
                                 <QRCode
                                     size={250}
                                     value={"qms" + selectedTicket?.serialTicket}/>
                                 <Typography sx={{margin:1, fontSize:18}} variant={"h6"}>qms{selectedTicket?.serialTicket}</Typography>
+                                <FlexBox sx={{paddingTop:2}}>
+                                    <Paper sx={{padding:2, width:'100%', borderRadius:2, border:1, borderColor:"#ddd", backgroundColor:'#dbecfd', flexDirection:'row', display:'flex', alignItems:'center' }}>
+                                        <Typography sx={{ px:2, color:'#5195dc', alignItems:'center', display:'flex', textAlign:'left',fontSize:mobileView ? 14 : 18, fontWeight:800}}>
+                                            <InfoOutlined sx={{color:'#5195dc', marginRight: 2, fontSize:mobileView ? 21 : 27}}/>Quầy đăng ký hoạt động từ 6:00 giờ sáng
+                                        </Typography>
+                                    </Paper>
+                                </FlexBox>
                             </FlexBox>
                             <FlexBox>
                                 <Button sx={{margin:2, '&:hover': {backgroundColor: '#a12222'}}} color={'error'} variant={'contained'} onClick={() => setSelectedTicket(null)}>ĐÓNG</Button>
@@ -154,10 +191,57 @@ export const CreateTicket = () => {
                         </FlexBox>
                     </Modal>
                 }
+                
+                <Drawer open={openDrawer} onClose={()=>setOpenDrawer(false)} anchor={'bottom'}>
+                    <Paper style={{height:'auto', overflow: 'auto', backgroundColor:'white'}}  >
+                        <IconButton sx={{position:'absolute',right:0}} onClick={()=>setOpenDrawer(false)}>
+                            <CloseIcon sx={{fontSize: '2rem'}} />
+                        </IconButton>
+                        <FlexBox sx={{padding:5, justifyContent:'center', alignItems:'center'}}>
+                            <Typography variant='h4' >Bạn đã từng khám tại Viện Tim TP.Hồ Chí Minh?</Typography>
+                        </FlexBox>
+                        <FlexBox sx={{px:5, justifyContent:'center', alignItems:'center'}}>
+                            <Button variant={'contained'} onClick={()=> {
+                                setAddManagePatientDrawer(true);
+                                setOpenDrawer(false);
+                            }}>
+                                <PlaylistAddOutlinedIcon sx={{marginX:1, fontSize: '2rem'}} />
+                                <FlexBox sx={{flexDirection:'column', alignItems:'center',justifyContent:'center', width:'400px'}}>
+                                    <span>ĐÃ TỪNG KHÁM</span>
+                                    <span>THÊM BỆNH NHÂN VÀO DANH SÁCH</span>
+                                </FlexBox>
+                            </Button>
+                        </FlexBox>
+                        <FlexBox sx={{padding:5, justifyContent:'center', alignItems:'center'}}>
+                            <Button variant={'outlined'} onClick={()=> {
+                                setCreatePatientDrawer(true);
+                                setOpenDrawer(false);
+                            }}>
+                                <PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}} />
+                                <FlexBox sx={{flexDirection:'column', alignItems:'center',justifyContent:'center', width:'400px'}}>
+                                    <span>CHƯA TỪNG KHÁM</span>
+                                    <span>TẠO MỚI BỆNH NHÂN</span>
+                                </FlexBox>
+                            </Button>
+                        </FlexBox>
+                    </Paper>
+                </Drawer>
+                {createPatientDrawer && <CreatePatientDrawer open={createPatientDrawer} onClose={() => {
+                    setCreatePatientDrawer(false)
+                }} patient={null}/>}
 
+                {addManagePatientDrawer && <AddManagePatientDrawer open={addManagePatientDrawer} onClose={()=>setAddManagePatientDrawer(false)}/>}
+                
                 <FlexBox flexDirection={'column'}>
-                    <FlexBox sx={{paddingY:2}}>
+                    <FlexBox sx={{padding:2, justifyContent:'space-between', alignItems:'center'}}>
                         <Typography variant='h5'>Lấy Phiếu Khám Bệnh</Typography>
+                        <FlexBox>
+                            <Tooltip title="Tạo mới / Thêm mới Bệnh Nhân">
+                                <IconButton onClick={handleOpenDrawer}>
+                                    <PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}}/>
+                                </IconButton>
+                            </Tooltip>
+                        </FlexBox>
                     </FlexBox>
                     {
                         Number(import.meta.env.VITE_DISABLE_TICKET_DATE) > 0 &&

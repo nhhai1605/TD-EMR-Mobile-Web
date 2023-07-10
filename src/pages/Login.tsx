@@ -146,20 +146,20 @@ export const Login = () => {
                         </LoadingButton>
 
                         {isNotSucceed && <ErrorMessage>Sai tên đăng nhập hoặc mật khẩu.</ErrorMessage>}
-
+                        <Box sx={{ textAlign: 'center', marginTop: '10px' }}>
+                            <Link component={RouterLink} to={`/register`} variant='h6' sx={{fontSize:16}}>
+                                {t('auth.login.newAccount')}
+                            </Link>
+                        </Box>
                         <Box sx={{ textAlign: 'center', marginTop: '10px' }}>
                             <Link
                                 component={RouterLink}
                                 to={`/forgot-password`}
-                                variant='body2'>
+                                variant='body1'>
                                 {t('auth.login.forgotPassword')}
                             </Link>
                         </Box>
-                        <Box sx={{ textAlign: 'center', marginTop: '10px' }}>
-                            <Link component={RouterLink} to={`/register`} variant='body2'>
-                                {t('auth.login.newAccount')}
-                            </Link>
-                        </Box>
+                       
                     </Box>
                 </BoxedLayout>
             </Grid>

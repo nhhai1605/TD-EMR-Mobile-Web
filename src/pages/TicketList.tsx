@@ -1,7 +1,19 @@
 ﻿import React, {useCallback, useEffect, useRef, useState} from "react";
 import {useAppointment} from "../context/AppointmentContext";
 import {useSnackbar} from "../@core/contexts/SnackbarProvider";
-import {Badge, Box, Button, Container, IconButton, Link, List, Modal, Typography} from "@mui/material";
+import {
+    Badge,
+    Box,
+    Button,
+    Container,
+    IconButton,
+    Link,
+    List,
+    Modal,
+    Theme,
+    Typography,
+    useMediaQuery
+} from "@mui/material";
 import { toggleLoading } from '@core/components/loading/LoadingScreen';
 import mobileService from "../@core/services/mobileService";
 import COOKIE_NAME from "../@core/constants/cookie";
@@ -13,7 +25,7 @@ import * as htmlToImage from 'html-to-image';
 import {CustomBox} from "./Home";
 import Paper from "@mui/material/Paper";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
-import {Female, Male} from "@mui/icons-material";
+import {Female, InfoOutlined, Male} from "@mui/icons-material";
 import MedicalInformationOutlinedIcon from '@mui/icons-material/MedicalInformationOutlined';
 import DateRangeOutlinedIcon from "@mui/icons-material/DateRangeOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
@@ -35,6 +47,8 @@ export const TicketList = () => {
     const snackbar = useSnackbar();
     const account = cookie.load(COOKIE_NAME.USER)
     const flexBoxRef = useRef<any>();
+    const mobileView = useMediaQuery((theme: Theme) => theme.breakpoints.down('sm'));
+
     const fetchData = async () =>
     {
         toggleLoading(true);
@@ -95,14 +109,25 @@ export const TicketList = () => {
                                     <Typography sx={{marginBottom:1, fontSize:18}} variant={"h6"}>VIỆN TIM TP.HỒ CHÍ MINH</Typography>
                                     <Typography sx={{marginBottom:1, color:'#db220d'}} variant={"h1"}>QUẦY ĐĂNG KÝ {selectedTicket?.ticketNumberText?.split("-")[0]}</Typography>
                                     <Typography sx={{marginBottom:3, color:'#db220d', fontSize:28}} variant={"h2"}>{selectedTicket?.ticketNumberText}</Typography>
-                                    <Typography sx={{marginBottom:1, fontSize:22}} variant={"h5"}>{selectedTicket?.patientName}</Typography>
+                                    <Typography sx={{marginBottom:1, fontSize:26}} variant={"h5"}>{selectedTicket?.patientName}</Typography>
                                     <Typography sx={{marginBottom:1, fontSize:20}} variant={"h5"}> {selectedTicket?.patientCode ? selectedTicket?.patientCode : "[Chưa có Mã BN]"}</Typography>
                                     <Typography sx={{marginBottom:1, fontSize:18}} variant={"h6"} >Ngày: {moment(selectedTicket?.issueDateTime).format("DD/MM/YYYY")}</Typography>
+                                    {
+                                        selectedTicket?.patientCode?.length == 0 &&
+                                        <Typography sx={{marginBottom:1, fontSize:18}} variant={"h6"} >Vui lòng đến quầy tư vấn để xác nhận thông tin</Typography>
+                                    }
                                 </FlexBox>
                                 <QRCode
                                     size={250}
                                     value={"qms" + selectedTicket?.serialTicket}/>
                                 <Typography sx={{margin:1, fontSize:18}} variant={"h6"}>qms{selectedTicket?.serialTicket}</Typography>
+                                <FlexBox sx={{paddingTop:2}}>
+                                    <Paper sx={{padding:2, width:'100%', borderRadius:2, border:1, borderColor:"#ddd", backgroundColor:'#dbecfd', flexDirection:'row', display:'flex', alignItems:'center' }}>
+                                        <Typography sx={{ px:2, color:'#5195dc', alignItems:'center', display:'flex', textAlign:'left',fontSize:mobileView ? 14 : 18, fontWeight:800}}>
+                                            <InfoOutlined sx={{color:'#5195dc', marginRight: 2, fontSize:mobileView ? 21 : 27}}/>Quầy đăng ký hoạt động từ 6:00 giờ sáng
+                                        </Typography>
+                                    </Paper>
+                                </FlexBox>
                             </FlexBox>
                             <FlexBox>
                                 <Button sx={{margin:2, '&:hover': {backgroundColor: '#a12222'}}} color={'error'} variant={'contained'} onClick={() => setSelectedTicket(null)}>ĐÓNG</Button>
@@ -119,21 +144,24 @@ export const TicketList = () => {
                     {
                         allTickets.map((ticket) =>{
                             return (
-                                <Paper onClick={()=>setSelectedTicket(ticket)} elevation={3} sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2,backgroundColor:"#f3f4f9", border:1, borderColor:'#cecfd3'}}>
+                                <Paper onClick={()=>setSelectedTicket(ticket)} elevation={1} sx={{padding:2, justifyContent:'center', alignItems:'center', margin:2,backgroundColor:"#f3f4f9", border:1, borderColor:'#cecfd3'}}>
                                     <FlexBox sx={{flexDirection:'column', alignItems:'flex-start'}}>
                                         <FlexBox sx={{flexDirection:'row', alignItems:'center', justifyContent:'space-between', width:'100%',py:1, height:"50px"}}>
                                             <FlexBox>
                                                 <DateRangeOutlinedIcon sx={{color: '#e3681b', marginRight:1}}/>
                                                 <Typography variant={"h6"} sx={{textAlign:'start'}}>Ngày Khám: {moment(ticket?.issueDateTime).format("DD/MM/YYYY")}</Typography>
                                             </FlexBox>
-                                            <FlexBox>
-                                                <IconButton onClick={(e)=>{
-                                                    e.stopPropagation();
-                                                    handleDelete(ticket);
-                                                }}  size={'large'} >
-                                                    <DeleteOutlineIcon />
-                                                </IconButton>
-                                            </FlexBox>
+                                            {
+                                                Number(import.meta.env.VITE_DISABLE_TICKET_DATE) > 0 &&
+                                                <FlexBox>
+                                                    <IconButton onClick={(e)=>{
+                                                        e.stopPropagation();
+                                                        handleDelete(ticket);
+                                                    }}  size={'large'} >
+                                                        <DeleteOutlineIcon />
+                                                    </IconButton>
+                                                </FlexBox>
+                                            }
                                         </FlexBox>
                                         <FlexBox sx={{flexDirection:'row', alignItems:'flex-start', justifyContent:'flex-start', width:'100%',py:1,height:"50px"}}>
                                             <PersonOutlinedIcon sx={{color: '#45b561',  marginRight:1}}/>

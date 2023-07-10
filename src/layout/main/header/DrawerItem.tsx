@@ -70,7 +70,7 @@ const itemList = [
     //     to: 'lien-he',
     // },
     {
-        text: 'Tài Khoàn',
+        text: 'Tài Khoản',
         icon: <PersonOutlinedIcon/>,
         to: '/tai-khoan',
     },
@@ -109,9 +109,11 @@ const DrawerItem = () => {
                         width: drawerWidth,
                     },
                 }}
+                elevation={5}
                 anchor="right"
                 open={open}
-                variant={'persistent'}
+                onClose={handleDrawerClose}
+                // variant={'persistent'}
             >
                 <DrawerHeader>
                     <IconButton onClick={handleDrawerClose}>

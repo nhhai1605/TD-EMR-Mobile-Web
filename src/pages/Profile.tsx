@@ -70,7 +70,7 @@ export const Profile = () => {
 				<ChangePasswordDrawer open={openChangePassword} onClose={()=> {setOpenChangePassword(false)}}/>
 				<Paper style={{height:'90vh', maxHeight: '90vh', overflow: 'auto', backgroundColor:'white'}} >
 					<FlexBox sx={{padding:2, justifyContent:'space-between', alignItems:'center'}}>
-						<Typography variant='h3'>Thông Tin Tài Khoàn</Typography>
+						<Typography variant='h3'>Thông Tin Tài Khoản</Typography>
 						<FlexBox>
 							<Tooltip title="Chỉnh sửa thông tin">
 								<IconButton onClick={()=>setOpenDrawer(true)}>

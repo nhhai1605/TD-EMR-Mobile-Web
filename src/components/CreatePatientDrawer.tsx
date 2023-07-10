@@ -220,9 +220,8 @@ const CreatePatientDrawer = (props) => {
     const initData = async () => {
         toggleLoading(true);
         const init = initialDataForm;
-        if (!init.fullName) {
-            init.dob = moment().format('YYYY-MM-DD')
-        } else {
+        if (init.fullName) 
+        {
             init.dob = moment(patient.dob).format('YYYY-MM-DD')
             if(patient?.patientCode && patient?.patientCode?.length > 0) {
                 await mobileService.getPtFamilyRelationship(patient.patientID).then((res: any) => {

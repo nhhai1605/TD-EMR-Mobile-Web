@@ -157,9 +157,11 @@ const EditAccountDrawer = (props) => {
 					
 					<FlexBox
 						sx={{
-							position: 'fixed',
-							bottom: 10,
-							right:10,
+							// position: 'fixed',
+							// bottom: 10,
+							// right:10,
+							marginTop:5,
+							justifyContent:'flex-end',
 							gap: '20px',
 						}}
 					>

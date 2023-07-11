@@ -173,7 +173,7 @@ export const CreateTicket = () => {
                                     }
                                 </FlexBox>
                                 <QRCode
-                                    size={250}
+                                    size={200}
                                     value={"qms" + selectedTicket?.serialTicket}/>
                                 <Typography sx={{margin:1, fontSize:18}} variant={"h6"}>qms{selectedTicket?.serialTicket}</Typography>
                                 <FlexBox sx={{paddingTop:2}}>

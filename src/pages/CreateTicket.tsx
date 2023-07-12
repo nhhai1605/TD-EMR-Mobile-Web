@@ -32,6 +32,8 @@ import PersonAddAlt1OutlinedIcon from "@mui/icons-material/PersonAddAlt1Outlined
 import CreatePatientDrawer from "../components/CreatePatientDrawer";
 import AddManagePatientDrawer from "../components/AddManagePatientDrawer";
 import Tooltip from "@mui/material/Tooltip";
+import Link from "@mui/material/Link";
+import {Link as RouterLink} from "react-router-dom";
 export const CreateTicket = () => {
     const snackbar = useSnackbar();
     const { getPatientList } = useAppointment()
@@ -233,15 +235,15 @@ export const CreateTicket = () => {
                 {addManagePatientDrawer && <AddManagePatientDrawer open={addManagePatientDrawer} onClose={()=>setAddManagePatientDrawer(false)}/>}
                 
                 <FlexBox flexDirection={'column'}>
-                    <FlexBox sx={{padding:2, justifyContent:'space-between', alignItems:'center'}}>
+                    <FlexBox sx={{paddingY:2, justifyContent:'space-between', alignItems:'center'}}>
                         <Typography variant='h5'>Lấy Phiếu Khám Bệnh</Typography>
-                        <FlexBox>
-                            <Tooltip title="Tạo mới / Thêm mới Bệnh Nhân">
-                                <IconButton onClick={handleOpenDrawer}>
-                                    <PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}}/>
-                                </IconButton>
-                            </Tooltip>
-                        </FlexBox>
+                        {/*<FlexBox>*/}
+                        {/*    <Tooltip title="Tạo mới / Thêm mới Bệnh Nhân">*/}
+                        {/*        <IconButton onClick={handleOpenDrawer}>*/}
+                        {/*            <PersonAddAlt1OutlinedIcon sx={{marginX:1, fontSize: '2rem'}}/>*/}
+                        {/*        </IconButton>*/}
+                        {/*    </Tooltip>*/}
+                        {/*</FlexBox>*/}
                     </FlexBox>
                     {
                         Number(import.meta.env.VITE_DISABLE_TICKET_DATE) > 0 &&
@@ -300,8 +302,22 @@ export const CreateTicket = () => {
                         />
                     </FlexBox>
                 </FlexBox>
-                <FlexBox flexDirection={'column'}>
-                    <FlexBox sx={{paddingY:2, justifyContent:'center'}}>
+                <FlexBox flexDirection={'row'} sx={{paddingY:2, justifyContent:'space-between'}}>
+                    {/*<FlexBox sx={{paddingTop:2, justifyContent:'center'}}>*/}
+                    {/*    <Link onClick={handleOpenDrawer} component={RouterLink} to={"#"} variant='h6' sx={{fontSize:16}}>*/}
+                    {/*        Quản lý bệnh nhân*/}
+                    {/*    </Link>*/}
+                    {/*</FlexBox>*/}
+                    <FlexBox sx={{width:'47.5%'}}>
+                        <Button onClick={handleOpenDrawer} sx={{
+                            '&:hover': {
+                                backgroundColor: '#e0ab00',
+                            }
+                        }} color={'warning'} type='button' variant='contained' fullWidth={true}>
+                            Quản lý BN
+                        </Button>
+                    </FlexBox>
+                    <FlexBox sx={{width:'47.5%'}}>
                         <LoadingButton disabled={!selectedPatient} onClick={()=> {
                             if(!selectedPatient || !selectedDate )
                             {

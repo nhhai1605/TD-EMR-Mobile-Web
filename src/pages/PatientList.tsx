@@ -110,7 +110,7 @@ export const PatientList = () => {
 				{addManagePatientDrawer && <AddManagePatientDrawer open={addManagePatientDrawer} onClose={()=>setAddManagePatientDrawer(false)}/>}
 				
 				<Paper style={{height:'90vh', overflow: 'auto', backgroundColor:'white'}} >
-					<FlexBox sx={{padding:2, justifyContent:'space-between', alignItems:'center'}}>
+					<FlexBox sx={{paddingY:2, justifyContent:'space-between', alignItems:'center'}}>
 						<Typography variant='h3'>Danh sách Bệnh Nhân</Typography>
 						<FlexBox>
 							<Tooltip title="Tạo mới / Thêm mới Bệnh Nhân">

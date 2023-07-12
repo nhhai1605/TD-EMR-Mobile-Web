@@ -137,7 +137,7 @@ export const TicketList = () => {
                     </Modal>
                 }
                 <Paper style={{height:'90vh', maxHeight: '90vh', overflow: 'auto', backgroundColor:'white'}} >
-                    <FlexBox sx={{padding:2}}>
+                    <FlexBox sx={{paddingY:2}}>
                         <Typography variant='h3'>Danh sách Số Thứ Tự</Typography>
                     </FlexBox>
                     <List sx={{paddingBottom:4}}>

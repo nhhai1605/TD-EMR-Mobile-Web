@@ -303,35 +303,54 @@ export const CreateTicket = () => {
                     </FlexBox>
                 </FlexBox>
                 <FlexBox flexDirection={'row'} sx={{paddingY:2, justifyContent:'space-between'}}>
-                    {/*<FlexBox sx={{paddingTop:2, justifyContent:'center'}}>*/}
-                    {/*    <Link onClick={handleOpenDrawer} component={RouterLink} to={"#"} variant='h6' sx={{fontSize:16}}>*/}
-                    {/*        Quản lý bệnh nhân*/}
-                    {/*    </Link>*/}
-                    {/*</FlexBox>*/}
-                    <FlexBox sx={{width:'47.5%'}}>
-                        <Button onClick={handleOpenDrawer} sx={{
-                            '&:hover': {
-                                backgroundColor: '#e0ab00',
-                            }
-                        }} color={'warning'} type='button' variant='contained' fullWidth={true}>
-                            Quản lý BN
-                        </Button>
-                    </FlexBox>
-                    <FlexBox sx={{width:'47.5%'}}>
-                        <LoadingButton disabled={!selectedPatient} onClick={()=> {
-                            if(!selectedPatient || !selectedDate )
-                            {
-                                setHaveDateError(true)
-                                setHavePatientError(true)
-                                snackbar.error("Vui lòng nhập đầy đủ thông tin");
-                                return;
-                            }
-                            onSubmit();
-                            // setOpenOtp(true)
-                        }} type='button' variant='contained' fullWidth={true}>
-                            Xác nhận
-                        </LoadingButton>
-                    </FlexBox>
+                    {
+                        allPatients.length == 0 && 
+                        <>
+                            <FlexBox sx={{width:'47.5%'}}>
+                                <Button onClick={handleOpenDrawer} sx={{
+                                    '&:hover': {
+                                        backgroundColor: '#e0ab00',
+                                    }
+                                }} color={'warning'} type='button' variant='contained' fullWidth={true}>
+                                    Quản lý BN
+                                </Button>
+                            </FlexBox>
+                            <FlexBox sx={{width:'47.5%'}}>
+                                <LoadingButton disabled={!selectedPatient} onClick={()=> {
+                                    if(!selectedPatient || !selectedDate )
+                                    {
+                                        setHaveDateError(true)
+                                        setHavePatientError(true)
+                                        snackbar.error("Vui lòng nhập đầy đủ thông tin");
+                                        return;
+                                    }
+                                    onSubmit();
+                                    // setOpenOtp(true)
+                                }} type='button' variant='contained' fullWidth={true}>
+                                    Xác nhận
+                                </LoadingButton>
+                            </FlexBox>
+                        </>
+                    }
+                    {
+                        allPatients.length > 0 &&
+                        <FlexBox sx={{width:'100%'}}>
+                             <LoadingButton disabled={!selectedPatient} onClick={()=> {
+                                 if(!selectedPatient || !selectedDate )
+                                 {
+                                     setHaveDateError(true)
+                                     setHavePatientError(true)
+                                     snackbar.error("Vui lòng nhập đầy đủ thông tin");
+                                     return;
+                                 }
+                                 onSubmit();
+                                 // setOpenOtp(true)
+                             }} type='button' variant='contained' fullWidth={true}>
+                                 Xác nhận
+                             </LoadingButton>
+                        </FlexBox>   
+                    }
+                    
                 </FlexBox>
             </Container>
         </CustomBox>     
